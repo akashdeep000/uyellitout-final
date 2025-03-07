@@ -1,12 +1,12 @@
 import { AdminPageWrapper } from "@/components/admin/page-wraper";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-export interface Artwork {
+interface Artwork {
     artist: string
     art: string
 }
 
-export const works: Artwork[] = [
+const works: Artwork[] = [
     {
         artist: "Ornella Binni",
         art: "https://images.unsplash.com/photo-1465869185982-5a1a7522cbcb?auto=format&fit=crop&w=300&q=80",
