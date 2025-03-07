@@ -8,5 +8,6 @@ export default defineConfig({
   out: "./src/db/migrations",
   dbCredentials: {
     url: env.DATABASE_URL,
+    authToken: env.DATABASE_TOKEN
   },
 });
