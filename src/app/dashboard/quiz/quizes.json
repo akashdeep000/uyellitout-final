@@ -1,0 +1,2515 @@
+[
+            {
+                "topicTitle": "Do You Need Therapy?",
+                "questions": [
+                    {
+                        "question": "How would you describe your general mood over the past few weeks?",
+                        "options": [
+                            {
+                                "option": "Mostly happy, content, and calm",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Mixed – some good days and some bad",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Frequently down, irritable, or upset",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Constantly overwhelmed, hopeless, or emotionally numb",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find it difficult to connect or communicate with people around you (friends, family, co-workers)?",
+                        "options": [
+                            {
+                                "option": "No, I have strong relationships and communicate easily",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but it’s manageable",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I struggle to communicate and connect often",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Yes, I feel very isolated and misunderstood, and I avoid social interactions",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How often do you experience physical symptoms like headaches, tension, or stomach issues due to stress?",
+                        "options": [
+                            {
+                                "option": "Rarely or never",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, but I can manage it",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Frequently, it affects my daily life",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Almost every day, I’m often in pain or discomfort",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Have you been feeling a lack of motivation or interest in things you once enjoyed (e.g., hobbies, work, social activities)?",
+                        "options": [
+                            {
+                                "option": "Not at all – I’m still passionate about my interests",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, but it’s only temporary",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Frequently, I’ve lost interest in things",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Yes, I’ve completely lost interest in almost everything",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel overwhelmed by responsibilities or demands, both at home and work?",
+                        "options": [
+                            {
+                                "option": "No, I feel I can handle my responsibilities well",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I manage with some effort",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I often feel overwhelmed by what’s expected of me",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Yes, I can barely keep up with everything, and it’s affecting my health",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you typically handle conflict or challenging situations in your life?",
+                        "options": [
+                            {
+                                "option": "Calmly and effectively – I find solutions",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I try to handle it, but sometimes get frustrated or anxious",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I often feel helpless or avoid conflict",
+                                "marks": 3
+                            },
+                            {
+                                "option": "I panic, become angry, or shut down in difficult situations",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you experience any feelings of guilt, shame, or regret that are hard to move past?",
+                        "options": [
+                            {
+                                "option": "No, I’ve made peace with my past",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I usually work through it",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Frequently, I carry guilt or regret from past mistakes",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Yes, I’m overwhelmed by guilt or shame that I can't seem to overcome",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you have trouble sleeping (falling asleep, staying asleep, or waking up too early)?",
+                        "options": [
+                            {
+                                "option": "No, I sleep well and wake up refreshed",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, but I manage with a good routine",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I have trouble falling or staying asleep regularly",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Yes, sleep is a constant struggle, and I often feel exhausted during the day",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Are you able to handle changes or unexpected events in your life easily?",
+                        "options": [
+                            {
+                                "option": "Yes, I adapt quickly to changes",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, I can handle them, but it takes time",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I often struggle with change and it stresses me out",
+                                "marks": 3
+                            },
+                            {
+                                "option": "I feel lost or overwhelmed by even small changes",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel a sense of fulfillment or purpose in your life?",
+                        "options": [
+                            {
+                                "option": "Yes, I feel fulfilled and have a clear sense of purpose",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, I feel purpose, but it’s not consistent",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I often question my purpose and feel lost",
+                                "marks": 3
+                            },
+                            {
+                                "option": "No, I don’t feel like I have any sense of purpose or direction",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you feel about your relationships with close family members (parents, spouse, children)?",
+                        "options": [
+                            {
+                                "option": "Strong and supportive relationships",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes strained, but overall okay",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Strained or distant most of the time",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Conflict and tension are frequent, and the relationships are unhealthy",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often feel anxious or worried about future events, even when things are going well?",
+                        "options": [
+                            {
+                                "option": "Not at all – I generally feel calm about the future",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, but it’s manageable",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Frequently, I worry about what’s ahead",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Yes, I often feel an overwhelming sense of anxiety about what’s coming",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How would you describe your self-esteem or self-worth?",
+                        "options": [
+                            {
+                                "option": "I feel confident and positive about myself",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I have some doubts, but overall I feel okay about who I am",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I often feel inadequate or not good enough",
+                                "marks": 3
+                            },
+                            {
+                                "option": "I feel worthless or struggle with my identity and self-worth",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel that you lack emotional support or have difficulty asking for help when you need it?",
+                        "options": [
+                            {
+                                "option": "No, I have a strong support system and ask for help when needed",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I manage on my own most of the time",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I often feel unsupported and struggle to ask for help",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Yes, I feel completely alone and can’t ask for help",
+                                "marks": 4
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "topicTitle": "Am I a Good Parent?",
+                "questions": [
+                    {
+                        "question": "How often do you spend quality one-on-one time with your child?",
+                        "options": [
+                            {
+                                "option": "Almost every day, even if it’s just a few minutes.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "A few times a week when possible.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Not as often as I’d like.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When your child is upset, do you…",
+                        "options": [
+                            {
+                                "option": "Listen to their feelings and validate their emotions.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Try to fix the problem immediately.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Tell them to stop crying or calm down.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you manage discipline at home?",
+                        "options": [
+                            {
+                                "option": "I use positive reinforcement and calm discussions to set expectations.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "I mostly react based on the situation.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I tend to be more strict or lenient, depending on the mood.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you celebrate small victories, like finishing homework or helping with chores?",
+                        "options": [
+                            {
+                                "option": "Yes, I always celebrate even the small wins to motivate them.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes, but not always.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I focus more on major achievements like exams or awards.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How often do you have 'family time' without any distractions (phones, TV, etc.)?",
+                        "options": [
+                            {
+                                "option": "At least once a week – usually during meals or games.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes, but it's hard to find time.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely, there’s always something else to do.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When your child makes a mistake, you…",
+                        "options": [
+                            {
+                                "option": "Discuss what went wrong and how they can learn from it.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Explain the consequences, but don’t focus on the mistake too much.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I get upset and tell them not to repeat it.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you show your love and affection to your child?",
+                        "options": [
+                            {
+                                "option": "I hug, praise, and verbally express love regularly.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "I do small gestures, like making their favorite food.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I mostly show love through actions like providing for them.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you approach your child’s academic progress?",
+                        "options": [
+                            {
+                                "option": "I stay involved and encourage them without stressing.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "I make sure they complete their assignments, but I don’t push too hard.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I focus on grades more than their learning process.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you encourage your child to express their emotions?",
+                        "options": [
+                            {
+                                "option": "Yes, I create an open space where they feel safe to talk.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes, but only when they seem really upset.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I usually tell them to keep their emotions in check.",
+                                "marks": 1
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How often do you take time for yourself to recharge?",
+                        "options": [
+                            {
+                                "option": "I try to make time for self-care regularly.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Only when I feel really overwhelmed.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I rarely take time for myself – it's always about the family.",
+                                "marks": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "topicTitle": "Am I a Toxic Partner?",
+                "questions": [
+                    {
+                        "question": "How do you react when your partner expresses their feelings or concerns?",
+                        "options": [
+                            {
+                                "option": "I listen and validate their feelings.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "I get defensive and argue.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I ignore them and avoid talking about it.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often find yourself questioning or doubting your partner’s actions or intentions without valid reasons?",
+                        "options": [
+                            {
+                                "option": "No, I trust them completely.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "Sometimes, but I try to be rational.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Yes, I constantly worry they’re hiding something.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When your partner makes a mistake, how do you react?",
+                        "options": [
+                            {
+                                "option": "I discuss it calmly and work together to fix it.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "I get angry and bring up past mistakes.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I hold it over their head or use it against them.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel like you respect your partner’s space, time, and privacy?",
+                        "options": [
+                            {
+                                "option": "Yes, we both have our personal space.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "I sometimes check in on their activities out of concern.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I feel the need to know everything they’re doing, where they are, and who they’re with.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How often do you criticize your partner’s actions or decisions?",
+                        "options": [
+                            {
+                                "option": "Rarely, I try to support them.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "Occasionally, but I try to be constructive.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Frequently, I believe it’s my job to point out their flaws.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When disagreements arise, how do you handle them?",
+                        "options": [
+                            {
+                                "option": "We talk it out calmly and try to understand each other.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "We argue, and things get heated.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I shut down or try to win the argument at all costs.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find yourself comparing your partner to others (exes, friends, celebrities)?",
+                        "options": [
+                            {
+                                "option": "No, I love them for who they are.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "Sometimes, but I don’t let it affect the relationship.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Yes, often, and it makes me feel disappointed in them.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you ever belittle or mock your partner in private or in front of others?",
+                        "options": [
+                            {
+                                "option": "Never, I respect and uplift them.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "Occasionally, I make jokes but they know it's all in fun.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Yes, sometimes I make remarks that are meant to hurt or embarrass them.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you handle your partner’s success or achievements?",
+                        "options": [
+                            {
+                                "option": "I celebrate their success and feel happy for them.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "I feel proud but sometimes a bit jealous.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I downplay their achievements or try to overshadow them.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When your partner expresses an opinion or belief that differs from yours, how do you respond?",
+                        "options": [
+                            {
+                                "option": "I listen and respect their perspective.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "I try to convince them that I’m right.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I dismiss their opinions and try to change their mind.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel that your partner often has to \"walk on eggshells\" around you?",
+                        "options": [
+                            {
+                                "option": "No, we are comfortable and open with each other.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "Sometimes, depending on the situation.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Yes, they are often cautious about what they say or do around me.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you handle jealousy or insecurity in the relationship?",
+                        "options": [
+                            {
+                                "option": "I communicate openly with my partner about my feelings.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "I keep it to myself but feel uncomfortable.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I become possessive and act out.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When your partner is upset, do you offer comfort or try to \"fix\" them?",
+                        "options": [
+                            {
+                                "option": "I listen and offer support without trying to fix them.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "I try to give advice and make them feel better quickly.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I avoid them or try to downplay their feelings.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you feel about your partner spending time with friends or alone?",
+                        "options": [
+                            {
+                                "option": "I encourage them to have time for themselves or with friends.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "I feel a bit left out but try to let them have their space.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I get upset and want them to spend all their time with me.",
+                                "marks": 2
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you ever gaslight your partner (denying things that happened or making them question their reality)?",
+                        "options": [
+                            {
+                                "option": "Never, I am open and honest.",
+                                "marks": 0
+                            },
+                            {
+                                "option": "Sometimes, I can be defensive or misinterpret things.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Yes, I’ve done it to avoid responsibility or make them feel confused.",
+                                "marks": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "topicTitle": "Am I a Toxic Partner?",
+                "questions": [
+                    {
+                        "question": "Do you often dismiss your partner's feelings or concerns?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you get angry or upset over small things your partner does?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you try to control where your partner goes or who they talk to?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you blame your partner for things that go wrong in your life?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find it hard to apologize, even when you know you’re in the wrong?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you use guilt or manipulation to get your partner to do things?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you ignore your partner’s needs because you’re too focused on your own comfort?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you make fun of your partner's appearance or actions in a hurtful way?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you take your partner for granted, thinking they’ll always be there for you?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you avoid tough conversations, even when they’re necessary?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you struggle to meet your partner halfway during disagreements?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you belittle your partner’s ideas or achievements?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you act passive-aggressive when you're upset with your partner?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you struggle to trust your partner, even when they’ve earned it?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often ignore your partner’s need for alone time or personal space?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "topicTitle": "Is This Anxiety or Just a Phase?",
+                "questions": [
+                    {
+                        "question": "Do you often feel nervous or restless without any specific reason?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Does your mind race with thoughts even when you’re trying to relax or sleep?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find it hard to concentrate or focus on tasks, even the important ones?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often experience physical symptoms like a racing heart, sweating, or shortness of breath when you’re stressed?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you avoid certain situations or places because they make you feel uncomfortable or worried?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you have frequent bursts of irritability or mood swings, even over small things?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often feel overwhelmed by the thought of doing daily tasks or responsibilities?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you have a tendency to worry excessively about things that might happen in the future, even if they’re unlikely?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find it hard to stop overthinking things, even after you've made a decision?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you frequently feel like you're 'on edge,' as if something bad is about to happen?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Are you experiencing disruptions in your sleep patterns (e.g., trouble falling asleep, waking up in the middle of the night)?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find yourself avoiding social situations or distancing yourself from people because of your anxiety?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you constantly feel fatigued, even if you’re getting enough sleep?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you experience a sense of dread or fear, even when there’s no apparent threat?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find it difficult to relax or unwind, even when you try to take time for yourself?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "topicTitle": "Am I in Depression?",
+                "questions": [
+                    {
+                        "question": "Do you feel like you’ve lost interest in activities you once enjoyed?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Have you been feeling tired, even after a good night’s sleep?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often feel down or sad without knowing why?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel like you’re not good enough, even when others try to reassure you?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Are you struggling to concentrate or make decisions, even on simple things?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel hopeless about the future or like things won’t improve?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Have you been withdrawing from friends, family, or social activities?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel like your emotions are either numb or overwhelming?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you experience physical symptoms like headaches or stomach problems, even if there’s no clear cause?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Have you noticed a change in your appetite (either eating much more or much less than usual)?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel like you’re carrying a heavy emotional burden, even though others may not notice?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Are you finding it hard to see the positives in your life, even the small things?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel like your mood is affecting your ability to take care of yourself or others?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Have you been feeling more irritable or angry than usual?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you ever feel like life isn’t worth living, even though you’re trying to push those thoughts away?",
+                        "options": [
+                            {
+                                "option": "Always",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sometimes",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Never",
+                                "marks": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "topicTitle": "Are You Overthinking Everything?",
+                "questions": [
+                    {
+                        "question": "Do you often replay conversations in your head, wondering if you said the wrong thing?",
+                        "options": [
+                            {
+                                "option": "Not really.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, but I try not to.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, all the time!",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When making decisions, do you second-guess yourself endlessly?",
+                        "options": [
+                            {
+                                "option": "I usually decide quickly and stick with it.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I get over it.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I can’t make a decision without a lot of doubt.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you constantly worry about future events that may or may not happen?",
+                        "options": [
+                            {
+                                "option": "Not really, I try to live in the moment.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to focus on the present.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I always imagine the worst-case scenario.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find it difficult to focus on a task because your mind keeps wandering to other things?",
+                        "options": [
+                            {
+                                "option": "I’m usually pretty focused.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, but I can usually refocus.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, all the time!",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you analyze every little detail about your personal interactions (e.g., texts, body language, tone)?",
+                        "options": [
+                            {
+                                "option": "Not at all, I don’t stress over details.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to let it go.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, it’s exhausting!",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you avoid taking action because you're too busy overthinking potential outcomes?",
+                        "options": [
+                            {
+                                "option": "I’m pretty quick to act on things.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I eventually take action.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I often procrastinate because of my thoughts.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When faced with a problem, do you obsess over possible solutions for hours (or days)?",
+                        "options": [
+                            {
+                                "option": "I usually solve problems fairly quickly.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, but I don’t let it control me.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I can’t stop thinking about all the possibilities.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often feel overwhelmed by the number of thoughts constantly running through your head?",
+                        "options": [
+                            {
+                                "option": "Not really, I manage to quiet my mind.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I find ways to calm myself down.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, it feels like my brain never stops.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When making a choice, do you always worry about what others will think?",
+                        "options": [
+                            {
+                                "option": "Not really, I make decisions based on what feels right for me.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try not to let it dictate my decisions.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I worry about everyone’s opinion.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you ever find yourself stuck in an endless loop of thoughts that lead to nothing?",
+                        "options": [
+                            {
+                                "option": "Not really, I usually know when to stop thinking.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I can snap out of it.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I keep thinking in circles with no solution.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel like your overthinking is impacting your relationships or work?",
+                        "options": [
+                            {
+                                "option": "Not really, I don’t think it affects much.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I manage to work through it.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, it’s definitely causing problems.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you find it hard to relax or turn off your brain, even during downtime?",
+                        "options": [
+                            {
+                                "option": "Not really, I can unwind easily.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I can relax if I try.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, my brain is always active.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often seek reassurance from others to calm your doubts?",
+                        "options": [
+                            {
+                                "option": "Not really, I trust my own instincts.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Occasionally, but I try to trust my own judgment.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I need constant validation.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you catch yourself creating 'what if' scenarios that don’t actually happen?",
+                        "options": [
+                            {
+                                "option": "Not really, I’m pretty realistic.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to stop myself.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, all the time! I make up stories in my head.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When something goes wrong, do you dwell on it for longer than necessary?",
+                        "options": [
+                            {
+                                "option": "Not really, I let go of things easily.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to move on.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Yes, I can’t let it go.",
+                                "marks": 3
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "topicTitle": "Are You a People-Pleaser?",
+                "questions": [
+                    {
+                        "question": "Do you say “yes” to things you don’t want to do just to avoid disappointing others?",
+                        "options": [
+                            {
+                                "option": "Yes, all the time!",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to stand up for myself.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Rarely, I try to say “no” when needed.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often put others' needs before your own, even when you're exhausted?",
+                        "options": [
+                            {
+                                "option": "Yes, I often do this, even if it means sacrificing my own well-being.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to take care of myself too.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "No, I usually make time for myself.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel guilty when you need to say 'no' or set boundaries?",
+                        "options": [
+                            {
+                                "option": "Yes, I feel terrible about it.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I know it’s necessary.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Not really, I try to set boundaries confidently.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you avoid conflicts at all costs, even if it means suppressing your own feelings?",
+                        "options": [
+                            {
+                                "option": "Yes, I hate conflict and will do anything to keep the peace.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to express myself when it’s important.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Not at all, I don’t mind healthy conflict.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often worry about what others think of you, even after they’ve stopped thinking about it?",
+                        "options": [
+                            {
+                                "option": "Yes, I replay situations in my head, wondering if I did something wrong.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try not to overthink it.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "No, I don’t care what others think.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you frequently apologize, even when you haven’t done anything wrong?",
+                        "options": [
+                            {
+                                "option": "Yes, I’m always apologizing, even when I don’t need to.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to be more mindful of it.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "No, I don’t apologize unless I truly need to.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel responsible for making others happy, even if it means sacrificing your own happiness?",
+                        "options": [
+                            {
+                                "option": "Yes, I often feel like it’s my job to make others happy.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to balance it out.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Not really, I focus on my own happiness too.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When someone asks for your help, do you agree right away, even if it causes stress or overload?",
+                        "options": [
+                            {
+                                "option": "Yes, I feel like I can’t say no.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to assess if I have the time.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "No, I make sure I can handle it before agreeing.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you often feel like you're walking on eggshells to avoid upsetting anyone?",
+                        "options": [
+                            {
+                                "option": "Yes, I’m always worried about offending people.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I’ve learned to express myself more openly.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "No, I speak my mind without fear.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel uncomfortable when people are upset with you, even if it's not your fault?",
+                        "options": [
+                            {
+                                "option": "Yes, I take it personally and feel anxious about it.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to remind myself it’s not always my fault.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Not at all, I don’t let it bother me much.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you avoid asking for help, even when you’re struggling, because you don’t want to burden anyone?",
+                        "options": [
+                            {
+                                "option": "Yes, I’d rather figure things out on my own.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I do ask for help when I really need it.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "No, I’m comfortable asking for help when necessary.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel like you lose a part of yourself in relationships because you’re too focused on others?",
+                        "options": [
+                            {
+                                "option": "Yes, I often feel like I’ve lost my identity.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to stay true to myself.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Not really, I keep a good balance.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When you receive a compliment, do you downplay it or deflect it because you feel unworthy of praise?",
+                        "options": [
+                            {
+                                "option": "Yes, I rarely accept compliments.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to acknowledge them.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "No, I accept compliments gracefully.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you tend to agree with others’ opinions or ideas, even if you secretly disagree?",
+                        "options": [
+                            {
+                                "option": "Yes, I don’t like to rock the boat.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I voice my opinion when it’s important.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Not at all, I express my own thoughts.",
+                                "marks": 3
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do you feel like you're constantly trying to please others but still feel unappreciated?",
+                        "options": [
+                            {
+                                "option": "Yes, I often feel like no one notices all I do for them.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Sometimes, but I try to remind myself of my value.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "No, I feel appreciated for what I do.",
+                                "marks": 3
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "topicTitle": "What's Your Love Language?",
+                "questions": [
+                    {
+                        "question": "When you feel down, what helps you the most?",
+                        "options": [
+                            {
+                                "option": "A long hug or cuddle.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Someone surprising me with a thoughtful gift.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Having a deep conversation about how I feel.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "A heartfelt note or text message.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you prefer to show affection to your partner?",
+                        "options": [
+                            {
+                                "option": "Physical touch, like holding hands or hugging.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Buying thoughtful gifts that show I care.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Talking openly about how I feel about them.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Writing them sweet notes or texting them throughout the day.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When you're in a fight with your partner, what do you crave the most?",
+                        "options": [
+                            {
+                                "option": "Physical comfort, like a hug or holding hands.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "A surprise gift or gesture to lighten the mood.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "A calm and understanding conversation.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "A message or note that expresses how they feel about you.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "If you could spend your ideal day with your partner, what would you want to do?",
+                        "options": [
+                            {
+                                "option": "Spend time being close—cuddling on the couch or holding hands while walking.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Go shopping or explore a new store together, picking out something special for each other.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Have a deep, meaningful conversation over coffee or dinner.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Write or exchange love notes and sweet texts throughout the day.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you feel about public displays of affection?",
+                        "options": [
+                            {
+                                "option": "I love holding hands or hugging in public.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I like surprising my partner with little gifts in public.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I prefer meaningful conversations or sharing intimate moments in private.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "I enjoy receiving or giving sweet texts when we're apart.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you feel about gifts?",
+                        "options": [
+                            {
+                                "option": "Gifts are nice, but I prefer affection and time together.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I love receiving thoughtful gifts—they mean a lot to me.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Gifts aren’t as important as emotional connection.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "I like when my partner writes me heartfelt messages or letters.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What's your idea of a romantic gesture?",
+                        "options": [
+                            {
+                                "option": "A spontaneous kiss or cuddle.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "A surprise gift, especially one that shows thoughtfulness.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "A heart-to-heart talk where we share our feelings openly.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "A handwritten letter or a sweet text telling me how they feel.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When your partner is having a tough day, what do you do?",
+                        "options": [
+                            {
+                                "option": "Give them a comforting hug and sit with them.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Surprise them with their favorite treat or gift.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Sit down and have a deep conversation about what’s bothering them.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Text them something sweet or leave them a note to brighten their day.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you like to receive compliments?",
+                        "options": [
+                            {
+                                "option": "I love it when someone expresses their affection through physical gestures.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "I feel appreciated when I get compliments, especially with little gifts.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Compliments mean a lot, especially when they’re about how I feel or what I think.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Compliments in writing, whether in notes or texts, really make my day.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When you think about a perfect evening together, what do you envision?",
+                        "options": [
+                            {
+                                "option": "Relaxing together, maybe cuddling or holding hands while watching a movie.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Doing something fun together, like shopping, or exchanging gifts.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Talking about life, feelings, and dreams over dinner.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Sending sweet messages to each other throughout the night.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you prefer to receive affection when you’re feeling low?",
+                        "options": [
+                            {
+                                "option": "I need a hug or physical affection to feel better.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "A small, thoughtful gift or gesture makes me feel loved.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "I appreciate deep conversations that help me process my emotions.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "A sweet message, text, or letter expressing affection means a lot to me.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How do you like to express love to your partner?",
+                        "options": [
+                            {
+                                "option": "Through physical touch—holding hands, cuddling, etc.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "By surprising them with thoughtful gifts or gestures.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "By opening up and sharing my feelings with them.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Through written words—cards, notes, or messages.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When your partner is excited about something, how do you show you care?",
+                        "options": [
+                            {
+                                "option": "Give them a hug or a high-five.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Surprise them with a thoughtful gift to celebrate.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Have an in-depth conversation with them about what excites them.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Send them a quick text to let them know you’re happy for them.",
+                                "marks": 4
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What’s your ideal form of communication with your partner?",
+                        "options": [
+                            {
+                                "option": "Face-to-face, with lots of physical touch.",
+                                "marks": 1
+                            },
+                            {
+                                "option": "Giving and receiving gifts to show care.",
+                                "marks": 2
+                            },
+                            {
+                                "option": "Sitting down to talk about how we feel.",
+                                "marks": 3
+                            },
+                            {
+                                "option": "Writing letters or sending thoughtful texts.",
+                                "marks": 4
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
