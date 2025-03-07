@@ -12,6 +12,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "staging", "production"]),
     BETTER_AUTH_SECRET: z.string().min(1), // Secret for authentication
     DATABASE_URL: z.string().url(), // Database connection URL
+    DATABASE_TOKEN: z.string().optional(),
     DB_MIGRATING: z
       .string()
       .refine((s) => s === "true" || s === "false") // Ensure it's a boolean string
@@ -33,6 +34,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_TOKEN: process.env.DATABASE_TOKEN,
     DB_MIGRATING: process.env.DB_MIGRATING,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,

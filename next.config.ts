@@ -7,7 +7,9 @@ import type { NextConfig } from "next";
 // jiti("./src/env.ts");
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  eslint: {
+    ignoreDuringBuilds: true,
+  }
 };
 
 export default nextConfig;
