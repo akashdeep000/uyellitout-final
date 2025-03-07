@@ -1,7 +1,10 @@
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 import { GalleryVerticalEnd } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function ResetPasswordPage() {
+    const searchParams = useSearchParams();
     return (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
             <div className="flex w-full max-w-sm flex-col gap-6">
@@ -11,7 +14,9 @@ export default function ResetPasswordPage() {
                     </div>
                     Acme Inc.
                 </a>
-                <ResetPasswordForm />
+                <Suspense>
+                    <ResetPasswordForm />
+                </Suspense>
             </div>
         </div>
     );
