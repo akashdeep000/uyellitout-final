@@ -18,6 +18,7 @@ export default function QuizQuestionsPage({ params }: { params: Promise<{ id: st
     const queryClient = useQueryClient();
     const { id } = use(params);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data: quiz, isLoading: quizLoading } = useQuery({
         queryKey: ["quiz", id],
         queryFn: () => getQuizById(id),

@@ -91,7 +91,7 @@ export function QuizList({ id }: { id: string }) {
                                         questions?.[questionIndex].options.map((option, index) => {
                                             return (
                                                 <div key={index} onClick={() => {
-                                                    const filteredAnswer = answers.filter((answer) => answer.questionId === questions[questionIndex].id);
+                                                    const filteredAnswer = answers.filter((answer) => answer.questionId !== questions[questionIndex].id);
                                                     setAnswers([...filteredAnswer, {
                                                         questionId: questions[questionIndex].id,
                                                         answerIndex: index,

@@ -32,7 +32,7 @@ export default function Page() {
         queryFn: () => (selectedCategory ? getQuizzesByCategory(selectedCategory) : getQuizzes()),
     });
 
-    const { data: quizResults, isLoading: quizResultsLoading, isError: quizResultsError } = useQuery({
+    const { data: quizResults, isLoading: quizResultsLoading } = useQuery({
         queryKey: ["quiz-results", selectedCategory],
         queryFn: () => getQuizResultsWithUser()
     });

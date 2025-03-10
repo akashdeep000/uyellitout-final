@@ -213,7 +213,7 @@ export async function submitQuiz(data: {
     }).returning();
     const quizResultId = quizResultData[0].id;
     const newQuizResultAnswers = quizResultAnswers.map((answer) => ({ ...answer, quizResultId }));
-    console.log({ quizData });
+    console.log({ mark, total, percentage, quizData });
 
     await db.insert(quizResultAnswer).values(newQuizResultAnswers);
     const stat = userStatData[0]?.stat ?? [];

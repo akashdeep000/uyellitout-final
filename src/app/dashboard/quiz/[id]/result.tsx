@@ -30,6 +30,7 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Quiz })
     }, [api]);
     const grade = quiz.grades.sort((a, b) => b.percent - a.percent).find(grade => percentage >= grade.percent);
 
+
     return (
         <div className="fixed sm:rounded-lg rounded-none sm:relative z-[500000] sm:z-[50] top-0 left-0 w-full h-full bg-[#9ed6b7] flex flex-col">
             {
@@ -72,7 +73,7 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Quiz })
                                             fontSize="40"
                                             className="fill-gray-800"
                                         >
-                                            {percentage}
+                                            {percentage.toFixed(0)}
                                         </text>
                                     </svg>
                                 </div>
@@ -109,7 +110,7 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Quiz })
                                             fontSize="40"
                                             className="fill-gray-800"
                                         >
-                                            {percentage}
+                                            {percentage.toFixed(0)}
                                         </text>
                                     </svg>
                                 </div>

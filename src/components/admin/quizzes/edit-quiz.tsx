@@ -142,8 +142,12 @@ export function EditQuiz({ id }: { id: string }) {
                             <FormItem className="grid gap-2">
                                 <FormLabel>Options Marks</FormLabel>
                                 <FormControl><Input placeholder="Seperated by comma (,)" value={field.value.join(",")} onChange={(e) => {
-                                    const marks = e.target.value.split(",").map(Number);
-                                    field.onChange(marks);
+                                    let remove = false;
+                                    if (field.value[field.value.length - 1] === 0 && e.target.value.split(",")[e.target.value.split(",").length - 1] === "") {
+                                        remove = true;
+                                    }
+                                    const marks = e.target.value.split(",").filter((item, index) => (z.coerce.number().safeParse(item).success || (item === "" && item === "" && index === e.target.value.split(",").length - 1)) && (!remove || index !== e.target.value.split(",").length - 1));
+                                    field.onChange(marks.map(item => Number(item)));
                                 }} /></FormControl>
                                 <FormMessage />
                             </FormItem>
