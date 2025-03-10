@@ -7,6 +7,8 @@ import { converterToHappiness } from "@/lib/utils";
 import { desc, eq, InferInsertModel, InferSelectModel, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 
+export const runtime = "edge";
+
 // Define TypeScript types
 export type Quiz = InferSelectModel<typeof quiz>;
 export type NewQuiz = InferInsertModel<typeof quiz>;
