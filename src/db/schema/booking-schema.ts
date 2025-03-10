@@ -22,6 +22,6 @@ export const booking = sqliteTable("booking", {
     date: integer("date", { mode: "timestamp" }).notNull(),
     slot: integer("slot").notNull(),
     userId: text("user_id").notNull().references(() => user.id),
-    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(CURRENT_TIMESTAMP)`),
-    updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+    createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+    updatedAt: text("updated_at").notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });

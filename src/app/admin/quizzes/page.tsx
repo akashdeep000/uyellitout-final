@@ -1,5 +1,5 @@
 "use client";
-import { deleteQuiz, getCategories, getQuizzes, getQuizzesByCategory, updateQuiz } from "@/actions/quiz";
+import { deleteQuiz, getCategories, getQuizResultsWithUser, getQuizzes, getQuizzesByCategory, updateQuiz } from "@/actions/quiz";
 import { AdminPageWrapper } from "@/components/admin/page-wraper";
 import { AddCategory } from "@/components/admin/quizzes/add-category";
 import { AddQuiz } from "@/components/admin/quizzes/add-quiz";
@@ -30,6 +30,11 @@ export default function Page() {
     const { data: quizzes, isLoading: quizzesLoading, isError: quizzesError } = useQuery({
         queryKey: ["quizzes", selectedCategory],
         queryFn: () => (selectedCategory ? getQuizzesByCategory(selectedCategory) : getQuizzes()),
+    });
+
+    const { data: quizResults, isLoading: quizResultsLoading, isError: quizResultsError } = useQuery({
+        queryKey: ["quiz-results", selectedCategory],
+        queryFn: () => getQuizResultsWithUser()
     });
 
     const deleteQuizMutation = useMutation({
@@ -112,6 +117,24 @@ export default function Page() {
                     {quizzesLoading && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="w-full h-32 rounded" />)}
                     {quizzes?.length === 0 && <div className="text-muted-foreground">No quizzes found.</div>}
                     {quizzesError && <div className="text-muted-foreground">Error loading quizzes.</div>}
+                </div>
+
+                <div className="space-y-4">
+                    <h2 className="text-xl font-semibold">Submitions</h2>
+                    <div className="space-y-2">
+                        {quizResultsLoading && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="w-full h-28 rounded" />)}
+                        {quizResults?.map((result) => (
+                            <div key={result.id} className="p-4 border rounded-lg shadow-sm">
+                                <h3 className="text-lg font-semibold">{result.quizName}</h3>
+                                <p className="text-sm text-gray-500">User: {result.user.name}</p>
+                                <div className="flex gap-4">
+                                    <p className="text-sm text-gray-500">Marks: {`${result.mark}/${result.total}`}</p>
+                                    <p className="text-sm text-gray-500">Percentage: {((result.mark / result.total) * 100).toFixed(2)}</p>
+                                </div>
+                                <p className="text-sm text-gray-500">Date: {(new Date(result.createdAt)).toLocaleString()}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 

@@ -1,15 +1,16 @@
+import { use } from "react";
 import { QuizList } from "./quiz";
 
-export default async function Page({
+export default function Page({
     params,
 }: {
-    params: Promise<{ id: number }>
+    params: Promise<{ id: string }>
 }) {
-    const topicIndex = (await params).id - 1;
+    const { id } = use(params);
 
     return (
         <div className="min-h-full grid">
-            <QuizList topicIndex={topicIndex} />
+            <QuizList id={id} />
         </div>
     );
 }

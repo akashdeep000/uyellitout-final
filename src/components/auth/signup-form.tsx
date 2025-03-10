@@ -89,7 +89,7 @@ export function SignupForm({
                 });
                 setStatus("idle");
             },
-            // redirectTo: "/dashboard"
+            // redirectTo: "/email-verification"
         });
     }
 

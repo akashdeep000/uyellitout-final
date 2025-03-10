@@ -24,7 +24,7 @@ export const quiz = sqliteTable("quiz", {
 export const quizCategory = sqliteTable("quiz_category", {
     id: text("id").primaryKey().$defaultFn(() => ulid()),
     name: text("name").notNull(),
-    relatedTo: text("related_to", { enum: ["happiness", "intimacy"] }).notNull(),
+    relatedTo: text("related_to", { enum: ["happiness", "anxity", "stress", "mood", "intimacy"] }).notNull(),
 });
 
 export const question = sqliteTable("question", {
@@ -36,16 +36,29 @@ export const question = sqliteTable("question", {
 
 export const quizResult = sqliteTable("quiz_result", {
     id: text("id").primaryKey().$defaultFn(() => ulid()),
-    quizId: text("quiz_id").notNull().references(() => quiz.id, { onDelete: "set null" }),
     quizName: text("quiz_name").notNull(),
+    mark: integer("mark").notNull(),
+    total: integer("total").notNull(),
+    quizId: text("quiz_id").notNull().references(() => quiz.id, { onDelete: "set null" }),
     userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(CURRENT_TIMESTAMP)`),
+    createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
 });
 
 export const quizResultAnswer = sqliteTable("quiz_result_answer", {
     id: text("id").primaryKey().$defaultFn(() => ulid()),
-    quizResultId: text("quiz_result_id").notNull().references(() => quizResult.id, { onDelete: "cascade" }),
-    questionId: text("question_id").notNull().references(() => question.id, { onDelete: "set null" }),
     question: text("question").notNull(),
     option: text("option").notNull(),
+    questionId: text("question_id").notNull().references(() => question.id, { onDelete: "set null" }),
+    quizResultId: text("quiz_result_id").notNull().references(() => quizResult.id, { onDelete: "cascade" }),
+});
+
+export const userStat = sqliteTable("user_stat", {
+    id: text("id").primaryKey().$defaultFn(() => ulid()),
+    stat: text("stat", { mode: "json" }).$type<{
+        happiness: number;
+        intimacy: number;
+    }[]>().notNull(),
+    userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }).unique(),
+    createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+    updatedAt: text("updated_at").notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });

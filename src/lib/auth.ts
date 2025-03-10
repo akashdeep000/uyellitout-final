@@ -29,7 +29,8 @@ export const auth = betterAuth({
     emailVerification: {
         sendVerificationEmail: async (ctx) => {
             await sendVerificationEmail({ ctx, subject: "Please verify your email address." });
-        }
+        },
+        autoSignInAfterVerification: true
     },
     plugins: [
         nextCookies(),

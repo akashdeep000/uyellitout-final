@@ -1,8 +1,11 @@
 "use server";
 
 import { db } from "@/db"; // Assuming you have a database instance
-import { question, quiz, quizCategory, quizResult, quizResultAnswer } from "@/db/schema";
-import { eq, InferInsertModel, InferSelectModel, sql } from "drizzle-orm";
+import { question, quiz, quizCategory, quizResult, quizResultAnswer, user, userStat } from "@/db/schema";
+import { auth } from "@/lib/auth";
+import { converterToHappiness } from "@/lib/utils";
+import { desc, eq, InferInsertModel, InferSelectModel, sql } from "drizzle-orm";
+import { headers } from "next/headers";
 
 // Define TypeScript types
 export type Quiz = InferSelectModel<typeof quiz>;
@@ -150,4 +153,116 @@ export async function updateCategory(id: string, name: string) {
 // Delete a category
 export async function deleteCategory(id: string) {
     return await db.delete(quizCategory).where(eq(quizCategory.id, id)).returning();
+}
+
+// Submit quiz
+export async function submitQuiz(data: {
+    quizId: string;
+    answers: {
+        questionId: string;
+        answerIndex: number;
+    }[];
+}) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+    const userId = session?.session?.userId;
+    if (!userId) {
+        throw new Error("User not found");
+    };
+    const quizData = (await db.select({
+        title: quiz.title,
+        defaultMarks: quiz.defaultMarks,
+        categoryId: quiz.categoryId,
+        categoryName: quizCategory.name,
+        categotyRelatedTo: quizCategory.relatedTo
+    }).from(quiz).where(eq(quiz.id, data.quizId)).leftJoin(quizCategory, eq(quiz.categoryId, quizCategory.id)))[0];
+
+    if (!quizData) {
+        throw new Error("Quiz not found");
+    }
+
+    const questions = await getQuestionsByQuiz(data.quizId);
+    const userStatData = await db.select().from(userStat).where(eq(userStat.userId, userId));
+
+    const defaultMarks = quizData.defaultMarks;
+
+    let mark = 0;
+    const quizResultAnswers: NewQuizResultAnswer[] = [];
+    const total = data.answers.length * defaultMarks.sort((a, b) => b - a)[0];
+
+    for (const answer of data.answers) {
+        mark += defaultMarks[answer.answerIndex];
+        const question = questions.find((question) => question.id = answer.questionId);
+        if (question) {
+            quizResultAnswers.push({
+                question: question.question,
+                option: question.options[answer.answerIndex] as string,
+                questionId: question.id,
+                quizResultId: "dummy"
+            });
+        }
+    }
+    const percentage = (mark / total) * 100;
+    const quizResultData = await db.insert(quizResult).values({
+        quizName: quizData.title,
+        quizId: data.quizId,
+        userId,
+        mark,
+        total
+    }).returning();
+    const quizResultId = quizResultData[0].id;
+    const newQuizResultAnswers = quizResultAnswers.map((answer) => ({ ...answer, quizResultId }));
+    console.log({ quizData });
+
+    await db.insert(quizResultAnswer).values(newQuizResultAnswers);
+    const stat = userStatData[0]?.stat ?? [];
+    const previousStat = stat[stat.length - 1] || {
+        happiness: 0,
+        intimacy: 0
+    };
+
+    const newStat = {
+        happiness: quizData.categotyRelatedTo === "intimacy" ? previousStat.happiness || 0 : converterToHappiness(quizData.categotyRelatedTo, (previousStat.happiness === 0 ? percentage : (previousStat.happiness + percentage) / 2)),
+        intimacy: quizData.categotyRelatedTo !== "intimacy" ? previousStat.intimacy || 0 : previousStat.intimacy === 0 ? percentage : (previousStat.intimacy + percentage) / 2
+    };
+
+    if (stat.length === 0) {
+        await db.insert(userStat).values({
+            stat: [newStat],
+            userId
+        });
+    } else if (stat.length < 3) {
+        await db.update(userStat).set({
+            stat: [...stat, newStat]
+        }).where(eq(userStat.userId, userId));
+    } else {
+        if (stat.length >= 3) {
+            stat.pop();
+        }
+        await db.update(userStat).set({
+            stat: [...stat, newStat]
+        }).where(eq(userStat.userId, userId));
+        return percentage;
+    }
+    return percentage;
+}
+
+// Get quiz results with user details (latest first)
+export async function getQuizResultsWithUser() {
+    return await db.select({
+        id: quizResult.id,
+        quizName: quizResult.quizName,
+        quizId: quizResult.quizId,
+        userId: quizResult.userId,
+        mark: quizResult.mark,
+        total: quizResult.total,
+        createdAt: quizResult.createdAt,
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image
+        }
+    }).from(quizResult).orderBy(desc(quizResult.createdAt)).innerJoin(user, eq(user.id, quizResult.userId));
 }

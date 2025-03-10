@@ -44,7 +44,7 @@ export function UploadQuizCSV({ quizId }: { quizId: string }) {
 
                 Object.entries(all).forEach((value, index) => {
                     if (index === 0) currentQn.question = value[1];
-                    else currentQn.options.push(value[1]);
+                    else if (value?.[1]?.length > 0) currentQn.options.push(value[1]);
                 });
 
                 return {
@@ -96,7 +96,10 @@ export function UploadQuizCSV({ quizId }: { quizId: string }) {
     };
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={(open) => {
+            form.reset();
+            setOpen(open);
+        }}>
             <DialogTrigger asChild>
                 <Button variant="outline">Upload CSV</Button>
             </DialogTrigger>
