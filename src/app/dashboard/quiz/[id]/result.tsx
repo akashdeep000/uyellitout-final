@@ -1,5 +1,5 @@
 "use client";
-import { Quiz } from "@/actions/quiz";
+import { getQuizById } from "@/actions/quiz";
 import { Button } from "@/components/ui/button";
 import {
     Carousel,
@@ -11,10 +11,11 @@ import { ChevronLeft, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 
-export function Result({ percentage, quiz }: { percentage: number, quiz: Quiz }) {
+export function Result({ percentage, quiz }: { percentage: number, quiz: Awaited<ReturnType<typeof getQuizById>> }) {
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
+    const imgCat = ["general", "emmotions", "growth", "parental", "relationship", "work"].find((cat) => quiz.categoryName?.toLowerCase().includes(cat)) || "general";
 
     useEffect(() => {
         if (!api) {
@@ -46,8 +47,8 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Quiz })
                         <div className="h-full max-w-prose mx-auto flex flex-col justify-center">
                             <img className="w-full" src="/result/page-1/image-1.svg" />
                             <div className="p-12 text-gray-800">
-                                <p className="text-2xl">Your <span className="font-semibold text-4xl">Brain’s</span></p>
-                                <p className="text-3xl font-semibold">Cheat Sheet</p>
+                                <p className="text-4xl">Your <span className="font-semibold text-5xl">Brain’s</span></p>
+                                <p className="text-5xl font-semibold">Cheat Sheet</p>
                             </div>
                         </div>
                     </CarouselItem>
@@ -78,11 +79,11 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Quiz })
                                     </svg>
                                 </div>
                                 <div className="w-[65%]">
-                                    <img className="w-full" src="/result/page-2/emmotions/image-1.svg" />
+                                    <img className="w-full" src={`/result/page-2/${imgCat}/image-1.svg`} />
                                 </div>
                             </div>
                             <div>
-                                <p className="text-2xl text-gray-800 font-semibold tracking-tighter">
+                                <p className="text-3xl text-gray-800 font-semibold tracking-tighter">
                                     {grade?.title}
                                 </p>
                             </div>
@@ -115,7 +116,7 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Quiz })
                                     </svg>
                                 </div>
                                 <div className="w-[60%]">
-                                    <img className="w-full" src="/result/page-3/emmotions/image-1.svg" />
+                                    <img className="w-full" src={`/result/page-3/${imgCat}/image-1.svg`} />
                                 </div>
                             </div>
                             <div className="text-gray-800 tracking-tighter space-y-4">
@@ -131,14 +132,26 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Quiz })
                                 <img className="h-full" src="/result/page-4/image-1.svg" />
                             </div>
                             <div className="p-12 text-gray-800">
-                                <p className="font-semibold text-6xl text-white">Pro - tip </p>
-                                <p className="text-4xl">protin</p>
+                                <p className="font-semibold text-7xl text-white">Pro - tip </p>
+                                <p className="text-5xl">protin</p>
                             </div>
                         </div>
                     </CarouselItem>
-                    <CarouselItem>
-                        5
-                    </CarouselItem>
+                    {
+                        grade?.tips.map((tip, index) => (
+                            <CarouselItem key={index} className="h-full p-4 pl-8">
+                                <div className="h-full max-w-prose mx-auto flex gap-8 flex-col justify-center">
+                                    <div className="h-[50%] w-full grid place-items-center">
+                                        <img className="h-full" src={tip.image} />
+                                    </div>
+                                    <div className="text-gray-800 tracking-tighter space-y-4">
+                                        <p className="font-semibold text-2xl" dangerouslySetInnerHTML={{ __html: tip.title.replaceAll("{", "<span class=\"text-3xl\">").replaceAll("}", "</span>").replaceAll("[", "<span class=\"text-white\">").replaceAll("]", "</span>") }} />
+                                        <p className="text-2xl" dangerouslySetInnerHTML={{ __html: tip.description.replaceAll("{", "<span class=\"text-3xl\">").replaceAll("}", "</span>").replaceAll("[", "<span class=\"text-white\">").replaceAll("]", "</span>") }} />
+                                    </div>
+                                </div>
+                            </CarouselItem>
+                        ))
+                    }
                 </CarouselContent>
             </Carousel>
             <div className="flex justify-center">

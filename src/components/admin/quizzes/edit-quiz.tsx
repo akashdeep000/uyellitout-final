@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Edit, Plus, Trash } from "lucide-react";
@@ -142,11 +143,12 @@ export function EditQuiz({ id }: { id: string }) {
                             <FormItem className="grid gap-2">
                                 <FormLabel>Options Marks</FormLabel>
                                 <FormControl><Input placeholder="Seperated by comma (,)" value={field.value.join(",")} onChange={(e) => {
-                                    let remove = false;
-                                    if (field.value[field.value.length - 1] === 0 && e.target.value.split(",")[e.target.value.split(",").length - 1] === "") {
-                                        remove = true;
-                                    }
-                                    const marks = e.target.value.split(",").filter((item, index) => (z.coerce.number().safeParse(item).success || (item === "" && item === "" && index === e.target.value.split(",").length - 1)) && (!remove || index !== e.target.value.split(",").length - 1));
+                                    // let remove = false;
+                                    // if (field.value[field.value.length - 1] === 0 && e.target.value.split(",")[e.target.value.split(",").length - 1] === "") {
+                                    //     remove = true;
+                                    // }
+                                    // const marks = e.target.value.split(",").filter((item, index) => (z.coerce.number().safeParse(item).success || (item === "" && item === "" && index === e.target.value.split(",").length - 1)) && (!remove || index !== e.target.value.split(",").length - 1));
+                                    const marks = e.target.value.split(",");
                                     field.onChange(marks.map(item => Number(item)));
                                 }} /></FormControl>
                                 <FormMessage />
@@ -187,14 +189,14 @@ export function EditQuiz({ id }: { id: string }) {
                                         <FormField control={form.control} name={`grades.${gradeIndex}.title`} render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Grade Title</FormLabel>
-                                                <FormControl><Input {...field} /></FormControl>
+                                                <FormControl><Textarea rows={2} {...field} /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )} />
                                         <FormField control={form.control} name={`grades.${gradeIndex}.description`} render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Grade Description</FormLabel>
-                                                <FormControl><Input {...field} /></FormControl>
+                                                <FormControl><Textarea rows={5} {...field} /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )} />
@@ -237,14 +239,14 @@ export function EditQuiz({ id }: { id: string }) {
                                                                         <Trash />
                                                                     </Button>
                                                                 </div>
-                                                                <FormControl><Input {...field} /></FormControl>
+                                                                <FormControl><Textarea rows={2} {...field} /></FormControl>
                                                                 <FormMessage />
                                                             </FormItem>
                                                         )} />
                                                         <FormField control={form.control} name={`grades.${gradeIndex}.tips.${tipIndex}.description`} render={({ field }) => (
                                                             <FormItem>
                                                                 <FormLabel>Tip Description</FormLabel>
-                                                                <FormControl><Input {...field} /></FormControl>
+                                                                <FormControl><Textarea rows={5} {...field} /></FormControl>
                                                                 <FormMessage />
                                                             </FormItem>
                                                         )} />

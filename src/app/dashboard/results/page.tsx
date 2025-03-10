@@ -17,7 +17,7 @@ export default function ResultsPage() {
                 <TableBody>
                     <TableRow>
                         <TableCell className="font-medium">21-06-2024</TableCell>
-                        <TableCell>Demo quize for a really long tittle</TableCell>
+                        <TableCell>Demo quiz for a really long tittle</TableCell>
                         <TableCell className="text-center">67</TableCell>
                         <TableCell className="px-0">
                             <DropdownMenu>

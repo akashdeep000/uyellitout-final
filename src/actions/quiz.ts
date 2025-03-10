@@ -27,8 +27,16 @@ export async function createQuiz(data: NewQuiz) {
 
 
 // Fetch a single quiz by ID
-export async function getQuizById(id: string): Promise<Quiz | undefined> {
-    const result = await db.select().from(quiz).where(eq(quiz.id, id));
+export async function getQuizById(id: string) {
+    const result = await db.select({
+        id: quiz.id,
+        title: quiz.title,
+        defaultMarks: quiz.defaultMarks,
+        grades: quiz.grades,
+        active: quiz.active,
+        categoryId: quiz.categoryId,
+        categoryName: quizCategory.name
+    }).from(quiz).where(eq(quiz.id, id)).leftJoin(quizCategory, eq(quiz.categoryId, quizCategory.id));
     return result[0];
 }
 
@@ -189,7 +197,7 @@ export async function submitQuiz(data: {
 
     let mark = 0;
     const quizResultAnswers: NewQuizResultAnswer[] = [];
-    const total = data.answers.length * defaultMarks.sort((a, b) => b - a)[0];
+    const total = data.answers.length * defaultMarks.toSorted((a, b) => b - a)[0];
 
     for (const answer of data.answers) {
         mark += defaultMarks[answer.answerIndex];
