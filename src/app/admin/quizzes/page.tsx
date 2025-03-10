@@ -123,6 +123,7 @@ export default function Page() {
                     <h2 className="text-xl font-semibold">Submitions</h2>
                     <div className="space-y-2">
                         {quizResultsLoading && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="w-full h-28 rounded" />)}
+                        {quizzes?.length === 0 && <div className="text-muted-foreground">No quizzes found.</div>}
                         {quizResults?.map((result) => (
                             <div key={result.id} className="p-4 border rounded-lg shadow-sm">
                                 <h3 className="text-lg font-semibold">{result.quizName}</h3>
