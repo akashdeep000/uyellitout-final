@@ -1,5 +1,4 @@
 import { AdminPageWrapper } from "@/components/admin/page-wraper";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface Artwork {
     artist: string
@@ -24,30 +23,6 @@ const works: Artwork[] = [
 export default function Page() {
     return (
         <AdminPageWrapper className="space-y-2">
-            <ScrollArea className="whitespace-nowrap rounded-md border">
-                <div className="flex w-max space-x-4 p-4">
-                    {works.map((artwork) => (
-                        <figure key={artwork.artist} className="shrink-0">
-                            <div className="overflow-hidden rounded-md">
-                                <img
-                                    src={artwork.art}
-                                    alt={`Photo by ${artwork.artist}`}
-                                    className="aspect-[3/4] h-fit w-fit object-cover"
-                                    width={300}
-                                    height={400}
-                                />
-                            </div>
-                            <figcaption className="pt-2 text-xs text-muted-foreground">
-                                Photo by{" "}
-                                <span className="font-semibold text-foreground">
-                                    {artwork.artist}
-                                </span>
-                            </figcaption>
-                        </figure>
-                    ))}
-                </div>
-                <ScrollBar orientation="horizontal" />
-            </ScrollArea>
             <div className="aspect-video w-full bg-muted/50 rounded"></div>
             <div className="aspect-video w-full bg-muted/50 rounded"></div>
             <div className="aspect-video w-full bg-muted/50 rounded"></div>
