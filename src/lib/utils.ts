@@ -5,12 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const converterToHappiness = (matric: "happiness" | "anxity" | "stress" | "mood" | "intimacy" | null, value: number) => {
+export const converterToHappiness = (matric: "happiness" | "anxiety" | "stress" | "mood" | "intimacy" | null, value: number) => {
   switch (matric) {
     case "happiness":
       return value;
-    case "anxity":
-      return anxityToHappiness(value);
+    case "anxiety":
+      return anxietyToHappiness(value);
     case "stress":
       return stressToHappiness(value);
     case "mood":
@@ -20,7 +20,22 @@ export const converterToHappiness = (matric: "happiness" | "anxity" | "stress" |
   }
 };
 
-export const happinessToAnxity = (happiness: number) => {
+export const converterFromHappiness = (matric: "happiness" | "anxiety" | "stress" | "mood" | "intimacy" | null, value: number) => {
+  switch (matric) {
+    case "happiness":
+      return value;
+    case "anxiety":
+      return happinessToAnxiety(value);
+    case "stress":
+      return happinessToStress(value);
+    case "mood":
+      return happinessToMood(value);
+    default:
+      return value;
+  }
+};
+
+export const happinessToAnxiety = (happiness: number) => {
   return ((98 - happiness) * 1.023) + 12;
 };
 
@@ -32,8 +47,8 @@ export const happinessToMood = (happiness: number) => {
   return ((98 - happiness) * 1.011) + 13;
 };
 
-export const anxityToHappiness = (anxity: number) => {
-  return 98 - ((anxity - 12) / 1.023);
+export const anxietyToHappiness = (anxiety: number) => {
+  return 98 - ((anxiety - 12) / 1.023);
 };
 
 export const stressToHappiness = (stress: number) => {

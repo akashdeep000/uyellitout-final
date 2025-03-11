@@ -3,7 +3,7 @@ import { getQuestionsByQuiz, getQuizById, submitQuiz } from "@/actions/quiz";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Maximize2, Minimize2 } from "lucide-react";
 import { useState } from "react";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
@@ -19,6 +19,7 @@ export function QuizList({ id }: { id: string }) {
     }[]>([]);
 
     const handle = useFullScreenHandle();
+    const queryClient = useQueryClient();
 
     const { data: quiz, isLoading: quizLoading } = useQuery({
         queryKey: ["quiz", id],
@@ -33,6 +34,7 @@ export function QuizList({ id }: { id: string }) {
     const mutation = useMutation({
         mutationFn: submitQuiz,
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["matrics"] });
             setShowResult(true);
         },
         onError: (error) => {
@@ -47,10 +49,15 @@ export function QuizList({ id }: { id: string }) {
         });
     };
 
+    console.log({
+        quiz,
+        data: mutation.data
+    });
+
     return (
         <>
             <FullScreen handle={handle}>
-                {!showResult ?
+                {!showResult &&
                     <div className="space-y-2 bg-background select-none min-h-full grid grid-rows-[auto_1fr]">
                         <div className="p-3 rounded-md bg-[#9ED6B7] space-y-4">
                             <div className="flex flex-row-reverse">
@@ -121,9 +128,10 @@ export function QuizList({ id }: { id: string }) {
                             </div>
                         </div>
                     </div>
-                    : mutation.data && quiz ?
-                        <Result percentage={mutation.data} quiz={quiz} />
-                        : null
+                }
+                {
+                    mutation.data !== undefined && quiz &&
+                    <Result percentage={mutation.data} quiz={quiz} />
                 }
             </FullScreen>
         </>

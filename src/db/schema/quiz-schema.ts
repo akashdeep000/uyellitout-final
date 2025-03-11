@@ -24,7 +24,7 @@ export const quiz = sqliteTable("quiz", {
 export const quizCategory = sqliteTable("quiz_category", {
     id: text("id").primaryKey().$defaultFn(() => ulid()),
     name: text("name").notNull(),
-    relatedTo: text("related_to", { enum: ["happiness", "anxity", "stress", "mood", "intimacy"] }).notNull(),
+    relatedTo: text("related_to", { enum: ["happiness", "anxiety", "stress", "mood", "intimacy"] }).notNull(),
 });
 
 export const question = sqliteTable("question", {

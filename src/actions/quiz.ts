@@ -7,8 +7,6 @@ import { converterToHappiness } from "@/lib/utils";
 import { desc, eq, InferInsertModel, InferSelectModel, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 
-export const runtime = "edge";
-
 // Define TypeScript types
 export type Quiz = InferSelectModel<typeof quiz>;
 export type NewQuiz = InferInsertModel<typeof quiz>;
@@ -237,6 +235,20 @@ export async function submitQuiz(data: {
         intimacy: quizData.categotyRelatedTo !== "intimacy" ? previousStat.intimacy || 0 : previousStat.intimacy === 0 ? percentage : (previousStat.intimacy + percentage) / 2
     };
 
+    if (newStat.happiness > 97) {
+        newStat.happiness = 97;
+    }
+    if (newStat.intimacy > 97) {
+        newStat.intimacy = 97;
+    }
+
+    if (newStat.happiness !== 0 && newStat.happiness < 7) {
+        newStat.happiness = 7;
+    }
+    if (newStat.intimacy !== 0 && newStat.intimacy < 7) {
+        newStat.intimacy = 7;
+    }
+
     if (stat.length === 0) {
         await db.insert(userStat).values({
             stat: [newStat],
@@ -275,4 +287,28 @@ export async function getQuizResultsWithUser() {
             image: user.image
         }
     }).from(quizResult).orderBy(desc(quizResult.createdAt)).innerJoin(user, eq(user.id, quizResult.userId));
+}
+
+// Get quiz results by user
+export async function getQuizResultsByUser() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+    const userId = session?.session?.userId;
+    if (!userId) {
+        throw new Error("User not found");
+    };
+    return await db.select().from(quizResult).where(eq(quizResult.userId, userId)).orderBy(desc(quizResult.createdAt));
+}
+
+// Get stats by user
+export async function getStatsByUser() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+    const userId = session?.session?.userId;
+    if (!userId) {
+        throw new Error("User not found");
+    };
+    return (await db.select().from(userStat).where(eq(userStat.userId, userId)).orderBy(desc(userStat.createdAt)))[0];
 }
