@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
+import { ReactQueryProviders } from "@/providers/react-query";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -16,7 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <main>
-          {children}
+          <ReactQueryProviders>
+            {children}
+          </ReactQueryProviders>
         </main>
         <Toaster />
       </body>

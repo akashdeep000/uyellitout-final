@@ -2,8 +2,9 @@
 
 import { getStatsByUser } from "@/actions/quiz";
 import { Button } from "@/components/ui/button";
-
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Skeleton } from "@/components/ui/skeleton";
+import { authClient } from "@/lib/auth-client";
 import { converterFromHappiness } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { CartesianGrid, Label, Line, LineChart, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, XAxis } from "recharts";
@@ -76,6 +77,11 @@ export default function Page() {
     queryFn: () => getStatsByUser()
   });
 
+  const { data: session, isLoading: sessionLoading } = useQuery({
+    queryKey: ["session"],
+    queryFn: () => authClient.getSession()
+  });
+
   const percentChartData = metrics.map((metric) => ({
     data: [{
       [metric.key]: Number(stats ? metric.key === "intimacy" ? stats?.stat[stats?.stat.length - 1].intimacy.toFixed(0) : converterFromHappiness(metric.key as "happiness" | "anxiety" | "stress" | "mood" | "intimacy", stats?.stat[stats?.stat.length - 1].happiness).toFixed(0) : 0) as number,
@@ -95,7 +101,7 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-8 overflow-x-scroll sm:px-[2%]">
       <div className="hidden sm:block font-semibold text-2xl pt-6 pb-2">
-        <p>Welcome back, Srishti!</p>
+        <div className="flex gap-2"><p>Welcome back, </p> {sessionLoading ? <Skeleton className="inline w-24 h-8 rounded" /> : <p>{session?.data?.user.name.split(" ")[0]}!</p>}</div>
         <p>Ready to check your progress?</p>
       </div>
       <div className="grid md:grid-cols-2 gap-4">
