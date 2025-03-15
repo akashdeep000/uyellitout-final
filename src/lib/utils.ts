@@ -58,3 +58,22 @@ export const stressToHappiness = (stress: number) => {
 export const moodToHappiness = (mood: number) => {
   return 98 - ((mood - 13) / 1.011);
 };
+
+
+export const slotToTime = (slot: number) => {
+  const hour = Math.floor(slot / 4);
+  const minute = ((slot % 4) * 15);
+  return `${(hour > 12 ? hour - 12 : hour).toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")} ${hour >= 12 ? "PM" : "AM"}`;
+};
+
+export function convertToDate(date: Date, slot: number): Date {
+  // Convert slot to hours and minutes
+  const hours = Math.floor(slot / 4);
+  const minutes = (slot % 4) * 15;
+
+  // Create a new Date object for the same calendar date, but in IST
+  const istDate = new Date(date.toLocaleDateString("en-US", { timeZone: "Asia/Kolkata" }));
+  istDate.setHours(hours, minutes, 0, 0);
+
+  return istDate;
+}

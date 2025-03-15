@@ -166,7 +166,6 @@ export default function Page() {
                                                     today.setHours(0, 0, 0, 0);
                                                     const isPastDate = date < today;
                                                     const isBlockedDate = blockedSlots.some(block => block.date?.toDateString() === date.toDateString());
-
                                                     return isPastDate || isBlockedDate;
                                                 }}
                                             />

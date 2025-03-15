@@ -1,14 +1,21 @@
 "use server";
 
+import { packages, services } from "@/configs/data";
 import { db } from "@/db"; // Assuming you have a database instance
-import { availability, blockedAvailability } from "@/db/schema";
+import { availability, blockedAvailability, booking } from "@/db/schema";
+import { env } from "@/env";
 import { auth } from "@/lib/auth";
-import { eq, InferSelectModel } from "drizzle-orm";
+import { convertToDate } from "@/lib/utils";
+import { orderSchema } from "@/schema/order";
+import { and, count, desc, eq, gte, InferInsertModel, InferSelectModel, isNotNull, like, lt, lte, or, SQL, sql } from "drizzle-orm";
 import { headers } from "next/headers";
+import Razorpay from "razorpay";
+import { z } from "zod";
 
 // Define TypeScript types
 export type Availability = InferSelectModel<typeof availability>;
 export type BlockedAvailability = InferSelectModel<typeof blockedAvailability>;
+export type NewBooking = InferInsertModel<typeof booking>;
 
 // Get availabile slots
 export async function getAvailabilities() {
@@ -106,3 +113,321 @@ export async function deleteAllBlockedSlotsAndAddNew(data: Partial<BlockedAvaila
         }
     });
 }
+
+// Get next 30 days upcoming confirmed bookings and pending bookings that are created in last 5min
+export async function getUpcommingBookings() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+    if (session?.user.role !== "admin") {
+        throw new Error("Not Allowed");
+    };
+
+    const now = new Date();
+    const thirtyDaysLater = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+
+    const upcomingBookings = await db
+        .select()
+        .from(booking)
+        .where(
+            sql`
+      (
+        (status = 'confirmed' AND date >= ${now.toISOString()} AND date <= ${thirtyDaysLater.toISOString()})
+        OR
+        (status = 'pending' AND created_at >= ${fiveMinutesAgo.toISOString()})
+      )
+    `
+        );
+    return upcomingBookings;
+}
+
+// Get Next 30 days' available days
+export async function getNext30DaysAvailableDays() {
+    // const IST_OFFSET = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+
+    // allow slots after
+    const startTime = new Date();
+
+
+    // Get current date and the date 30 days from now
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to beginning of day
+
+    const thirtyDaysLater = new Date();
+    thirtyDaysLater.setDate(today.getDate() + 30);
+    thirtyDaysLater.setHours(23, 59, 59, 999); // Set to end of day
+
+    // Get all weekly availability
+    const weeklyAvailability = await db.select().from(availability);
+
+    // Get all blocked dates within the next 30 days
+    const blockedDates = await db.select().from(blockedAvailability).where(
+        and(
+            gte(blockedAvailability.date, today),
+            lte(blockedAvailability.date, thirtyDaysLater)
+        )
+    );
+    //Get all confirmed bookings within the next 30 days
+    const confirmedBookings = await db.select().from(booking).where(
+        and(
+            eq(booking.status, "confirmed"),
+            gte(booking.date, today),
+            lte(booking.date, thirtyDaysLater)
+        )
+    );
+
+    // Create an array to hold all dates in the next 30 days
+    const next30Days = [];
+    for (let i = 0; i < 30; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        next30Days.push(date);
+    }
+
+    // Map day numbers to day names used in your schema
+    const dayMap = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+
+    // Create the final availability result
+    const result = next30Days.map(date => {
+        const dayName = dayMap[date.getDay()];
+
+        // Get the weekly schedule for this day
+        const daySchedule = weeklyAvailability.find(a => a.day === dayName);
+        if (!daySchedule || !daySchedule.slots.length) {
+            return {
+                date: date.toISOString().split("T")[0], // Format as YYYY-MM-DD
+                dayOfWeek: dayName,
+                availableSlots: []
+            };
+        }
+
+        // Find if this specific date has blocked slots
+        const blockedDate = blockedDates.find(b => {
+            const blockedDateTime = new Date(b.date);
+            return blockedDateTime.getTime() >= date.getTime() &&
+                blockedDateTime.getTime() < new Date(date).setHours(24, 0, 0, 0);
+        });
+
+        // console.log({ blockedDates, blockedDate, data: date.getTime() });
+
+
+        // Calculate available slots
+        let availableSlots = [...daySchedule.slots];
+
+        if (blockedDate) {
+            // Properly remove blocked slots from available slots
+            availableSlots = daySchedule.slots.filter(slot =>
+                !blockedDate.slots.includes(slot)
+            );
+        }
+
+        // Filter slots that's time is already passed
+        if (date.toISOString().split("T")[0] === today.toISOString().split("T")[0]) {
+            console.log({ today });
+            availableSlots = availableSlots.filter(slot => {
+                const hour = Math.floor(slot / 4);
+                const minute = ((slot % 4) * 15);
+                const slotStart = new Date(date);
+                slotStart.setHours(hour, minute, 0, 0);
+                return slotStart > startTime;
+            });
+        }
+
+        // Filter out slots that are already booked
+        const bookedSlots = confirmedBookings.filter(b => {
+            return b.date?.toISOString().split("T")[0] === date.toISOString().split("T")[0];
+        }).map(b => b.slots);
+
+        if (bookedSlots) {
+            availableSlots = availableSlots.filter(slot => {
+                return !bookedSlots.some(booked => booked?.includes(slot));
+            });
+        }
+
+        return {
+            date: date.toISOString().split("T")[0], // Format as YYYY-MM-DD
+            dayOfWeek: dayName,
+            availableSlots: availableSlots
+        };
+    });
+
+    // Filter out days with no available slots
+    return result.filter(day => day.availableSlots.length > 0);
+
+}
+
+// Update booking
+export async function updateBooking(data: Partial<NewBooking> & { id: string }) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+    if (session?.user.role !== "admin") {
+        throw new Error("Not Allowed");
+    };
+    return await db.update(booking).set(data).where(eq(booking.id, data.id)).returning();
+}
+
+
+// Get all bookings (latest first) with pagination
+export async function getBookings({
+    lastId,
+    limit = 10,
+    from = new Date(),
+    to = new Date(),
+    sortBy = "time",
+    onlyScheduled = "false",
+    search = ""
+}: {
+    lastId?: string | undefined | null,
+    limit?: number,
+    from?: Date,
+    to?: Date,
+    sortBy?: "createdAt" | "time",
+    onlyScheduled?: "true" | "false",
+    search?: string
+}) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+
+    if (session?.user.role !== "admin") {
+        throw new Error("Not Allowed");
+    }
+
+    // Set time boundaries for the date range
+    from.setHours(0, 0, 0, 0);
+    to.setHours(23, 59, 59, 999);
+
+    // Determine which column to sort by
+    const sortColumn = sortBy === "createdAt" ? "createdAt" : "date";
+
+    // Build the base where conditions (without pagination cursor)
+    const baseWhereConditions = [
+        eq(booking.status, "confirmed"),
+        gte(booking.date, from),
+        lte(booking.date, to)
+    ];
+
+    // Add scheduled-only condition if specified
+    if (onlyScheduled === "true") {
+        baseWhereConditions.push(isNotNull(booking.time));
+    }
+
+    // Add search conditions if search term is provided
+    if (search && search.trim() !== "") {
+        baseWhereConditions.push(
+            or(
+                like(booking.name, `%${search.trim()}%`),
+                like(booking.email, `%${search.trim()}%`),
+                like(booking.phoneNumber, `%${search.trim()}%`)
+            ) as SQL<unknown>
+        );
+    }
+
+    // Get total count matching the criteria (excluding pagination)
+    const [{ count: totalCount }] = await db
+        .select({ count: count() })
+        .from(booking)
+        .where(and(...baseWhereConditions));
+
+    // Create pagination conditions by copying base conditions
+    const paginationWhereConditions = [...baseWhereConditions];
+
+    // Add pagination cursor condition if lastId is provided
+    if (lastId) {
+        paginationWhereConditions.push(lt(booking.id, lastId));
+    }
+
+    // Execute the paginated query
+    const results = await db
+        .select()
+        .from(booking)
+        .where(and(...paginationWhereConditions))
+        .orderBy(desc(booking[sortColumn]))
+        .limit(limit);
+
+    // Get the last ID for the next page cursor
+    const lastBookingId = results.length > 0 ? results[results.length - 1].id : null;
+
+    // Check if there are more results
+    const hasNextPage = results.length === limit;
+
+    return {
+        data: results,
+        pagination: {
+            hasNextPage,
+            nextCursor: hasNextPage ? lastBookingId : null,
+            totalCount: Number(totalCount)
+        }
+    };
+}
+
+
+// Create Rasorpay order
+type Modify<T, K extends keyof T, R> = Omit<T, K> & { [P in K]: R };
+type FormDataType = Modify<z.infer<typeof orderSchema>, "staringtSlot", number | string | undefined>
+
+export async function createRazorpayOrder(data: FormDataType) {
+    // safe parse using zod
+    const { data: parsedData, success } = orderSchema.safeParse(data);
+    if (!success) {
+        throw new Error("Invalid data");
+    }
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+    const availabilities = await getNext30DaysAvailableDays();
+    const availabileSlots = availabilities.find((availability) => availability.date === parsedData.date.toISOString().split("T")[0])?.availableSlots;
+    if (!availabileSlots) {
+        throw new Error("No slots available for this date");
+    }
+    const staringtSlot = parsedData.staringtSlot;
+    console.log("creating order", { availabileSlots, staringtSlot });
+
+    if (![staringtSlot, staringtSlot + 1, staringtSlot + 2, staringtSlot + 3].every(slot => availabileSlots.includes(slot))) {
+        throw new Error("Slot not available");
+    }
+
+    const product = parsedData.productType === "service" ? services[parsedData.productId] : packages[parsedData.productId];
+
+    const razorpay = new Razorpay({
+        key_id: env.NEXT_PUBLIC_RASORPAY_KEY_ID,
+        key_secret: env.RASORPAY_KEY_SECRET
+    });
+
+    const order = await razorpay.orders.create({
+        amount: product.price * parsedData.productCount * 100, // amount in the smallest currency unit
+        currency: "INR",
+        notes: {
+            userId: session?.user.id || "",
+            productType: parsedData.productType,
+            productId: parsedData.productId,
+            name: parsedData.name,
+            email: parsedData.email,
+            phoneNumber: parsedData.phoneNumber,
+            age: parsedData.age,
+        }
+    });
+    const newBookings: NewBooking[] = [];
+    for (let i = 0; i < parsedData.productCount; i++) {
+        newBookings.push({
+            userId: session?.user.id || null,
+            name: parsedData.name,
+            email: parsedData.email,
+            phoneNumber: parsedData.phoneNumber,
+            orderId: order.id,
+            productType: parsedData.productType,
+            productName: product.title,
+            price: product.price,
+            age: parsedData.age,
+            status: "pending",
+            date: i === 0 ? parsedData.date : null,
+            slots: i === 0 ? [parsedData.staringtSlot, parsedData.staringtSlot + 1, parsedData.staringtSlot + 2, parsedData.staringtSlot + 3] : null,
+            time: i === 0 ? convertToDate(parsedData.date, parsedData.staringtSlot) : null,
+            message: parsedData.message
+        });
+    }
+    await db.insert(booking).values(newBookings);
+    return order;
+};

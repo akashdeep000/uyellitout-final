@@ -54,7 +54,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         <Link href="/dashboard/results">
                             <ul className={`px-4 py-2 rounded-lg font-semibold hover:text-foreground  transition-all hover:bg-teal-500/20 ${pathName.split("/")[2] === "results" ? "bg-teal-500/50" : null}`}>Results</ul>
                         </Link>
-                        <Link href="#">
+                        <Link href="/dashboard/book-a-session">
                             <ul className="px-4 py-2 rounded-lg font-semibold hover:text-foreground  transition-all hover:bg-teal-500/20">Book a session</ul>
                         </Link>
                         <Link href="#">
@@ -144,7 +144,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Link href="/dashboard/results">
                                 <Button variant={"link"} className={pathName.split("/")[2] === "results" ? "underline bg-[#90DBB2]" : ""}>Results</Button>
                             </Link>
-                            <Link href="#">
+                            <Link href="/dashboard/book-a-session">
                                 <Button variant={"link"}>Book a session</Button>
                             </Link>
                             <Link href="#">

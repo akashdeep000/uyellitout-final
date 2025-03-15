@@ -26,12 +26,16 @@ export const env = createEnv({
     SMTP_FROM_NAME: z.string().min(1), // SMTP from name
     GOOGLE_CLIENT_ID: z.string().min(1).optional(), // Google client ID
     GOOGLE_CLIENT_SECRET: z.string().min(1).optional(), // Google client secret
+    RASORPAY_KEY_SECRET: z.string().min(1), // Rasorpay key secret
+    RASORPAY_WEBHOOK_SECRET: z.string().min(1), // Rasorpay webhook secret
   },
   client: {
     NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url(), // URL for authentication service
+    NEXT_PUBLIC_RASORPAY_KEY_ID: z.string().min(1), // Rasorpay key ID
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
+    NEXT_PUBLIC_RASORPAY_KEY_ID: process.env.NEXT_PUBLIC_RASORPAY_KEY_ID,
   },
   onValidationError: (error: ZodError) => {
     console.error(

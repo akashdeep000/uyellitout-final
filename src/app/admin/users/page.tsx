@@ -1,6 +1,7 @@
 "use client";
 
 import { AdminPageWrapper } from "@/components/admin/page-wraper";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { authClient } from "@/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
@@ -31,16 +32,16 @@ export default function Page() {
     return (
         <AdminPageWrapper className="space-y-2" breadcrumb={[{ title: "Users" }]}>
             {/* <ScrollArea className="w-full whitespace-nowrap rounded-md border overflow-scroll"> */}
-            <Table className="border w-full">
+            <Table className="w-full border-b">
                 {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="">Avatar</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Phone Number</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead className="font-semibold">Avatar</TableHead>
+                        <TableHead className="font-semibold">Name</TableHead>
+                        <TableHead className="font-semibold">Email</TableHead>
+                        <TableHead className="font-semibold">Role</TableHead>
+                        <TableHead className="font-semibold">Phone Number</TableHead>
+                        <TableHead className="font-semibold">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -48,7 +49,10 @@ export default function Page() {
                         usersData && usersData.users.map((user) => (
                             <TableRow key={user.id}>
                                 <TableCell>
-
+                                    <Avatar>
+                                        <AvatarImage className="bg-muted-foreground/10" src={user.image || `https://api.dicebear.com/9.x/avataaars/svg?seed=${user.id}`} />
+                                        <AvatarFallback>{user.name.split("")[0]}</AvatarFallback>
+                                    </Avatar>
                                 </TableCell>
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.email}</TableCell>
