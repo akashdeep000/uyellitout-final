@@ -300,13 +300,13 @@ export async function getBookings({
     to.setHours(23, 59, 59, 999);
 
     // Determine which column to sort by
-    const sortColumn = sortBy === "createdAt" ? "createdAt" : "date";
+    const sortColumn = sortBy;
 
     // Build the base where conditions (without pagination cursor)
     const baseWhereConditions = [
         eq(booking.status, "confirmed"),
-        gte(booking.date, from),
-        lte(booking.date, to)
+        gte(booking.time, from),
+        lte(booking.time, to)
     ];
 
     // Add scheduled-only condition if specified
