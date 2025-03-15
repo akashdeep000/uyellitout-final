@@ -177,6 +177,7 @@ export async function getNext30DaysAvailableDays() {
         )
     );
 
+
     // Create an array to hold all dates in the next 30 days
     const next30Days = [];
     for (let i = 0; i < 30; i++) {
@@ -224,7 +225,6 @@ export async function getNext30DaysAvailableDays() {
 
         // Filter slots that's time is already passed
         if (date.toISOString().split("T")[0] === today.toISOString().split("T")[0]) {
-            console.log({ today });
             availableSlots = availableSlots.filter(slot => {
                 const hour = Math.floor(slot / 4);
                 const minute = ((slot % 4) * 15);
@@ -305,8 +305,8 @@ export async function getBookings({
     // Build the base where conditions (without pagination cursor)
     const baseWhereConditions = [
         eq(booking.status, "confirmed"),
-        gte(booking.time, from),
-        lte(booking.time, to)
+        gte(booking.date, from),
+        lte(booking.date, to)
     ];
 
     // Add scheduled-only condition if specified
@@ -383,7 +383,6 @@ export async function createRazorpayOrder(data: FormDataType) {
         throw new Error("No slots available for this date");
     }
     const staringtSlot = parsedData.staringtSlot;
-    console.log("creating order", { availabileSlots, staringtSlot });
 
     if (![staringtSlot, staringtSlot + 1, staringtSlot + 2, staringtSlot + 3].every(slot => availabileSlots.includes(slot))) {
         throw new Error("Slot not available");

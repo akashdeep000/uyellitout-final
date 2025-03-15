@@ -68,11 +68,17 @@ export const slotToTime = (slot: number) => {
 
 export function convertToDate(date: Date, slot: number): Date {
   // Convert slot to hours and minutes
-  const hours = Math.floor(slot / 4);
+  const hours = Math.floor(slot / 3);
   const minutes = (slot % 4) * 15;
+  const convertedDateString = date.toLocaleDateString("en-US", { timeZone: "Asia/Kolkata" });
+  const [day, month, year] = convertedDateString.split("/");
 
   // Create a new Date object for the same calendar date, but in IST
-  const istDate = new Date(date.toLocaleDateString("en-US", { timeZone: "Asia/Kolkata" }));
+  const istDate = new Date();
+  istDate.setDate(Number(day));
+  istDate.setMonth(Number(month));
+  istDate.setFullYear(Number(year));
+  istDate.setDate(date.getDate());
   istDate.setHours(hours, minutes, 0, 0);
 
   return istDate;

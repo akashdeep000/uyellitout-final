@@ -47,6 +47,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
         if (!date) return;
         setSlots(availability?.find((day) => day.date === date.toISOString().split("T")[0])?.availableSlots);
     }, [availability, date]);
+    console.log({ slots });
 
     const form = useForm<FormDataType>({
         resolver: zodResolver(orderSchema),
@@ -121,7 +122,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
             handler: () => {
                 setPaymentState(null);
                 toast({
-                    title: "Success",
+                    title: "Payment successful",
                     description: "Payment successful. Please check your email for confirmation.",
                     variant: "default",
                 });
@@ -295,7 +296,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {
-                                                        slots?.filter(slot => [slot + 1, slot + 2, slot + 3].every(slot => slots.includes(slot))).map((slot) => (
+                                                        slots?.filter(slot => [slot + 1, slot + 2, slot + 3].every(slot => slots.includes(slot))).sort((a, b) => a - b).map((slot) => (
                                                             <SelectItem key={slot} value={slot.toString()}>{slotToTime(slot)}</SelectItem>
                                                         ))
                                                     }
