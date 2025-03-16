@@ -279,7 +279,8 @@ export default function Page() {
                                     <h3 className="text-sm font-medium">Date Range</h3>
                                     <div className="flex flex-wrap gap-2">
                                         <Button size="sm" variant="outline" onClick={() => {
-                                            setDateCRange(undefined);
+                                            setDateRange(undefined);
+                                            setCalendarOpen(false);
                                             setTimeout(() => refetch(), 100);
                                         }}>Clear</Button>
                                         <Button size="sm" variant="outline" onClick={selectToday}>Today</Button>
@@ -324,6 +325,7 @@ export default function Page() {
                                     <div className="flex flex-wrap gap-2">
                                         <Button size="sm" variant="outline" onClick={() => {
                                             setDateCRange(undefined);
+                                            setCCalendarOpen(false);
                                             setTimeout(() => refetch(), 100);
                                         }}>Clear</Button>
                                         <Button size="sm" variant="outline" onClick={selectCToday}>Today</Button>
