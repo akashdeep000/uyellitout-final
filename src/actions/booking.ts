@@ -379,8 +379,16 @@ export async function createRazorpayOrder(data: FormDataType) {
         headers: await headers()
     });
     const availabilities = await getNext30DaysAvailableDays();
-    console.log({ availabilities });
-    console.log(parsedData.date.toISOString());
+
+    console.log(availabilities.map(a => ({
+        date: a.date.toISOString(),
+        slots: a.slots
+    })));
+    console.log({
+        date: parsedData.date.toISOString(),
+        startingSlot: parsedData.staringtSlot,
+        slots: [parsedData.staringtSlot, parsedData.staringtSlot + 1, parsedData.staringtSlot + 2, parsedData.staringtSlot + 3]
+    });
 
 
     const availabileSlots = availabilities.find((availability) => availability.date.toISOString().split("T")[0] === parsedData.date.toISOString().split("T")[0])?.slots;

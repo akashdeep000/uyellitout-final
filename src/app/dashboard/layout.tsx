@@ -40,7 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                     <AvatarImage className="bg-muted-foreground/10" src={session?.data?.user.image || `https://api.dicebear.com/9.x/avataaars/svg?seed=${session?.data?.user.id}`} />
                                     <AvatarFallback>{session?.data?.user.name.split("")[0]}</AvatarFallback>
                                 </Avatar>
-                                <p className="font-bold text-lg">Profile Name</p>
+                                <p className="font-bold text-lg">{session?.data?.user.name}</p>
                             </>
                         }
                     </div>
