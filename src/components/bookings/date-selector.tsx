@@ -4,7 +4,7 @@ import { getNext30DaysAvailableDays } from "@/actions/booking";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn, convertDateSlots } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -17,7 +17,10 @@ type DateSelectorProps = {
 export function DateSelector({ selected, onSelect }: DateSelectorProps) {
     const { data: availability, isLoading: availabilityLoading, refetch } = useQuery({
         queryKey: ["availability"],
-        queryFn: getNext30DaysAvailableDays
+        queryFn: async () => {
+            const data = await getNext30DaysAvailableDays();
+            return convertDateSlots(data, 0, -(new Date()).getTimezoneOffset());
+        },
     });
 
     return (
@@ -42,8 +45,8 @@ export function DateSelector({ selected, onSelect }: DateSelectorProps) {
                     onSelect={onSelect}
                     initialFocus
                     disabled={(date) => {
-                        const day = availability?.find((d) => new Date(d.date).toISOString().split("T")[0] === date.toISOString().split("T")[0]);
-                        return !day || day?.availableSlots.filter(slot => [slot + 1, slot + 2, slot + 3].every(slot => day.availableSlots.includes(slot))).length === 0;
+                        const day = availability?.find((d) => new Date(d.date).toLocaleDateString() === date.toLocaleDateString());
+                        return !day || day?.slots.filter(slot => [slot + 1, slot + 2, slot + 3].every(slot => day.slots.includes(slot))).length === 0;
                     }}
                 />
             </PopoverContent>

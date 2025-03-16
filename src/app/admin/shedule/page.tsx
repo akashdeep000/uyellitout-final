@@ -7,7 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import { cn, convertDateSlots, convertDaySlots } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarIcon, Eraser, Plus, Trash } from "lucide-react";
@@ -21,14 +21,20 @@ export default function Page() {
     }[] = [{ key: "sun", label: "Sunday" }, { key: "mon", label: "Monday" }, { key: "tue", label: "Tuesday" }, { key: "wed", label: "Wednesday" }, { key: "thu", label: "Thursday" }, { key: "fri", label: "Friday" }, { key: "sat", label: "Saturday" }];
     const { data: availabilities, isLoading: availabilitiesLoading } = useQuery({
         queryKey: ["availabilities"],
-        queryFn: () => getAvailabilities(),
+        queryFn: async () => {
+            const data = await getAvailabilities();
+            return convertDaySlots(data, 0, -(new Date()).getTimezoneOffset());
+        },
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
     });
 
     const { data: blockedAvailabilities, isLoading: blockedAvailabilitiesLoading } = useQuery({
         queryKey: ["blocked-availabilities"],
-        queryFn: () => getBlockedSlots(),
+        queryFn: async () => {
+            const data = await getBlockedSlots();
+            return convertDateSlots(data, 0, -(new Date()).getTimezoneOffset());
+        },
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
     });
@@ -50,14 +56,24 @@ export default function Page() {
     const queryClient = useQueryClient();
 
     const availableSlotsMutation = useMutation({
-        mutationFn: updateAvailabilities,
+        mutationFn: async (data: {
+            day: "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
+            slots: number[];
+        }[]) => {
+            await updateAvailabilities(convertDaySlots(data, -(new Date()).getTimezoneOffset(), 0));
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["availabilities"] });
         }
     });
 
     const blockedSlotsMutation = useMutation({
-        mutationFn: deleteAllBlockedSlotsAndAddNew,
+        mutationFn: async (data: {
+            date: Date;
+            slots: number[];
+        }[]) => {
+            await deleteAllBlockedSlotsAndAddNew(convertDateSlots(data, -(new Date()).getTimezoneOffset(), 0));
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["blocked-availabilities"] });
         }
@@ -126,7 +142,11 @@ export default function Page() {
                                 setBlockedSlots([...blockedSlots, { date: undefined, slots: [] }]);
                             }} variant="outline" size="icon"><Plus /></Button>
                             <Button disabled={blockedSlotsMutation.isPending} variant="outline" onClick={() => {
-                                blockedSlotsMutation.mutate(blockedSlots);
+                                const filteredData = blockedSlots.filter(e => e.date) as {
+                                    date: Date;
+                                    slots: number[];
+                                }[];
+                                blockedSlotsMutation.mutate(filteredData);
                             }}>{blockedSlotsMutation.isPending ? "Saving..." : "Save"}</Button>
                         </div>
 

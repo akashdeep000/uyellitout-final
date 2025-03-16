@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { packages, services } from "@/configs/data";
 import { useToast } from "@/hooks/use-toast";
 import { authClient } from "@/lib/auth-client";
-import { slotToTime } from "@/lib/utils";
+import { convertDateSlots, slotToTime } from "@/lib/utils";
 import { orderSchema } from "@/schema/order";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
@@ -40,14 +40,17 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
 
     const { data: availability, refetch: refetchAvailability } = useQuery({
         queryKey: ["availability"],
-        queryFn: getNext30DaysAvailableDays
+        queryFn: async () => {
+            const data = await getNext30DaysAvailableDays();
+            return convertDateSlots(data, 0, -(new Date()).getTimezoneOffset());
+        },
     });
 
     useEffect(() => {
         if (!date) return;
-        setSlots(availability?.find((day) => day.date === date.toISOString().split("T")[0])?.availableSlots);
+        setSlots(availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString())?.slots);
     }, [availability, date]);
-    console.log({ slots });
+
 
     const form = useForm<FormDataType>({
         resolver: zodResolver(orderSchema),
@@ -99,7 +102,17 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
         setPaymentState("creating-order");
         let order: Orders.RazorpayOrder;
         try {
-            order = await createRazorpayOrder(data);
+            order = await createRazorpayOrder({
+                ...data,
+                date: convertDateSlots([{
+                    date: data.date!,
+                    slots: [Number(data.staringtSlot!)]
+                }], -(new Date()).getTimezoneOffset(), 0)[0].date,
+                staringtSlot: convertDateSlots([{
+                    date: data.date!,
+                    slots: [Number(data.staringtSlot!)]
+                }], -(new Date()).getTimezoneOffset(), 0)[0].slots[0],
+            });
         } catch (error) {
             setPaymentState(null);
             console.log(error);
@@ -274,6 +287,8 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                                         <FormControl>
                                             <DateSelector selected={field.value} onSelect={(date) => {
                                                 if (date) {
+                                                    console.log("setting date", date);
+
                                                     form.setValue("date", date);
                                                     setDate(date);
                                                 }
@@ -316,6 +331,9 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                     </div>
                 </form>
             </Form>
+            <pre>
+                {availability?.map(a => a.date.toLocaleString())}
+            </pre>
         </div>
     );
 }

@@ -144,8 +144,6 @@ export async function getUpcommingBookings() {
 
 // Get Next 30 days' available days
 export async function getNext30DaysAvailableDays() {
-    // const IST_OFFSET = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
-
     // allow slots after
     const startTime = new Date();
 
@@ -186,20 +184,24 @@ export async function getNext30DaysAvailableDays() {
         next30Days.push(date);
     }
 
+
     // Map day numbers to day names used in your schema
     const dayMap = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
     // Create the final availability result
     const result = next30Days.map(date => {
         const dayName = dayMap[date.getDay()];
+        // console.log({
+        //     date: date.toISOString(),
+        //     dayName,
+        // });
 
         // Get the weekly schedule for this day
         const daySchedule = weeklyAvailability.find(a => a.day === dayName);
         if (!daySchedule || !daySchedule.slots.length) {
             return {
-                date: date.toISOString().split("T")[0], // Format as YYYY-MM-DD
-                dayOfWeek: dayName,
-                availableSlots: []
+                date: date,
+                slots: []
             };
         }
 
@@ -246,14 +248,13 @@ export async function getNext30DaysAvailableDays() {
         }
 
         return {
-            date: date.toISOString().split("T")[0], // Format as YYYY-MM-DD
-            dayOfWeek: dayName,
-            availableSlots: availableSlots
+            date: date,
+            slots: availableSlots
         };
     });
 
     // Filter out days with no available slots
-    return result.filter(day => day.availableSlots.length > 0);
+    return result.filter(day => day.slots.length > 0);
 
 }
 
@@ -378,7 +379,11 @@ export async function createRazorpayOrder(data: FormDataType) {
         headers: await headers()
     });
     const availabilities = await getNext30DaysAvailableDays();
-    const availabileSlots = availabilities.find((availability) => availability.date === parsedData.date.toISOString().split("T")[0])?.availableSlots;
+    console.log({ availabilities });
+    console.log(parsedData.date.toISOString());
+
+
+    const availabileSlots = availabilities.find((availability) => availability.date.toISOString().split("T")[0] === parsedData.date.toISOString().split("T")[0])?.slots;
     if (!availabileSlots) {
         throw new Error("No slots available for this date");
     }

@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import { addMinutes } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -67,19 +68,102 @@ export const slotToTime = (slot: number) => {
 };
 
 export function convertToDate(date: Date, slot: number): Date {
-  // Convert slot to hours and minutes
-  const hours = Math.floor(slot / 3);
-  const minutes = (slot % 4) * 15;
-  const convertedDateString = date.toLocaleDateString("en-US", { timeZone: "Asia/Kolkata" });
-  const [day, month, year] = convertedDateString.split("/");
+  date.setHours(0, 0, 0, 0);
+  return addMinutes(date, (slot * 15));
+}
 
-  // Create a new Date object for the same calendar date, but in IST
-  const istDate = new Date();
-  istDate.setDate(Number(day));
-  istDate.setMonth(Number(month));
-  istDate.setFullYear(Number(year));
-  istDate.setDate(date.getDate());
-  istDate.setHours(hours, minutes, 0, 0);
+type Day = "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
+type DaySlots = {
+  day: Day,
+  slots: number[];
+};
 
-  return istDate;
+type ConvertedDaySlots = Record<Day, number[]>;
+
+type ConvertedDateSlots = Record<string, number[]>;
+
+interface DateSlots {
+  date: Date;
+  slots: number[];
+}
+
+const daysOfWeek: readonly Day[] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+
+/**
+* Converts multiple DaySlots to a specified timezone.
+* @param daySchedules - Array of DaySlots to convert.
+* @param sourceOffset - The original timezone offset in minutes (e.g., 0 for UTC, 330 for IST).
+* @param targetOffset - The target timezone offset in minutes (e.g., 330 for IST, 0 for UTC).
+* @returns An array of converted DaySlots.
+*/
+export function convertDaySlots(
+  daySchedules: DaySlots[],
+  sourceOffset: number,
+  targetOffset: number
+): DaySlots[] {
+  const result: ConvertedDaySlots = {
+    sun: [], mon: [], tue: [], wed: [], thu: [], fri: [], sat: []
+  };
+
+  for (const daySchedule of daySchedules) {
+    for (const slot of daySchedule.slots) {
+      const minutes = slot * 15;
+      const convertedMinutes = (minutes - sourceOffset + targetOffset);
+      if (convertedMinutes < 0) {
+        const prevDay = daysOfWeek[(daysOfWeek.indexOf(daySchedule.day) + 6) % 7];
+        result[prevDay].push((1440 + convertedMinutes) / 15);
+      } else if (convertedMinutes >= 1440) {
+        const nextDay = daysOfWeek[(daysOfWeek.indexOf(daySchedule.day) + 1) % 7];
+        result[nextDay].push((convertedMinutes - 1440) / 15);
+      } else {
+        result[daySchedule.day].push(convertedMinutes / 15);
+      }
+    }
+  }
+
+  return Object.entries(result).map(([day, slots]) => ({ day: day as Day, slots }));
+}
+
+/**
+* Converts multiple DateSlots to a specified timezone.
+* @param blockedDates - Array of DateSlots to convert.
+* @param sourceOffset - The original timezone offset in minutes (e.g., 0 for UTC).
+* @param targetOffset - The target timezone offset in minutes (e.g., 330 for IST).
+* @returns An array of converted DateSlots.
+*/
+export function convertDateSlots(
+  dates: DateSlots[],
+  sourceOffset: number,
+  targetOffset: number
+): DateSlots[] {
+  const result: ConvertedDateSlots = {};
+  console.log("insifde");
+
+  for (const date of dates) {
+    for (const slot of date.slots) {
+      const minutes = slot * 15;
+      const convertedMinutes = (minutes - sourceOffset + targetOffset);
+      const convertedDate = addMinutes(date.date, - sourceOffset + targetOffset);
+
+      const dateKey = convertedDate.toISOString().split("T")[0];
+
+      if (!result[dateKey]) result[dateKey] = [];
+
+      if (convertedMinutes < 0) {
+        result[dateKey].push((1440 + convertedMinutes) / 15);
+      } else if (convertedMinutes >= 1440) {
+        result[dateKey].push((convertedMinutes - 1440) / 15);
+      } else {
+        result[dateKey].push(convertedMinutes / 15);
+      }
+    }
+  }
+  console.log({
+    in: dates,
+    sourceOffset,
+    targetOffset,
+    out: Object.entries(result).map(([date, slots]) => ({ date: new Date(date), slots }))
+  });
+
+  return Object.entries(result).map(([date, slots]) => ({ date: new Date(date), slots }));
 }

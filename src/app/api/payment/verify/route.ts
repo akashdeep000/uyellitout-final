@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
 
                 for (const booking of bookings) {
                     if (booking.date && booking.slots) {
-                        const availabileSlots = availabilities.find((availability) => availability.date === booking.date?.toISOString().split("T")[0])?.availableSlots;
+                        const availabileSlots = availabilities.find((availability) => availability.date.toISOString().split("T")[0] === booking.date?.toISOString().split("T")[0])?.slots;
                         if (!availabileSlots) {
                             throw new Error("No slots available for this date");
                         }
