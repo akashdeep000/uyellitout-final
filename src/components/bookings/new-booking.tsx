@@ -120,7 +120,9 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
             console.log(error);
             toast({
                 title: "Error",
-                description: "Something went wrong. Please try again later.",
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error?.message || "Something went wrong. Please try again later.",
                 variant: "destructive",
             });
             return;

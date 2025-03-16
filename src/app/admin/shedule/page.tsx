@@ -7,6 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
 import { cn, convertDateSlots, convertDaySlots } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -14,6 +15,7 @@ import { CalendarIcon, Eraser, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Page() {
+    const { toast } = useToast();
     // const days =  ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
     const days: {
         key: "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
@@ -64,6 +66,15 @@ export default function Page() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["availabilities"] });
+            toast({
+                title: "Saved Weekly availabilities",
+            });
+        },
+        onError: () => {
+            toast({
+                title: "Failed to save availabilities",
+                variant: "destructive",
+            });
         }
     });
 
@@ -76,6 +87,16 @@ export default function Page() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["blocked-availabilities"] });
+            toast({
+                title: "Saved Blocked availabilities",
+            });
+        },
+        onError: (error) => {
+            toast({
+                title: "Failed to save availabilities",
+                description: error.message,
+                variant: "destructive",
+            });
         }
     });
 
