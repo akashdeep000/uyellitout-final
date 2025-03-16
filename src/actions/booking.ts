@@ -276,8 +276,10 @@ export async function updateBooking(data: Partial<NewBooking> & { id: string }) 
 export async function getBookings({
     lastId,
     limit = 10,
-    from = new Date(),
-    to = new Date(),
+    from,
+    to,
+    createdFrom,
+    createdTo,
     sortBy = "time",
     onlyScheduled = "false",
     search = ""
@@ -286,6 +288,8 @@ export async function getBookings({
     limit?: number,
     from?: Date,
     to?: Date,
+    createdFrom?: Date,
+    createdTo?: Date,
     sortBy?: "createdAt" | "time",
     onlyScheduled?: "true" | "false",
     search?: string
@@ -298,10 +302,6 @@ export async function getBookings({
         throw new Error("Not Allowed");
     }
 
-    // Set time boundaries for the date range
-    from.setHours(0, 0, 0, 0);
-    to.setHours(23, 59, 59, 999);
-
     // Determine which column to sort by
     const sortColumn = sortBy;
 
@@ -310,10 +310,20 @@ export async function getBookings({
         eq(booking.status, "confirmed")
     ];
 
+    if (createdFrom && createdTo && createdFrom < createdTo) {
+        baseWhereConditions.push(gte(booking.createdAt, createdFrom));
+        baseWhereConditions.push(lte(booking.createdAt, createdTo));
+    }
+
     // Add scheduled-only condition if specified
     if (onlyScheduled === "true") {
-        baseWhereConditions.push(gte(booking.date, from));
-        baseWhereConditions.push(lte(booking.date, to));
+        console.log(from, to);
+
+        if (from && to && from < to) {
+            baseWhereConditions.push(gte(booking.date, from));
+            baseWhereConditions.push(lte(booking.date, to));
+        }
+
         baseWhereConditions.push(isNotNull(booking.time));
     }
 

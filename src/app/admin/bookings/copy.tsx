@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { addDays, format } from "date-fns";
@@ -30,11 +29,10 @@ export default function Page() {
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
+    // Set default date range to current month
     const [dateRange, setDateRange] = useState<DateRange | undefined>();
-    const [dateCRange, setDateCRange] = useState<DateRange | undefined>();
 
     const [calendarOpen, setCalendarOpen] = useState(false);
-    const [cCalendarOpen, setCCalendarOpen] = useState(false);
 
     // Debounce search term to avoid too many requests
     useEffect(() => {
@@ -55,15 +53,13 @@ export default function Page() {
         hasNextPage,
         refetch
     } = useInfiniteQuery({
-        queryKey: ["booking-payments", isScheduled, sortBy, dateRange, dateCRange, limit, debouncedSearchTerm],
+        queryKey: ["booking-payments", isScheduled, sortBy, dateRange, limit, debouncedSearchTerm],
         queryFn: async ({ pageParam }: { pageParam: PaginationParams }) => {
             return getBookings({
                 lastId: pageParam?.nextCursor,
                 limit: limit,
-                from: dateRange?.from,
-                to: dateRange?.to,
-                createdFrom: dateCRange?.from,
-                createdTo: dateCRange?.to,
+                from: dateRange?.from || new Date(),
+                to: dateRange?.to || new Date(),
                 sortBy: sortBy,
                 onlyScheduled: isScheduled ? "true" : "false",
                 search: debouncedSearchTerm
@@ -73,65 +69,6 @@ export default function Page() {
         getNextPageParam: (lastPage) =>
             lastPage.pagination.hasNextPage ? { nextCursor: lastPage.pagination.nextCursor } : undefined,
     });
-
-    // Handle date range change
-    const handleDateCRangeChange = (range: DateRange | undefined) => {
-        // Get the start of the day (00:00:00) in the local time zone
-        const startOfDay = range?.from ? new Date(range?.from.setHours(0, 0, 0, 0)) : undefined;
-        // Get the end of the day (23:59:59) in the local time zone
-        const endOfDay = range?.to ? new Date(range.to.setHours(23, 59, 59, 999)) : undefined;
-        setDateCRange({
-            from: startOfDay,
-            to: endOfDay
-        });
-        if (range?.from && range?.to) {
-            setCCalendarOpen(false);
-            // Refetch data with new date range
-            setTimeout(() => refetch(), 100);
-        }
-    };
-
-    // Set preset date ranges
-    const selectCToday = () => {
-        // Get the current date and time in the local time zone
-        const currentDate = new Date();
-        // Get the start of the day (00:00:00) in the local time zone
-        const startOfDay = new Date(currentDate.setHours(0, 0, 0, 0));
-        // Get the end of the day (23:59:59) in the local time zone
-        const endOfDay = new Date(currentDate.setHours(23, 59, 59, 999));
-        setDateCRange({ from: startOfDay, to: endOfDay });
-        setCCalendarOpen(false);
-        setTimeout(() => refetch(), 100);
-    };
-
-    const selectCLastWeek = () => {
-        const today = new Date();
-        const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-        const from = addDays(endOfDay, -7);
-        setDateCRange({ from, to: endOfDay });
-        setCCalendarOpen(false);
-        setTimeout(() => refetch(), 100);
-    };
-
-    const selectCLastMonth = () => {
-        const today = new Date();
-        const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-        const from = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-        setDateCRange({ from, to: endOfDay });
-        setCCalendarOpen(false);
-        setTimeout(() => refetch(), 100);
-    };
-
-    const selectCCurrentMonth = () => {
-        const today = new Date();
-        const from = new Date(today.getFullYear(), today.getMonth(), 1);
-        const to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        setDateCRange({ from, to });
-        setCCalendarOpen(false);
-        setTimeout(() => refetch(), 100);
-    };
-
-
 
     // Handle date range change
     const handleDateRangeChange = (range: DateRange | undefined) => {
@@ -190,9 +127,6 @@ export default function Page() {
         setTimeout(() => refetch(), 100);
     };
 
-
-
-
     // Handle limit change
     const handleLimitChange = (value: string) => {
         setLimit(Number(value));
@@ -218,6 +152,14 @@ export default function Page() {
 
                     <div className="flex flex-wrap items-center gap-2">
                         <Button
+                            variant={isScheduled ? "default" : "outline"}
+                            onClick={() => setIsScheduled(!isScheduled)}
+                            size="sm"
+                        >
+                            {isScheduled ? "Scheduled Only" : "All Bookings"}
+                        </Button>
+
+                        <Button
                             variant={sortBy === "createdAt" ? "default" : "outline"}
                             onClick={() => setSortBy("createdAt")}
                             size="sm"
@@ -232,23 +174,19 @@ export default function Page() {
                         >
                             Sort by Schedule
                         </Button>
-                        <div className="flex items-center gap-1 border px-2 py-1.5 rounded">
-                            <p className="text-xs">Only sheduled:</p> <Switch checked={isScheduled} onCheckedChange={() => setIsScheduled(!isScheduled)} />
-                        </div>
+
                         <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                             <PopoverTrigger asChild>
                                 <Button disabled={!isScheduled} variant="outline" size="sm" className="justify-start text-left font-normal">
-                                    <CalendarIcon className="mr-2 h-4 w-4" /> Sheduled at:
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
                                     {dateRange?.from ? (
-                                        <span>
-                                            {dateRange.to ? (
-                                                <>
-                                                    {format(dateRange.from, "LLL dd, y")} - {format(dateRange.to, "LLL dd, y")}
-                                                </>
-                                            ) : (
-                                                format(dateRange.from, "LLL dd, y")
-                                            )}
-                                        </span>
+                                        dateRange.to ? (
+                                            <>
+                                                {format(dateRange.from, "LLL dd, y")} - {format(dateRange.to, "LLL dd, y")}
+                                            </>
+                                        ) : (
+                                            format(dateRange.from, "LLL dd, y")
+                                        )
                                     ) : (
                                         <span>Pick a date range</span>
                                     )}
@@ -258,10 +196,6 @@ export default function Page() {
                                 <div className="p-3 space-y-3 border-b">
                                     <h3 className="text-sm font-medium">Date Range</h3>
                                     <div className="flex flex-wrap gap-2">
-                                        <Button size="sm" variant="outline" onClick={() => {
-                                            setDateCRange(undefined);
-                                            setTimeout(() => refetch(), 100);
-                                        }}>Clear</Button>
                                         <Button size="sm" variant="outline" onClick={selectToday}>Today</Button>
                                         <Button size="sm" variant="outline" onClick={selectLastWeek}>Last 7 days</Button>
                                         <Button size="sm" variant="outline" onClick={selectLastMonth}>Last month</Button>
@@ -274,50 +208,6 @@ export default function Page() {
                                     defaultMonth={dateRange?.from}
                                     selected={dateRange}
                                     onSelect={handleDateRangeChange}
-                                    numberOfMonths={2}
-                                    className="p-3"
-                                />
-                            </PopoverContent>
-                        </Popover>
-                        <Popover open={cCalendarOpen} onOpenChange={setCCalendarOpen}>
-                            <PopoverTrigger asChild>
-                                <Button variant="outline" size="sm" className="justify-start text-left font-normal">
-                                    <CalendarIcon className="mr-2 h-4 w-4" /> Created at:
-                                    {dateCRange?.from ? (
-                                        <span>
-                                            {dateCRange.to ? (
-                                                <>
-                                                    {format(dateCRange.from, "LLL dd, y")} - {format(dateCRange.to, "LLL dd, y")}
-                                                </>
-                                            ) : (
-                                                format(dateCRange.from, "LLL dd, y")
-                                            )}
-                                        </span>
-                                    ) : (
-                                        <span>Pick a date range</span>
-                                    )}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="end">
-                                <div className="p-3 space-y-3 border-b">
-                                    <h3 className="text-sm font-medium">Date Range</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        <Button size="sm" variant="outline" onClick={() => {
-                                            setDateCRange(undefined);
-                                            setTimeout(() => refetch(), 100);
-                                        }}>Clear</Button>
-                                        <Button size="sm" variant="outline" onClick={selectCToday}>Today</Button>
-                                        <Button size="sm" variant="outline" onClick={selectCLastWeek}>Last 7 days</Button>
-                                        <Button size="sm" variant="outline" onClick={selectCLastMonth}>Last month</Button>
-                                        <Button size="sm" variant="outline" onClick={selectCCurrentMonth}>This month</Button>
-                                    </div>
-                                </div>
-                                <Calendar
-                                    initialFocus
-                                    mode="range"
-                                    defaultMonth={dateCRange?.from}
-                                    selected={dateCRange}
-                                    onSelect={handleDateCRangeChange}
                                     numberOfMonths={2}
                                     className="p-3"
                                 />
