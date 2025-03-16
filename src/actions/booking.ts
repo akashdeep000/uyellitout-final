@@ -307,13 +307,13 @@ export async function getBookings({
 
     // Build the base where conditions (without pagination cursor)
     const baseWhereConditions = [
-        eq(booking.status, "confirmed"),
-        gte(booking.date, from),
-        lte(booking.date, to)
+        eq(booking.status, "confirmed")
     ];
 
     // Add scheduled-only condition if specified
     if (onlyScheduled === "true") {
+        baseWhereConditions.push(gte(booking.date, from));
+        baseWhereConditions.push(lte(booking.date, to));
         baseWhereConditions.push(isNotNull(booking.time));
     }
 

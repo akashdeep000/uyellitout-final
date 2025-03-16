@@ -167,7 +167,7 @@ export default function Page() {
 
                         <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                             <PopoverTrigger asChild>
-                                <Button variant="outline" size="sm" className="justify-start text-left font-normal">
+                                <Button disabled={isScheduled} variant="outline" size="sm" className="justify-start text-left font-normal">
                                     <CalendarIcon className="mr-2 h-4 w-4" />
                                     {dateRange?.from ? (
                                         dateRange.to ? (

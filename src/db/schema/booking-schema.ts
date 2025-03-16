@@ -21,7 +21,7 @@ export const booking = sqliteTable("booking", {
     time: integer("time", { mode: "timestamp" }),
     status: text("status", { enum: ["pending", "confirmed", "cancelled"] }).notNull().default("pending"),
     userId: text("user_id").references(() => user.id),
-    orderId: text("order_id").unique().notNull(),
+    orderId: text("order_id").notNull(),
     productName: text("product_name").notNull(),
     productType: text("product_type", { enum: ["service", "package"] }).notNull(),
     price: integer("price").notNull(),
