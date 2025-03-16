@@ -139,6 +139,7 @@ export function convertDateSlots(
   targetOffset: number
 ): DateSlots[] {
   const result: ConvertedDateSlots = {};
+
   for (const date of dates) {
     for (const slot of date.slots) {
       const minutes = slot * 15;
@@ -165,7 +166,7 @@ export function convertDateSlots(
     in: dates,
     sourceOffset,
     targetOffset,
-    out: Object.entries(result).map(([date, slots]) => ({ date: new Date(date), slots }))
+    out: Object.entries(result).map(([, slots]) => (slots))
   });
 
   return Object.entries(result).map(([, slots]) => (slots));

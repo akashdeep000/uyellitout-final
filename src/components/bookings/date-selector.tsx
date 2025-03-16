@@ -19,6 +19,7 @@ export function DateSelector({ selected, onSelect }: DateSelectorProps) {
         queryKey: ["availability"],
         queryFn: async () => {
             const data = await getNext30DaysAvailableDays();
+            convertDateSlots(convertDateSlots(data, 0, -(new Date()).getTimezoneOffset()), -(new Date()).getTimezoneOffset(), 0);
             return convertDateSlots(data, 0, -(new Date()).getTimezoneOffset());
         },
     });
