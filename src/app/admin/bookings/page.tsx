@@ -75,7 +75,9 @@ export default function Page() {
                 setLastConfigHash(hash([limit, dateRange, dateCRange, sortBy, isScheduled, debouncedSearchTerm]));
                 setPage(1);
             } else {
-                setPage(page + 1);
+                if (Math.ceil(data.pagination.totalCount / limit) > page) {
+                    setPage(page + 1);
+                }
             }
             return data;
         },
