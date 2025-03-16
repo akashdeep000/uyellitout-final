@@ -13,20 +13,22 @@ import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { addDays, format } from "date-fns";
+import hash from "hash-it";
 import { CalendarIcon, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 
 // Define the type for cursor pagination
 type PaginationParams = {
-    nextCursor: string | null;
+    nextPage: number | null;
 } | null | undefined;
 
 export default function Page() {
     const [isScheduled, setIsScheduled] = useState(false);
     const [sortBy, setSortBy] = useState<"createdAt" | "time">("createdAt");
-    const [limit, setLimit] = useState(10);
-    const [pageIdx, setPageIdx] = useState(0);
+    const [limit, setLimit] = useState(1);
+    const [page, setPage] = useState(0);
+    const [lastConfigHash, setLastConfigHash] = useState<number | undefined>();
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
@@ -57,8 +59,8 @@ export default function Page() {
     } = useInfiniteQuery({
         queryKey: ["booking-payments", isScheduled, sortBy, dateRange, dateCRange, limit, debouncedSearchTerm],
         queryFn: async ({ pageParam }: { pageParam: PaginationParams }) => {
-            return getBookings({
-                lastId: pageParam?.nextCursor,
+            const data = await getBookings({
+                page: pageParam?.nextPage || 1,
                 limit: limit,
                 from: dateRange?.from,
                 to: dateRange?.to,
@@ -68,11 +70,27 @@ export default function Page() {
                 onlyScheduled: isScheduled ? "true" : "false",
                 search: debouncedSearchTerm
             });
+            const configHash = hash([limit, dateRange, dateCRange, sortBy, isScheduled, debouncedSearchTerm]);
+            if (configHash !== lastConfigHash) {
+                setLastConfigHash(hash([limit, dateRange, dateCRange, sortBy, isScheduled, debouncedSearchTerm]));
+                setPage(1);
+            } else {
+                setPage(page + 1);
+            }
+            return data;
         },
         initialPageParam: null as PaginationParams,
         getNextPageParam: (lastPage) =>
-            lastPage.pagination.hasNextPage ? { nextCursor: lastPage.pagination.nextCursor } : undefined,
+            lastPage.pagination.hasNextPage ? { nextPage: lastPage.pagination.nextPage } : undefined,
     });
+
+    useEffect(() => {
+        const configHash = hash([limit, dateRange, dateCRange, sortBy, isScheduled, debouncedSearchTerm]);
+        if (configHash !== lastConfigHash) {
+            setLastConfigHash(hash([limit, dateRange, dateCRange, sortBy, isScheduled, debouncedSearchTerm]));
+            setPage(1);
+        }
+    }, [limit, dateRange, dateCRange, sortBy, isScheduled, debouncedSearchTerm, lastConfigHash]);
 
     // Handle date range change
     const handleDateCRangeChange = (range: DateRange | undefined) => {
@@ -205,7 +223,7 @@ export default function Page() {
         setTimeout(() => refetch(), 100);
     };
     console.log({
-        pageIdx,
+        page,
         pages: data?.pages
     });
 
@@ -386,7 +404,7 @@ export default function Page() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {data?.pages[pageIdx].data.map((booking) => (
+                            {data?.pages[page - 1]?.data?.map((booking) => (
                                 <TableRow key={booking.id}>
                                     <TableCell className="font-medium">{booking.createdAt.toLocaleString()}</TableCell>
                                     <TableCell className="font-medium">{booking.time?.toLocaleString() || "Not scheduled"}</TableCell>
@@ -427,57 +445,35 @@ export default function Page() {
                                 ? `Total: ${data.pages[0].pagination.totalCount} bookings`
                                 : ""}
                         </p>
+                        <p className="text-sm text-muted-foreground">
+                            {data?.pages[0]?.pagination.totalCount !== undefined
+                                ? `Page: ${page} of ${Math.floor(data.pages[0].pagination.totalCount / limit)}`
+                                : ""}
+                        </p>
                         <div className="flex gap-2">
                             <Button
                                 onClick={() => {
-                                    if (pageIdx > 0) {
-                                        setPageIdx(pageIdx - 1);
-                                    }
+                                    setPage(page - 1);
                                 }}
-                                disabled={pageIdx === 0}
+                                disabled={!(page > 1)}
                                 variant="outline"
                             >
                                 Previous
                             </Button>
                             <Button
                                 onClick={() => {
-                                    console.log({ pageIdx });
+                                    console.log({ page });
                                     console.log({ hasNextPage });
                                     console.log({ isFetchingNextPage });
-                                    if (pageIdx < (data?.pages.length || 0)) {
-                                        if (data?.pages[pageIdx + 1]?.data.length) {
-                                            console.log({ pageLength: data?.pages.length });
-                                            console.log("incresing page index withoutres fetch", pageIdx + 1);
-                                            setPageIdx(pageIdx + 1);
-                                        } else {
-                                            if (hasNextPage) {
-                                                console.log("fetching next page");
-                                                let triggered = false;
-                                                fetchNextPage().then((res) => {
-                                                    if (res.data?.pages[res.data?.pages.length]) {
-                                                        console.log({ pageLength: res.data?.pages.length });
-
-                                                        console.log("incresing page index after fetch", pageIdx + 1);
-
-                                                        setPageIdx(pageIdx + 1);
-                                                        triggered = true;
-                                                    }
-                                                });
-                                                if (!triggered) {
-                                                    if (data?.pages[data?.pages.length]) {
-                                                        console.log({ pageLength: data?.pages.length });
-
-                                                        console.log("incresing page index after fetch", pageIdx + 1);
-
-                                                        setPageIdx(pageIdx + 1);
-                                                        triggered = true;
-                                                    }
-                                                }
-                                            }
-                                        }
+                                    if (page === data?.pages.length) {
+                                        console.log("fetching...");
+                                        fetchNextPage();
+                                    } else {
+                                        console.log("not fetching...");
+                                        setPage(page + 1);
                                     }
                                 }}
-                                disabled={(!hasNextPage || isFetchingNextPage) && !(pageIdx + 1 < (data?.pages.length || 0))}
+                                disabled={(!hasNextPage || isFetchingNextPage) && (page === data?.pages.length)}
                                 variant="outline"
                             >
                                 {isFetchingNextPage

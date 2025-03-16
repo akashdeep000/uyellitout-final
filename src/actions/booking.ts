@@ -7,7 +7,7 @@ import { env } from "@/env";
 import { auth } from "@/lib/auth";
 import { convertToDate } from "@/lib/utils";
 import { orderSchema } from "@/schema/order";
-import { and, count, desc, eq, gte, InferInsertModel, InferSelectModel, isNotNull, like, lt, lte, or, SQL, sql } from "drizzle-orm";
+import { and, count, desc, eq, gte, InferInsertModel, InferSelectModel, isNotNull, like, lte, or, SQL, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 import Razorpay from "razorpay";
 import { z } from "zod";
@@ -274,7 +274,7 @@ export async function updateBooking(data: Partial<NewBooking> & { id: string }) 
 
 // Get all bookings (latest first) with pagination
 export async function getBookings({
-    lastId,
+    page = 1,
     limit = 10,
     from,
     to,
@@ -284,7 +284,7 @@ export async function getBookings({
     onlyScheduled = "false",
     search = ""
 }: {
-    lastId?: string | undefined | null,
+    page?: number,
     limit?: number,
     from?: Date,
     to?: Date,
@@ -347,10 +347,10 @@ export async function getBookings({
     // Create pagination conditions by copying base conditions
     const paginationWhereConditions = [...baseWhereConditions];
 
-    // Add pagination cursor condition if lastId is provided
-    if (lastId) {
-        paginationWhereConditions.push(lt(booking.id, lastId));
-    }
+    // // Add pagination cursor condition if lastId is provided
+    // if (lastId) {
+    //     paginationWhereConditions.push(lt(booking.id, lastId));
+    // }
 
     // Execute the paginated query
     const results = await db
@@ -358,19 +358,19 @@ export async function getBookings({
         .from(booking)
         .where(and(...paginationWhereConditions))
         .orderBy(desc(booking[sortColumn]))
-        .limit(limit);
+        .offset((page - 1) * limit).limit(limit);
 
     // Get the last ID for the next page cursor
-    const lastBookingId = results.length > 0 ? results[results.length - 1].id : null;
+    // const lastBookingId = results.length > 0 ? results[results.length - 1].id : null;
 
     // Check if there are more results
-    const hasNextPage = results.length === limit;
+    const hasNextPage = totalCount > (page * limit);
 
     return {
         data: results,
         pagination: {
             hasNextPage,
-            nextCursor: hasNextPage ? lastBookingId : null,
+            nextPage: hasNextPage ? page + 1 : null,
             totalCount: Number(totalCount)
         }
     };
