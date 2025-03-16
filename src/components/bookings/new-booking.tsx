@@ -288,9 +288,11 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                                             <DateSelector selected={field.value} onSelect={(date) => {
                                                 if (date) {
                                                     console.log("setting date", date);
-
-                                                    form.setValue("date", date);
-                                                    setDate(date);
+                                                    const convertedDate = availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString())?.date;
+                                                    if (convertedDate) {
+                                                        form.setValue("date", convertedDate);
+                                                        setDate(convertedDate);
+                                                    }
                                                 }
                                             }} />
                                         </FormControl>
