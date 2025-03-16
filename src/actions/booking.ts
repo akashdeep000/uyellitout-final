@@ -207,9 +207,8 @@ export async function getNext30DaysAvailableDays() {
 
         // Find if this specific date has blocked slots
         const blockedDate = blockedDates.find(b => {
-            const blockedDateTime = new Date(b.date);
-            return blockedDateTime.getTime() >= date.getTime() &&
-                blockedDateTime.getTime() < new Date(date).setHours(24, 0, 0, 0);
+            const blockedDateTime = b.date;
+            return blockedDateTime.toISOString().split("T")[0] = date.toISOString().split("T")[0];
         });
 
         // console.log({ blockedDates, blockedDate, data: date.getTime() });
