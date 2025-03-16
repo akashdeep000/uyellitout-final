@@ -72,7 +72,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <header className="hidden sm:flex px-4 py-4 border-b-2 border-neutral-200 sticky top-0 left-0 bg-background z-[9999] justify-between">
                     <div className="text-2xl font-semibold first-letter:uppercase">
                         {
-                            pathName.split("/")[2].replaceAll("-", " ") || "Dashboard"
+                            pathName.split("/")[2]?.replaceAll("-", " ") || "Dashboard"
                         }
                     </div>
                     <div className="flex items-center gap-4">
