@@ -24,7 +24,7 @@ type PaginationParams = {
 export default function Page() {
     const [isScheduled, setIsScheduled] = useState(false);
     const [sortBy, setSortBy] = useState<"createdAt" | "time">("createdAt");
-    const [limit, setLimit] = useState(1);
+    const [limit, setLimit] = useState(10);
     const [pageIdx, setPageIdx] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
