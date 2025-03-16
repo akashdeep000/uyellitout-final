@@ -447,7 +447,7 @@ export default function Page() {
                         </p>
                         <p className="text-sm text-muted-foreground">
                             {data?.pages[0]?.pagination.totalCount !== undefined
-                                ? `Page: ${page} of ${Math.floor(data.pages[0].pagination.totalCount / limit)}`
+                                ? `Page: ${page} of ${Math.ceil(data.pages[0].pagination.totalCount / limit)}`
                                 : ""}
                         </p>
                         <div className="flex gap-2">
