@@ -45,7 +45,7 @@ export function DateSelector({ selected, onSelect }: DateSelectorProps) {
                     onSelect={onSelect}
                     initialFocus
                     disabled={(date) => {
-                        const day = availability?.find((d) => new Date(d.date).toLocaleDateString() === date.toLocaleDateString());
+                        const day = availability?.find((d) => new Date(d.date).toISOString().split("T")[0] === date.toISOString().split("T")[0]);
                         return !day || day?.slots.filter(slot => [slot + 1, slot + 2, slot + 3].every(slot => day.slots.includes(slot))).length === 0;
                     }}
                 />

@@ -48,7 +48,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
 
     useEffect(() => {
         if (!date) return;
-        setSlots(availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString())?.slots);
+        setSlots(availability?.find((day) => day.date.toISOString().split("T")[0] === date.toISOString().split("T")[0])?.slots);
     }, [availability, date]);
 
 
@@ -331,9 +331,9 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                     </div>
                 </form>
             </Form>
-            <pre>
+            {/* <pre>
                 {availability?.map(a => a.date.toLocaleString())}
-            </pre>
+            </pre> */}
         </div>
     );
 }

@@ -80,12 +80,14 @@ type DaySlots = {
 
 type ConvertedDaySlots = Record<Day, number[]>;
 
-type ConvertedDateSlots = Record<string, number[]>;
 
 interface DateSlots {
   date: Date;
   slots: number[];
 }
+
+type ConvertedDateSlots = Record<string, DateSlots>;
+
 
 const daysOfWeek: readonly Day[] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
@@ -137,8 +139,6 @@ export function convertDateSlots(
   targetOffset: number
 ): DateSlots[] {
   const result: ConvertedDateSlots = {};
-  console.log("insifde");
-
   for (const date of dates) {
     for (const slot of date.slots) {
       const minutes = slot * 15;
@@ -147,14 +147,17 @@ export function convertDateSlots(
 
       const dateKey = convertedDate.toISOString().split("T")[0];
 
-      if (!result[dateKey]) result[dateKey] = [];
+      if (!result[dateKey]) result[dateKey] = {
+        date: date.date,
+        slots: []
+      };
 
       if (convertedMinutes < 0) {
-        result[dateKey].push((1440 + convertedMinutes) / 15);
+        result[dateKey].slots.push((1440 + convertedMinutes) / 15);
       } else if (convertedMinutes >= 1440) {
-        result[dateKey].push((convertedMinutes - 1440) / 15);
+        result[dateKey].slots.push((convertedMinutes - 1440) / 15);
       } else {
-        result[dateKey].push(convertedMinutes / 15);
+        result[dateKey].slots.push(convertedMinutes / 15);
       }
     }
   }
@@ -165,5 +168,5 @@ export function convertDateSlots(
     out: Object.entries(result).map(([date, slots]) => ({ date: new Date(date), slots }))
   });
 
-  return Object.entries(result).map(([date, slots]) => ({ date: new Date(date), slots }));
+  return Object.entries(result).map(([, slots]) => (slots));
 }
