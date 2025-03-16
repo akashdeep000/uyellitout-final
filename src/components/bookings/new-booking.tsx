@@ -48,6 +48,8 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
 
     useEffect(() => {
         if (!date) return;
+        console.log(availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString()));
+
         setSlots(availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString())?.slots);
     }, [availability, date]);
 
@@ -289,6 +291,8 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                                                 if (date) {
                                                     console.log("setting date", date);
                                                     const convertedDate = availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString())?.date;
+                                                    console.log({ convertedDate });
+
                                                     if (convertedDate) {
                                                         form.setValue("date", convertedDate);
                                                         setDate(convertedDate);
@@ -334,7 +338,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                 </form>
             </Form>
             {/* <pre>
-                {availability?.map(a => a.date.toLocaleString())}
+                {JSON.stringify(availability, null, 2)}
             </pre> */}
         </div>
     );

@@ -252,6 +252,9 @@ export async function getNext30DaysAvailableDays() {
             slots: availableSlots
         };
     });
+    // console.log(result.filter(day => day.slots.length > 0));
+    // console.log(convertDateSlots(result.filter(day => day.slots.length > 0), 0, 330));
+
 
     // Filter out days with no available slots
     return result.filter(day => day.slots.length > 0);

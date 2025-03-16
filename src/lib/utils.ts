@@ -1,5 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
-import { addMinutes } from "date-fns";
+import { addDays, addMinutes } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -144,20 +144,31 @@ export function convertDateSlots(
     for (const slot of date.slots) {
       const minutes = slot * 15;
       const convertedMinutes = (minutes - sourceOffset + targetOffset);
+
       const convertedDate = addMinutes(date.date, - sourceOffset + targetOffset);
 
-      const dateKey = convertedDate.toISOString().split("T")[0];
-
-      if (!result[dateKey]) result[dateKey] = {
-        date: date.date,
-        slots: []
-      };
-
       if (convertedMinutes < 0) {
+        const dateKey = addDays(convertedDate, -1).toISOString().split("T")[0];
+        if (!result[dateKey]) result[dateKey] = {
+          date: addDays(date.date, -1),
+          slots: []
+        };
         result[dateKey].slots.push((1440 + convertedMinutes) / 15);
+
       } else if (convertedMinutes >= 1440) {
+        const dateKey = addDays(convertedDate, + 1).toISOString().split("T")[0];
+        if (!result[dateKey]) result[dateKey] = {
+          date: addDays(date.date, + 1),
+          slots: []
+        };
         result[dateKey].slots.push((convertedMinutes - 1440) / 15);
+
       } else {
+        const dateKey = convertedDate.toISOString().split("T")[0];
+        if (!result[dateKey]) result[dateKey] = {
+          date: date.date,
+          slots: []
+        };
         result[dateKey].slots.push(convertedMinutes / 15);
       }
     }
