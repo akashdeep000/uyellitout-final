@@ -1,5 +1,6 @@
 "use client";
 
+import { getNotSheduledBookingsUser, getUpcomingBookingsUser } from "@/actions/booking";
 import { getStatsByUser } from "@/actions/quiz";
 import { Button } from "@/components/ui/button";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -7,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
 import { converterFromHappiness } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { CartesianGrid, Label, Line, LineChart, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, XAxis } from "recharts";
 
 
@@ -82,6 +84,16 @@ export default function Page() {
     queryFn: () => authClient.getSession()
   });
 
+  const { data: upcomingBookings, isLoading: upcomingBookingsLoading } = useQuery({
+    queryKey: ["upcoming-bookings"],
+    queryFn: () => getUpcomingBookingsUser()
+  });
+
+  const { data: notScheduledBookings, isLoading: notScheduledBookingsLoading } = useQuery({
+    queryKey: ["not-scheduled-bookings"],
+    queryFn: () => getNotSheduledBookingsUser()
+  });
+
   const percentChartData = metrics.map((metric) => ({
     data: [{
       [metric.key]: Number(stats ? metric.key === "intimacy" ? stats?.stat[stats?.stat.length - 1].intimacy.toFixed(0) : converterFromHappiness(metric.key as "happiness" | "anxiety" | "stress" | "mood" | "intimacy", stats?.stat[stats?.stat.length - 1].happiness).toFixed(0) : 0) as number,
@@ -107,17 +119,17 @@ export default function Page() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="border p-2 rounded-xl space-y-2 bg-yellow-50">
           <p className="text-center text-lg font-semibold">- Reminder -</p>
-          <p><b>Upcoming Session :</b>  29th Jan, 2025 (18:00pm)</p>
+          <div className="flex flex-wrap gap-2"><p><b>Upcoming Session :</b> </p> <div>{upcomingBookingsLoading ? <Skeleton className="rounded w-52 h-6" /> : upcomingBookings?.length === 0 ? "No upcoming sessions" : `${upcomingBookings?.[0].time?.toDateString()} (${upcomingBookings?.[0].time?.toLocaleTimeString()})`}</div></div>
+          {/* <p><b>Upcoming Session :</b>  29th Jan, 2025 (18:00pm)</p> */}
           <div className="flex justify-between">
-            <p><b>No. of sessions left :</b>  0</p>
-            <button className="font-bold bg-foreground hover:bg-foreground/80 text-background rounded-xl px-2.5 py-1 shadow-lg">Schedule</button>
+            <div className="flex flex-wrap gap-2"><p><b>No. of sessions left :</b></p><div>{notScheduledBookingsLoading ? <Skeleton className="size-6" /> : notScheduledBookings?.length}</div></div>
+            <Link href="/dashboard/bookings"><button className="font-bold bg-foreground hover:bg-foreground/80 text-background rounded-xl px-2.5 py-1 shadow-lg">Schedule</button></Link>
           </div>
         </div>
       </div>
       <div className="space-y-2">
         <p className="font-semibold">Mental Health Metrices</p>
         <div className="flex gap-2 sm:gap-[2%] overflow-x-scroll lg:overflow-hidden">
-
           {metrics.map((metric, index) => (
             <div key={metric.key} className={`max-w-32 min-w-32 aspect-square flex-grow rounded-2xl p-2  bg-[${metric.background}]`}>
               <p className="text-left text-white font-bold text-sm">{metric.lebel}</p>

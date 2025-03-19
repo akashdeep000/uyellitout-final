@@ -9,26 +9,29 @@ import { authClient } from "@/lib/auth-client";
 import { convertDateSlots, slotToTime } from "@/lib/utils";
 import { orderSchema } from "@/schema/order";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Orders } from "razorpay/dist/types/orders";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { RazorpayOrderOptions, useRazorpay } from "react-razorpay";
 import { z } from "zod";
 import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
 import { PhoneInput } from "../ui/phone-input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { DateSelector } from "./date-selector";
 
 type Modify<T, K extends keyof T, R> = Omit<T, K> & { [P in K]: R };
-type FormDataType = Modify<z.infer<typeof orderSchema>, "staringtSlot", string | undefined>
+type FormDataType = Modify<z.infer<typeof orderSchema>, "startingSlot", string | undefined>
 
-export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: {
+export function NewBooking({ defaultProductType, defaultProductId, onSuccess, isNested = false }: {
     defaultProductType?: "service" | "package",
     defaultProductId?: number;
     onSuccess?: (orderId: string) => void;
+    isNested?: boolean;
 }) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { error: razorpayError, isLoading: razorpayLoading, Razorpay } = useRazorpay();
     const [paymentState, setPaymentState] = useState<"creating-order" | "redirecting" | null>(null);
 
@@ -65,7 +68,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
             phoneNumber: "",
             age: undefined,
             date: undefined,
-            staringtSlot: undefined,
+            startingSlot: undefined,
             message: "",
         }
     });
@@ -84,13 +87,15 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                     phoneNumber: session.data.user.phoneNumber || undefined,
                     age: undefined,
                     date: undefined,
-                    staringtSlot: undefined,
+                    startingSlot: undefined,
                     message: "",
                 });
             }
         })();
     }, [form]);
 
+
+    const queryClient = useQueryClient();
 
     const handlePayment = async (data: FormDataType) => {
         console.log({ data });
@@ -108,11 +113,11 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                 ...data,
                 date: convertDateSlots([{
                     date: data.date!,
-                    slots: [Number(data.staringtSlot!)]
+                    slots: [Number(data.startingSlot!)]
                 }], -(new Date()).getTimezoneOffset(), 0)[0].date,
-                staringtSlot: convertDateSlots([{
+                startingSlot: convertDateSlots([{
                     date: data.date!,
-                    slots: [Number(data.staringtSlot!)]
+                    slots: [Number(data.startingSlot!)]
                 }], -(new Date()).getTimezoneOffset(), 0)[0].slots[0],
             });
         } catch (error) {
@@ -138,6 +143,9 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
             order_id: order.id, // Generate order_id on server
             handler: () => {
                 setPaymentState(null);
+                queryClient.invalidateQueries({ queryKey: ["bookings"] });
+                queryClient.invalidateQueries({ queryKey: ["upcoming-bookings"] });
+                queryClient.invalidateQueries({ queryKey: ["not-scheduled-bookings"] });
                 toast({
                     title: "Payment successful",
                     description: "Payment successful. Please check your email for confirmation.",
@@ -179,6 +187,51 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                 <form onSubmit={form.handleSubmit(handlePayment)}>
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-6">
+                            {
+                                isNested &&
+                                <div className="space-y-4">
+                                    <p className="text-sm">Choose services or packages</p>
+                                    <Select defaultValue={(defaultProductType && defaultProductId) ? `${defaultProductType.charAt(0)}-${defaultProductId}` : "s-0"} onValueChange={(value) => {
+                                        const [type, id] = value.split("-");
+                                        form.setValue("productType", type === "s" ? "service" : "package");
+                                        form.setValue("productId", Number(id));
+                                    }}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select services or package" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Services</SelectLabel>
+                                                {
+                                                    services.map((service, index) => (
+                                                        <SelectItem key={`s-${index}`} value={`s-${index}`}>
+                                                            <div className="flex gap-2">
+                                                                <p> {service.title}</p>
+                                                                <p>-</p>
+                                                                <p className="text-muted-foreground">₹{service.price}</p>
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))
+                                                }
+                                            </SelectGroup>
+                                            <SelectGroup>
+                                                <SelectLabel>Packages</SelectLabel>
+                                                {
+                                                    packages.map((pkg, index) => (
+                                                        <SelectItem key={`p-${index}`} value={`p-${index}`}>
+                                                            <div className="flex gap-2">
+                                                                <p> {pkg.title}</p>
+                                                                <p>-</p>
+                                                                <p className="text-muted-foreground">₹{pkg.price}</p>
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))
+                                                }
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            }
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -232,48 +285,51 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                         </div>
                         <div className="gap-6 flex flex-col">
                             <div className="space-y-6 flex-1">
-                                <div className="space-y-2.5">
-                                    <p className="text-sm">Choose services or packages</p>
-                                    <Select defaultValue="s-0" onValueChange={(value) => {
-                                        const [type, id] = value.split("-");
-                                        form.setValue("productType", type === "s" ? "service" : "package");
-                                        form.setValue("productId", Number(id));
-                                    }}>
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select services or package" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Services</SelectLabel>
-                                                {
-                                                    services.map((service, index) => (
-                                                        <SelectItem key={`s-${index}`} value={`s-${index}`}>
-                                                            <div className="flex gap-2">
-                                                                <p> {service.title}</p>
-                                                                <p>-</p>
-                                                                <p className="text-muted-foreground">₹{service.price}</p>
-                                                            </div>
-                                                        </SelectItem>
-                                                    ))
-                                                }
-                                            </SelectGroup>
-                                            <SelectGroup>
-                                                <SelectLabel>Packages</SelectLabel>
-                                                {
-                                                    packages.map((pkg, index) => (
-                                                        <SelectItem key={`p-${index}`} value={`p-${index}`}>
-                                                            <div className="flex gap-2">
-                                                                <p> {pkg.title}</p>
-                                                                <p>-</p>
-                                                                <p className="text-muted-foreground">₹{pkg.price}</p>
-                                                            </div>
-                                                        </SelectItem>
-                                                    ))
-                                                }
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                {
+                                    !isNested &&
+                                    <div className="space-y-4">
+                                        <p className="text-sm">Choose services or packages</p>
+                                        <Select defaultValue="s-0" onValueChange={(value) => {
+                                            const [type, id] = value.split("-");
+                                            form.setValue("productType", type === "s" ? "service" : "package");
+                                            form.setValue("productId", Number(id));
+                                        }}>
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Select services or package" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectLabel>Services</SelectLabel>
+                                                    {
+                                                        services.map((service, index) => (
+                                                            <SelectItem key={`s-${index}`} value={`s-${index}`}>
+                                                                <div className="flex gap-2">
+                                                                    <p> {service.title}</p>
+                                                                    <p>-</p>
+                                                                    <p className="text-muted-foreground">₹{service.price}</p>
+                                                                </div>
+                                                            </SelectItem>
+                                                        ))
+                                                    }
+                                                </SelectGroup>
+                                                <SelectGroup>
+                                                    <SelectLabel>Packages</SelectLabel>
+                                                    {
+                                                        packages.map((pkg, index) => (
+                                                            <SelectItem key={`p-${index}`} value={`p-${index}`}>
+                                                                <div className="flex gap-2">
+                                                                    <p> {pkg.title}</p>
+                                                                    <p>-</p>
+                                                                    <p className="text-muted-foreground">₹{pkg.price}</p>
+                                                                </div>
+                                                            </SelectItem>
+                                                        ))
+                                                    }
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                }
                                 {
                                     isLoggedin && <FormField control={form.control} name="productCount" render={({ field }) => (
                                         <FormItem className="grid gap-2">
@@ -289,23 +345,50 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                                     <FormItem className="grid gap-2">
                                         <FormLabel>Date</FormLabel>
                                         <FormControl>
-                                            <DateSelector selected={field.value} onSelect={(date) => {
-                                                if (date) {
-                                                    console.log("setting date", date);
-                                                    const convertedDate = availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString())?.date;
-                                                    console.log({ convertedDate });
+                                            {
+                                                isNested ?
+                                                    <div className="grid place-items-center">
+                                                        <Calendar
+                                                            className=""
+                                                            mode="single"
+                                                            selected={field.value} onSelect={(date) => {
+                                                                if (date) {
+                                                                    console.log("setting date", date);
+                                                                    const convertedDate = availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString())?.date;
+                                                                    console.log({ convertedDate });
 
-                                                    if (convertedDate) {
-                                                        form.setValue("date", convertedDate);
-                                                        setDate(convertedDate);
-                                                    }
-                                                }
-                                            }} />
+                                                                    if (convertedDate) {
+                                                                        form.setValue("date", convertedDate);
+                                                                        setDate(convertedDate);
+                                                                    }
+                                                                }
+                                                            }}
+                                                            initialFocus
+                                                            disabled={(date) => {
+                                                                const day = availability?.find((d) => new Date(d.date).toLocaleDateString() === date.toLocaleDateString());
+                                                                return !day || day?.slots.filter(slot => [slot + 1, slot + 2, slot + 3].every(slot => day.slots.includes(slot))).length === 0;
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    :
+                                                    <DateSelector selected={field.value} onSelect={(date) => {
+                                                        if (date) {
+                                                            console.log("setting date", date);
+                                                            const convertedDate = availability?.find((day) => day.date.toLocaleDateString() === date.toLocaleDateString())?.date;
+                                                            console.log({ convertedDate });
+
+                                                            if (convertedDate) {
+                                                                form.setValue("date", convertedDate);
+                                                                setDate(convertedDate);
+                                                            }
+                                                        }
+                                                    }} />
+                                            }
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )} />
-                                <FormField control={form.control} name="staringtSlot" render={({ field }) => (
+                                <FormField control={form.control} name="startingSlot" render={({ field }) => (
                                     <FormItem className="grid gap-2">
                                         <FormLabel>Time</FormLabel>
                                         <FormControl>
@@ -331,7 +414,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess }: 
                                 )} />
                             </div>
                             <div>
-                                <Button className="float-right" type="submit" size="lg" disabled={razorpayLoading || !!razorpayError || paymentState !== null}>
+                                <Button className="float-right" type="submit" size="lg" disabled={paymentState !== null}>
                                     {paymentState === "creating-order" ? "Creating order..." : paymentState === "redirecting" ? "Redirecting..." : "Book Now"}
                                 </Button>
                             </div>

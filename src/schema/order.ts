@@ -1,4 +1,7 @@
+import libphonenumber from "google-libphonenumber";
 import { z } from "zod";
+
+const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
 export const orderSchema = z.object({
     productType: z.enum(["service", "package"]),
@@ -18,16 +21,25 @@ export const orderSchema = z.object({
     email: z.string().email({
         message: "Invalid email address.",
     }),
-    phoneNumber: z.string({
-        message: "Phone numberis required.",
-    }),
+    phoneNumber: z.string().nonempty({ message: "Mobile number is required" })
+        .refine(
+            (number) => {
+                try {
+                    const phoneNumber = phoneUtil.parse(number);
+                    return phoneUtil.isValidNumber(phoneNumber);
+                } catch {
+                    return false;
+                }
+            },
+            { message: "Invalid mobile number" }
+        ),
     age: z.number().min(1, {
         message: "Age must be at least 1 characters.",
     }),
     date: z.date({
         message: "Date is required.",
     }),
-    staringtSlot: z.coerce.number({
+    startingSlot: z.coerce.number({
         message: "Time is required.",
     }),
     message: z.string().optional(),

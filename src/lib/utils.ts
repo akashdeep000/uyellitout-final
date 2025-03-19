@@ -68,8 +68,13 @@ export const slotToTime = (slot: number) => {
 };
 
 export function convertToDate(date: Date, slot: number): Date {
-  date.setHours(0, 0, 0, 0);
-  return addMinutes(date, (slot * 15));
+  console.log({
+    date,
+    slot,
+    reset: new Date(date.toISOString().split("T")[0]),
+    out: addMinutes(new Date(date.toISOString().split("T")[0]), (slot * 15))
+  });
+  return addMinutes(new Date(date.toISOString().split("T")[0]), (slot * 15));
 }
 
 type Day = "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
@@ -145,7 +150,7 @@ export function convertDateSlots(
       const minutes = slot * 15;
       const convertedMinutes = (minutes - sourceOffset + targetOffset);
 
-      const convertedDate = addMinutes(date.date, - sourceOffset + targetOffset);
+      const convertedDate = addMinutes(new Date(date.date.toISOString().split("T")[0]), - sourceOffset + targetOffset);
 
       if (convertedMinutes < 0) {
         const dateKey = addDays(convertedDate, -1).toISOString().split("T")[0];
@@ -173,12 +178,12 @@ export function convertDateSlots(
       }
     }
   }
-  console.log({
-    in: dates,
-    sourceOffset,
-    targetOffset,
-    out: Object.entries(result).map(([, slots]) => (slots))
-  });
+  // console.log({
+  //   in: dates,
+  //   sourceOffset,
+  //   targetOffset,
+  //   out: Object.entries(result).map(([, slots]) => (slots))
+  // });
 
   return Object.entries(result).map(([, slots]) => (slots));
 }

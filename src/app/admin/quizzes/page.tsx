@@ -1,9 +1,10 @@
 "use client";
-import { deleteQuiz, getCategories, getQuizResultsWithUser, getQuizzes, getQuizzesByCategory, updateQuiz } from "@/actions/quiz";
+import { deleteQuiz, getCategories, getQuizzes, getQuizzesByCategory, updateQuiz } from "@/actions/quiz";
 import { AdminPageWrapper } from "@/components/admin/page-wraper";
 import { AddCategory } from "@/components/admin/quizzes/add-category";
 import { AddQuiz } from "@/components/admin/quizzes/add-quiz";
 import { EditQuiz } from "@/components/admin/quizzes/edit-quiz";
+import { QuizResults } from "@/components/admin/quizzes/quiz-results";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -32,10 +33,7 @@ export default function Page() {
         queryFn: () => (selectedCategory ? getQuizzesByCategory(selectedCategory) : getQuizzes()),
     });
 
-    const { data: quizResults, isLoading: quizResultsLoading } = useQuery({
-        queryKey: ["quiz-results", selectedCategory],
-        queryFn: () => getQuizResultsWithUser()
-    });
+
 
     const deleteQuizMutation = useMutation({
         mutationFn: deleteQuiz,
@@ -56,7 +54,7 @@ export default function Page() {
     });
 
     return (
-        <AdminPageWrapper className="space-y-4" breadcrumb={[{ title: "Quizzes" }]}>
+        <AdminPageWrapper className="space-y-6" breadcrumb={[{ title: "Quizzes" }]}>
             <ScrollArea>
                 <div className="flex gap-2">
                     <div onClick={() => setSelectedCategory(null)}
@@ -118,27 +116,8 @@ export default function Page() {
                     {quizzes?.length === 0 && <div className="text-muted-foreground">No quizzes found.</div>}
                     {quizzesError && <div className="text-muted-foreground">Error loading quizzes.</div>}
                 </div>
-
-                <div className="space-y-4">
-                    <h2 className="text-xl font-semibold">Submitions</h2>
-                    <div className="space-y-2">
-                        {quizResultsLoading && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="w-full h-28 rounded" />)}
-                        {quizzes?.length === 0 && <div className="text-muted-foreground">No quizzes found.</div>}
-                        {quizResults?.map((result) => (
-                            <div key={result.id} className="p-4 border rounded-lg shadow-sm">
-                                <h3 className="text-lg font-semibold">{result.quizName}</h3>
-                                <p className="text-sm text-gray-500">User: {result.user.name}</p>
-                                <div className="flex gap-4">
-                                    <p className="text-sm text-gray-500">Marks: {`${result.mark}/${result.total}`}</p>
-                                    <p className="text-sm text-gray-500">Percentage: {((result.mark / result.total) * 100).toFixed(2)}</p>
-                                </div>
-                                <p className="text-sm text-gray-500">Date: {(new Date(result.createdAt)).toLocaleString()}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
             </div>
-
+            <QuizResults />
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <DialogContent>
                     <DialogHeader>

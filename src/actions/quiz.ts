@@ -4,7 +4,7 @@ import { db } from "@/db"; // Assuming you have a database instance
 import { question, quiz, quizCategory, quizResult, quizResultAnswer, user, userStat } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { converterToHappiness } from "@/lib/utils";
-import { desc, eq, InferInsertModel, InferSelectModel, sql } from "drizzle-orm";
+import { count, desc, eq, InferInsertModel, InferSelectModel, like, or } from "drizzle-orm";
 import { headers } from "next/headers";
 
 // Define TypeScript types
@@ -49,8 +49,12 @@ export async function getQuizzes() {
         grades: quiz.grades,
         active: quiz.active,
         categoryId: quiz.categoryId,
-        totalQuestions: sql<number>`(SELECT COUNT(*) FROM ${question} WHERE ${question.quizId} = ${quiz.id})`.as("totalQuestions")
-    }).from(quiz);
+        totalQuestions: count(question.id)
+    })
+        .from(quiz)
+        .leftJoin(question, eq(question.quizId, quiz.id))
+        .groupBy(quiz.id, quiz.title, quiz.defaultMarks, quiz.grades, quiz.active, quiz.categoryId);
+
 }
 
 // // Fetch quizzes by category
@@ -62,10 +66,12 @@ export async function getQuizzesByCategory(categoryId: string) {
         grades: quiz.grades,
         active: quiz.active,
         categoryId: quiz.categoryId,
-        totalQuestions: sql<number>`(SELECT COUNT(*) FROM ${question} WHERE ${question.quizId} = ${quiz.id})`.as("totalQuestions")
-    }).from(quiz).where(eq(quiz.categoryId, categoryId));
+        totalQuestions: count(question.id)
+    })
+        .from(quiz).where(eq(quiz.categoryId, categoryId))
+        .leftJoin(question, eq(question.quizId, quiz.id))
+        .groupBy(quiz.id, quiz.title, quiz.defaultMarks, quiz.grades, quiz.active, quiz.categoryId);
 }
-
 
 // Update a quiz
 export async function updateQuiz(id: string, data: Partial<NewQuiz>) {
@@ -126,6 +132,22 @@ export async function getAllQuizResults(): Promise<QuizResult[]> {
 // Fetch quiz results for a user
 export async function getQuizResults(userId: string): Promise<QuizResult[]> {
     return await db.select().from(quizResult).where(eq(quizResult.userId, userId));
+}
+
+// Get quiz result with quiz details by id
+export async function getQuizResultById(id: string) {
+    return (await db.select({
+        id: quizResult.id,
+        quizId: quizResult.quizId,
+        userId: quizResult.userId,
+        createdAt: quizResult.createdAt,
+        quizName: quizResult.quizName,
+        mark: quizResult.mark,
+        total: quizResult.total,
+        quiz: quiz,
+    }).from(quizResult)
+        .where(eq(quizResult.id, id))
+        .leftJoin(quiz, eq(quizResult.quizId, quiz.id)))[0];
 }
 
 // Delete a quiz result
@@ -265,14 +287,16 @@ export async function submitQuiz(data: {
         await db.update(userStat).set({
             stat: [...stat, newStat]
         }).where(eq(userStat.userId, userId));
-        return percentage;
+        return { id: quizResultId, percentage };
     }
-    return percentage;
+    return { id: quizResultId, percentage };
 }
 
 // Get quiz results with user details (latest first)
-export async function getQuizResultsWithUser() {
-    return await db.select({
+export async function getQuizResultsWithUser(page: number = 1, limit: number = 10, search?: string) {
+    const offset = (page - 1) * limit;
+
+    let query = db.select({
         id: quizResult.id,
         quizName: quizResult.quizName,
         quizId: quizResult.quizId,
@@ -286,7 +310,34 @@ export async function getQuizResultsWithUser() {
             email: user.email,
             image: user.image
         }
-    }).from(quizResult).orderBy(desc(quizResult.createdAt)).innerJoin(user, eq(user.id, quizResult.userId));
+    }).from(quizResult)
+        .innerJoin(user, eq(user.id, quizResult.userId))
+        .orderBy(desc(quizResult.createdAt));
+
+    if (search) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
+        query = query.where(
+            or(
+                like(user.name, `%${search}%`),
+                like(user.email, `%${search}%`)
+            )
+        );
+    }
+
+    const [results, totalCount] = await Promise.all([
+        query.limit(limit).offset(offset),
+        db.select({ count: count() })
+            .from(quizResult)
+            .then(result => Number(result[0].count))
+    ]);
+
+    return {
+        results,
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        currentPage: page
+    };
 }
 
 // Get quiz results by user

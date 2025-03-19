@@ -1,9 +1,11 @@
 "use client";
 
-import { getBookings } from "@/actions/booking";
+import { cancelBooking, getBookings } from "@/actions/booking";
 import { AdminPageWrapper } from "@/components/admin/page-wraper";
+import { ResheduleBooking } from "@/components/bookings/reshedule-booking";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -11,10 +13,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { addDays, format } from "date-fns";
 import hash from "hash-it";
-import { CalendarIcon, Search, X } from "lucide-react";
+import { CalendarIcon, MoreVertical, Search, Settings, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 
@@ -57,7 +60,7 @@ export default function Page() {
         hasNextPage,
         refetch
     } = useInfiniteQuery({
-        queryKey: ["booking-payments", isScheduled, sortBy, dateRange, dateCRange, limit, debouncedSearchTerm],
+        queryKey: ["bookings", isScheduled, sortBy, dateRange, dateCRange, limit, debouncedSearchTerm],
         queryFn: async ({ pageParam }: { pageParam: PaginationParams }) => {
             const data = await getBookings({
                 page: pageParam?.nextPage || 1,
@@ -229,6 +232,27 @@ export default function Page() {
         pages: data?.pages
     });
 
+    const queryClient = useQueryClient();
+    const { toast } = useToast();
+
+    const bookingCancelMutation = useMutation({
+        mutationFn: cancelBooking,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["bookings"] });
+            toast({
+                title: "Booking cancelled",
+                description: "The booking has been cancelled successfully.",
+            });
+        },
+        onError: (error) => {
+            console.error("Error to cancel a booking:", error);
+            toast({
+                title: "Error",
+                description: "An error occurred while cancelling the booking.",
+                variant: "destructive",
+            });
+        }
+    });
 
     return (
         <AdminPageWrapper className="space-y-4" breadcrumb={[{ title: "Bookings" }]}>
@@ -395,6 +419,7 @@ export default function Page() {
                     <Table>
                         <TableHeader>
                             <TableRow>
+                                <TableHead></TableHead>
                                 <TableHead>Created at</TableHead>
                                 <TableHead>Schedule at</TableHead>
                                 <TableHead>Name</TableHead>
@@ -410,8 +435,31 @@ export default function Page() {
                         <TableBody>
                             {data?.pages[page - 1]?.data?.map((booking) => (
                                 <TableRow key={booking.id}>
+                                    <TableCell>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button aria-haspopup="true" size="icon" variant="ghost">
+                                                    <MoreVertical className="h-4 w-4" />
+                                                    <span className="sr-only">Toggle menu</span>
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                <DropdownMenuItem onClick={() => bookingCancelMutation.mutate({ id: booking.id })}>
+                                                    Cancel
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
                                     <TableCell className="font-medium">{booking.createdAt.toLocaleString()}</TableCell>
-                                    <TableCell className="font-medium">{booking.time?.toLocaleString() || "Not scheduled"}</TableCell>
+                                    <TableCell className="font-medium">
+                                        <div className="flex gap-1 items-center">
+                                            <p>{booking.status === "cancelled" ? "Canceled" : booking.time?.toLocaleString() || "Not scheduled"}</p>
+                                            <ResheduleBooking id={booking.id}>
+                                                <Button variant="ghost" size="icon"><Settings /></Button>
+                                            </ResheduleBooking>
+                                        </div>
+                                    </TableCell>
                                     <TableCell>{booking.name}</TableCell>
                                     <TableCell>{booking.email}</TableCell>
                                     <TableCell>{booking.phoneNumber}</TableCell>
@@ -425,7 +473,7 @@ export default function Page() {
 
                             {(isLoading || !data) && Array.from({ length: 3 }).map((_, i) => (
                                 <TableRow key={i}>
-                                    {Array.from({ length: 10 }).map((_, j) => (
+                                    {Array.from({ length: 11 }).map((_, j) => (
                                         <TableCell key={j}>
                                             <Skeleton className="h-6 w-full" />
                                         </TableCell>

@@ -7,12 +7,14 @@ import {
     CarouselContent,
     CarouselItem
 } from "@/components/ui/carousel";
+import { useToast } from "@/hooks/use-toast";
 import { ChevronLeft, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 
-export function Result({ percentage, quiz }: { percentage: number, quiz: Awaited<ReturnType<typeof getQuizById>> }) {
+export function Result({ id, percentage, quiz }: { id: string, percentage: number, quiz: Awaited<ReturnType<typeof getQuizById>> }) {
     const [api, setApi] = useState<CarouselApi>();
+    const { toast } = useToast();
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
     const imgCat = ["general", "emmotions", "growth", "parental", "relationship", "work"].find((cat) => quiz.categoryName?.toLowerCase().includes(cat)) || "general";
@@ -33,11 +35,26 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Awaited
 
 
     return (
-        <div className="fixed sm:rounded-lg rounded-none sm:relative z-[500000] sm:z-[50] top-0 left-0 w-full h-full bg-[#9ed6b7] flex flex-col">
+        <div className="fixed sm:rounded-lg rounded-none sm:relative z-[500000] sm:z-[50] top-0 left-0 bottom-0 right-0 w-full h-full bg-[#9ed6b7] flex flex-col">
             {
                 current !== 1 && (
                     <div className="flex justify-end p-2">
-                        <Button variant="ghost" className="rounded-full font-semibold text-white hover:text-[#9ed6b7] [&_svg]:size-5"><Share2 className="rotate-180 stroke-2" /> Share</Button>
+                        <Button onClick={async () => {
+                            if (navigator.share) {
+                                await navigator.share({
+                                    title: "Uyellitout - Brain's Cheat Sheet",
+                                    text: `I got ${percentage}% on the ${quiz.title} quiz!`,
+                                    url: `${window.location.origin}/results/${id}`
+                                });
+                            } else if (navigator.clipboard) {
+                                await navigator.clipboard.writeText(`${window.location.origin}/results/${id}`);
+                                toast({
+                                    title: "Link copied to clipboard",
+                                    description: "Share this link with your friends to show them your results!"
+                                });
+                            }
+
+                        }} variant="ghost" className="rounded-full font-semibold text-white hover:text-[#9ed6b7] [&_svg]:size-5"><Share2 className="rotate-180 stroke-2" /> Share</Button>
                     </div>
                 )
             }
@@ -159,7 +176,7 @@ export function Result({ percentage, quiz }: { percentage: number, quiz: Awaited
                     current !== 1 && <Button variant="secondary" size="lg">BOOK YOUR SESSION</Button>
                 }
             </div>
-            <div className="p-2 flex gap-1 justify-between sm:judstify-around items-center">
+            <div className="p-2 flex gap-1 justify-around sm:judstify-around items-center">
                 <Button disabled={current === 1} onClick={() => api?.scrollPrev()} variant="ghost" size="icon" className="border-2 border-white rounded-full text-white hover:text-[#9ed6b7]"><ChevronLeft className="stroke-[4]" /></Button>
                 <div className="flex gap-1">
                     {

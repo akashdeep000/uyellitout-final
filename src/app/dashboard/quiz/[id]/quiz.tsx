@@ -131,7 +131,7 @@ export function QuizList({ id }: { id: string }) {
                 }
                 {
                     mutation.data !== undefined && quiz &&
-                    <Result percentage={mutation.data} quiz={quiz} />
+                    <Result id={mutation.data.id} percentage={mutation.data.percentage} quiz={quiz} />
                 }
             </FullScreen>
         </>
