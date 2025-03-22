@@ -120,7 +120,7 @@ export function SchoolContactForm({ defaultService }: {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate({
-      formName: "School Contact Form",
+      formName: "School contact form",
       data: {
         schoolName: values.schoolName,
         location: values.location,

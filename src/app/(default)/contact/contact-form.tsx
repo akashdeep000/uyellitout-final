@@ -15,14 +15,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
+import libphonenumber from "google-libphonenumber";
+
+const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  contact: z.string().min(10, "Contact number must be at least 10 digits"),
+  contact: z.string().nonempty({ message: "Mobile number is required" })
+    .refine(
+      (number) => {
+        try {
+          const phoneNumber = phoneUtil.parse(number);
+          return phoneUtil.isValidNumber(phoneNumber);
+        } catch {
+          return false;
+        }
+      },
+      { message: "Invalid mobile number" }
+    ),
   subject: z.string().min(2, "Subject must be at least 2 characters"),
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
@@ -63,7 +78,7 @@ export function ContactForm() {
 
   function onSubmit(values: FormValues) {
     mutation.mutate({
-      formName: "Contact",
+      formName: "Contact form",
       data: values
     });
   }
@@ -107,7 +122,7 @@ export function ContactForm() {
               <FormItem className="flex-1">
                 <FormLabel className="text-black font-bold text-sm">Contact No.</FormLabel>
                 <FormControl>
-                  <Input type="tel" placeholder="Enter your contact number" {...field} className="border-b border-gray-300 focus:outline-none" />
+                  <PhoneInput defaultCountry="IN" placeholder="Enter your contact number" {...field} className="border-b border-gray-300 focus:outline-none" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

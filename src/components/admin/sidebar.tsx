@@ -40,7 +40,7 @@ const items = [
     },
     {
         title: "Messeges",
-        url: "/admin/quizzes",
+        url: "/admin/messages",
         icon: MessageCircle,
     },
     {
