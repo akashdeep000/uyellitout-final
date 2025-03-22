@@ -2,6 +2,7 @@
 
 import { getFormSubmissions } from "@/actions/form";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -31,7 +32,14 @@ export function FormSubmissionsList() {
         }
     }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-    if (status === "pending") return <div>Loading...</div>;
+    if (status === "pending") return (
+        <div className="space-y-2">
+            <Skeleton className="w-full h-12 rounded" />
+            <Skeleton className="w-full h-12 rounded" />
+            <Skeleton className="w-full h-12 rounded" />
+        </div>
+    );
+
     if (status === "error") return <div>Error loading submissions</div>;
 
     return (
