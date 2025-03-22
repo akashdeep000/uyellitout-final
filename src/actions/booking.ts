@@ -3,9 +3,10 @@
 import { packages, services } from "@/configs/data";
 import { db } from "@/db"; // Assuming you have a database instance
 import { availability, blockedAvailability, booking } from "@/db/schema";
+import { sendBookingConfirmationEmail, sendBookingRescheduledEmail } from "@/emails";
 import { env } from "@/env";
 import { auth } from "@/lib/auth";
-import { convertDateSlots, convertToDate } from "@/lib/utils";
+import { convertDateSlots, convertToDate, formatToIndianTime } from "@/lib/utils";
 import { orderSchema } from "@/schema/order";
 import { addMinutes } from "date-fns";
 import { and, asc, count, desc, eq, gte, InferInsertModel, InferSelectModel, isNotNull, isNull, like, lte, or, SQL } from "drizzle-orm";
@@ -280,13 +281,48 @@ export async function resheduleBooking({ id, date, startingSlot }: {
         throw new Error("Not Allowed");
     };
 
+    const currentBooking = (await db.select().from(booking).where(eq(booking.id, id)).limit(1))[0];
+
+    if (!currentBooking) {
+        throw new Error("Booking not found");
+    }
+
     await checkIfSlotAvailible(date, startingSlot);
-    return await db.update(booking).set({
+    const data = await db.update(booking).set({
         date,
         slots: [startingSlot, startingSlot + 1, startingSlot + 2, startingSlot + 3],
         time: convertToDate(date, startingSlot),
         status: "confirmed"
     }).where(and(eq(booking.id, id), session?.user.role !== "admin" ? eq(booking.userId, session.user.id) : undefined)).returning();
+
+    if (currentBooking.time) {
+        await sendBookingRescheduledEmail({
+            ctx: {
+                client: {
+                    name: currentBooking.name,
+                    email: currentBooking.email
+                },
+                sessionType: currentBooking.productName,
+                oldSessionDateTime: formatToIndianTime(currentBooking.time),
+                newSessionDateTime: formatToIndianTime(convertToDate(date, startingSlot)),
+            },
+            subject: "Booking Rescheduled",
+        });
+    } else {
+        await sendBookingConfirmationEmail({
+            ctx: {
+                client: {
+                    name: currentBooking.name,
+                    email: currentBooking.email
+                },
+                sessionType: currentBooking.productName,
+                sessionDateTime: formatToIndianTime(convertToDate(date, startingSlot)),
+            },
+            subject: "Booking Confirmed",
+        });
+    }
+
+    return data;
 }
 
 // Cancel booking

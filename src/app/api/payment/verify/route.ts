@@ -86,17 +86,21 @@ export async function POST(request: NextRequest) {
                 } catch (error) {
                     console.log(error);
                     if (!bookings) return;
-                    await sendBookingNotConfirmedEmail({
-                        subject: "Uyellitout - Session Booking Not Confirmed",
-                        ctx: {
-                            client: {
-                                email: bookings[0].email,
-                                name: bookings[0].name
-                            },
-                            sessionType: bookings[0].productName,
-                            sessionDateTime: formatToIndianTime(bookings[0].time!)
-                        }
-                    });
+                    try {
+                        await sendBookingNotConfirmedEmail({
+                            subject: "Uyellitout - Session Booking Not Confirmed",
+                            ctx: {
+                                client: {
+                                    email: bookings[0].email,
+                                    name: bookings[0].name
+                                },
+                                sessionType: bookings[0].productName,
+                                sessionDateTime: formatToIndianTime(bookings[0].time!)
+                            }
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
                 break;
             default:
