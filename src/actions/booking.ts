@@ -559,7 +559,10 @@ export async function createRazorpayOrder(data: FormDataType) {
             date: i === 0 ? parsedData.date : null,
             slots: i === 0 ? [parsedData.startingSlot, parsedData.startingSlot + 1, parsedData.startingSlot + 2, parsedData.startingSlot + 3] : null,
             time: i === 0 ? convertToDate(parsedData.date, parsedData.startingSlot) : null,
-            message: parsedData.message
+            message: parsedData.message,
+            emergencyContactPerson: parsedData.emergencyContactPerson,
+            emergencyContactNumber: parsedData.emergencyContactNumber,
+            emergencyContactRelation: parsedData.emergencyContactRelation
         });
     }
     await db.insert(booking).values(newBookings);

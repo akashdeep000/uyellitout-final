@@ -28,7 +28,7 @@ export function AddCategory() {
         }).max(36, {
             message: "Category name must be at most 36 characters.",
         }),
-        relatedTo: z.enum(["happiness", "intimacy"], {
+        relatedTo: z.enum(["happiness", "anxiety", "stress", "mood", "intimacy"], {
             message: "Please select a valid category type.",
         }),
     });
@@ -92,6 +92,9 @@ export function AddCategory() {
                                     <FormControl>
                                         <select {...field} className="w-full p-2 border rounded-md">
                                             <option value="happiness">Happiness</option>
+                                            <option value="anxiety">Anxiety</option>
+                                            <option value="stress">Stress</option>
+                                            <option value="mood">Mood</option>
                                             <option value="intimacy">Intimacy</option>
                                         </select>
                                     </FormControl>

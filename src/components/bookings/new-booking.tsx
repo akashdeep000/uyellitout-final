@@ -17,6 +17,8 @@ import { RazorpayOrderOptions, useRazorpay } from "react-razorpay";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
+import { Checkbox } from "../ui/checkbox";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { PhoneInput } from "../ui/phone-input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
@@ -70,6 +72,10 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
             date: undefined,
             startingSlot: undefined,
             message: "",
+            emergencyContactPerson: "",
+            emergencyContactNumber: "",
+            emergencyContactRelation: "",
+            consent: false,
         }
     });
 
@@ -89,6 +95,10 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
                     date: undefined,
                     startingSlot: undefined,
                     message: "",
+                    emergencyContactPerson: "",
+                    emergencyContactNumber: "",
+                    emergencyContactRelation: "",
+                    consent: false
                 });
             }
         })();
@@ -187,50 +197,58 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
                 <form onSubmit={form.handleSubmit(handlePayment)}>
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-6">
+                            <div className="space-y-4">
+                                <p className="text-sm">Choose services or packages</p>
+                                <Select defaultValue={(defaultProductType && defaultProductId) ? `${defaultProductType.charAt(0)}-${defaultProductId}` : "s-0"} onValueChange={(value) => {
+                                    const [type, id] = value.split("-");
+                                    form.setValue("productType", type === "s" ? "service" : "package");
+                                    form.setValue("productId", Number(id));
+                                }}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select services or package" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Services</SelectLabel>
+                                            {
+                                                services.filter((e, i) => i < 4).map((service, index) => (
+                                                    <SelectItem key={`s-${index}`} value={`s-${index}`}>
+                                                        <div className="flex gap-2">
+                                                            <p> {service.title}</p>
+                                                            <p>-</p>
+                                                            <p className="text-muted-foreground">₹{service.price}</p>
+                                                        </div>
+                                                    </SelectItem>
+                                                ))
+                                            }
+                                        </SelectGroup>
+                                        <SelectGroup>
+                                            <SelectLabel>Packages</SelectLabel>
+                                            {
+                                                packages.map((pkg, index) => (
+                                                    <SelectItem key={`p-${index}`} value={`p-${index}`}>
+                                                        <div className="flex gap-2">
+                                                            <p> {pkg.title}</p>
+                                                            <p>-</p>
+                                                            <p className="text-muted-foreground">₹{pkg.price}</p>
+                                                        </div>
+                                                    </SelectItem>
+                                                ))
+                                            }
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                             {
-                                isNested &&
-                                <div className="space-y-4">
-                                    <p className="text-sm">Choose services or packages</p>
-                                    <Select defaultValue={(defaultProductType && defaultProductId) ? `${defaultProductType.charAt(0)}-${defaultProductId}` : "s-0"} onValueChange={(value) => {
-                                        const [type, id] = value.split("-");
-                                        form.setValue("productType", type === "s" ? "service" : "package");
-                                        form.setValue("productId", Number(id));
-                                    }}>
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select services or package" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Services</SelectLabel>
-                                                {
-                                                    services.map((service, index) => (
-                                                        <SelectItem key={`s-${index}`} value={`s-${index}`}>
-                                                            <div className="flex gap-2">
-                                                                <p> {service.title}</p>
-                                                                <p>-</p>
-                                                                <p className="text-muted-foreground">₹{service.price}</p>
-                                                            </div>
-                                                        </SelectItem>
-                                                    ))
-                                                }
-                                            </SelectGroup>
-                                            <SelectGroup>
-                                                <SelectLabel>Packages</SelectLabel>
-                                                {
-                                                    packages.map((pkg, index) => (
-                                                        <SelectItem key={`p-${index}`} value={`p-${index}`}>
-                                                            <div className="flex gap-2">
-                                                                <p> {pkg.title}</p>
-                                                                <p>-</p>
-                                                                <p className="text-muted-foreground">₹{pkg.price}</p>
-                                                            </div>
-                                                        </SelectItem>
-                                                    ))
-                                                }
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                isLoggedin && <FormField control={form.control} name="productCount" render={({ field }) => (
+                                    <FormItem className="grid gap-2">
+                                        <FormLabel>Number of session</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" placeholder="Number of session" value={field.value} onChange={(e) => field.onChange(Number(e.target.value))} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )} />
                             }
                             <FormField
                                 control={form.control}
@@ -283,64 +301,9 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
                                 </FormItem>
                             )} />
                         </div>
-                        <div className="gap-6 flex flex-col">
-                            <div className="space-y-6 flex-1">
-                                {
-                                    !isNested &&
-                                    <div className="space-y-4">
-                                        <p className="text-sm">Choose services or packages</p>
-                                        <Select defaultValue="s-0" onValueChange={(value) => {
-                                            const [type, id] = value.split("-");
-                                            form.setValue("productType", type === "s" ? "service" : "package");
-                                            form.setValue("productId", Number(id));
-                                        }}>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select services or package" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectLabel>Services</SelectLabel>
-                                                    {
-                                                        services.map((service, index) => (
-                                                            <SelectItem key={`s-${index}`} value={`s-${index}`}>
-                                                                <div className="flex gap-2">
-                                                                    <p> {service.title}</p>
-                                                                    <p>-</p>
-                                                                    <p className="text-muted-foreground">₹{service.price}</p>
-                                                                </div>
-                                                            </SelectItem>
-                                                        ))
-                                                    }
-                                                </SelectGroup>
-                                                <SelectGroup>
-                                                    <SelectLabel>Packages</SelectLabel>
-                                                    {
-                                                        packages.map((pkg, index) => (
-                                                            <SelectItem key={`p-${index}`} value={`p-${index}`}>
-                                                                <div className="flex gap-2">
-                                                                    <p> {pkg.title}</p>
-                                                                    <p>-</p>
-                                                                    <p className="text-muted-foreground">₹{pkg.price}</p>
-                                                                </div>
-                                                            </SelectItem>
-                                                        ))
-                                                    }
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                }
-                                {
-                                    isLoggedin && <FormField control={form.control} name="productCount" render={({ field }) => (
-                                        <FormItem className="grid gap-2">
-                                            <FormLabel>Number of session</FormLabel>
-                                            <FormControl>
-                                                <Input type="number" placeholder="Number of session" value={field.value} onChange={(e) => field.onChange(Number(e.target.value))} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )} />
-                                }
+
+                        <div className="space-y-6 flex-1">
+                            <div className="gap-6 flex flex-col">
                                 <FormField control={form.control} name="date" render={({ field }) => (
                                     <FormItem className="grid gap-2">
                                         <FormLabel>Date</FormLabel>
@@ -412,11 +375,134 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
                                         <FormMessage />
                                     </FormItem>
                                 )} />
-                            </div>
-                            <div>
-                                <Button className="float-right" type="submit" size="lg" disabled={paymentState !== null}>
-                                    {paymentState === "creating-order" ? "Creating order..." : paymentState === "redirecting" ? "Redirecting..." : "Book Now"}
-                                </Button>
+                                <FormField
+                                    control={form.control}
+                                    name="emergencyContactPerson"
+                                    render={({ field }) => (
+                                        <FormItem className="grid gap-2">
+                                            <FormLabel>Emergency contact person name</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Emergency contact person name" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField control={form.control} name="emergencyContactNumber" render={({ field }) => (
+                                    <FormItem className="grid gap-2">
+                                        <FormLabel>Emergency contact person&apos;s phone number</FormLabel>
+                                        <FormControl>
+                                            <PhoneInput defaultCountry="IN" placeholder="Phone number" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )} />
+                                <FormField control={form.control} name="emergencyContactRelation" render={({ field }) => (
+                                    <FormItem className="grid gap-2">
+                                        <FormLabel>Relation with emergency contact person</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Relation with emergency contact person" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )} />
+                                <FormField
+                                    control={form.control}
+                                    name="consent"
+                                    render={({ field }) => (
+                                        <FormItem className="grid gap-2">
+                                            <div className="flex items-center space-x-2">
+                                                <FormControl>
+                                                    <Checkbox
+                                                        checked={field.value}
+                                                        onCheckedChange={field.onChange}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="text-sm font-normal flex gap-2">
+                                                    <p>I agree to the</p>
+                                                    <Dialog>
+                                                        <DialogTrigger className="text-blue-500 underline">terms and conditions</DialogTrigger>
+                                                        <DialogContent className="overflow-y-scroll max-h-svh sm:max-h-[80svh]">
+                                                            <DialogHeader>
+                                                                <DialogTitle>Client Consent Notice for Counseling Services</DialogTitle>
+                                                                <DialogDescription>
+                                                                </DialogDescription>
+                                                            </DialogHeader>
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">Introduction</h2>
+                                                                <p className="text-gray-700">Thank you for choosing our counseling services. This consent form outlines important information regarding your participation in counseling sessions. Please read this carefully before proceeding with your booking.</p>
+                                                            </section>
+
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">1. Nature of Counseling Services</h2>
+                                                                <p className="text-gray-700">Counseling involves discussing personal challenges, emotions, and thoughts to facilitate personal growth and well-being. While counseling can be beneficial, there are no guarantees regarding specific outcomes.</p>
+                                                            </section>
+
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">2. Confidentiality</h2>
+                                                                <ul className="text-gray-700 list-disc pl-5">
+                                                                    <li>If there is a risk of harm to yourself or others.</li>
+                                                                    <li>If there is suspected abuse of a minor, elderly person, or vulnerable individual.</li>
+                                                                    <li>If required by law or court order.</li>
+                                                                    <li>If you provide written consent to share information with a third party.</li>
+                                                                </ul>
+                                                            </section>
+
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">3. Online Counseling Considerations</h2>
+                                                                <p className="text-gray-700">If sessions are conducted online, ensure a private and secure space to maintain confidentiality. The platform used will strive to maintain security; however, complete privacy over the internet cannot be guaranteed.</p>
+                                                            </section>
+
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">4. Fees & Cancellation Policy</h2>
+                                                                <ul className="text-gray-700 list-disc pl-5">
+                                                                    <li>Payment must be made before the session begins.</li>
+                                                                    <li>Cancellations or rescheduling requests should be made at least 24 hours in advance. Late cancellations may be subject to charges.</li>
+                                                                </ul>
+                                                            </section>
+
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">5. Client Responsibilities</h2>
+                                                                <ul className="text-gray-700 list-disc pl-5">
+                                                                    <li>Actively participate in sessions and engage in the therapeutic process.</li>
+                                                                    <li>Communicate openly about any concerns regarding counseling.</li>
+                                                                    <li>Seek emergency medical or psychiatric help if experiencing a crisis beyond the scope of counseling services.</li>
+                                                                </ul>
+                                                            </section>
+
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">6. Voluntary Participation & Right to Withdraw</h2>
+                                                                <p className="text-gray-700">You have the right to withdraw from counseling at any time. If you wish to discontinue, you may discuss this with your counselor for proper closure and referrals if needed.</p>
+                                                            </section>
+
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">7. Limitation of Services</h2>
+                                                                <p className="text-gray-700">Counseling is not a substitute for medical treatment or psychiatric care. If a higher level of care is required, referrals will be provided.</p>
+                                                            </section>
+
+                                                            <section>
+                                                                <h2 className="text-lg font-semibold mb-2">8. Informed Consent Acknowledgment</h2>
+                                                                <p className="text-gray-700">By checking this box and proceeding with the booking, you acknowledge that:</p>
+                                                                <ul className="text-gray-700 list-disc pl-5">
+                                                                    <li>You have read and understood this consent form.</li>
+                                                                    <li>You agree to the terms outlined above.</li>
+                                                                    <li>You have read and understood this consent form.</li>
+                                                                </ul>
+                                                            </section>
+                                                        </DialogContent>
+                                                    </Dialog>
+                                                    <p>of counseling services</p>
+                                                </FormLabel>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <div>
+                                    <Button className="float-right" type="submit" size="lg" disabled={paymentState !== null}>
+                                        {paymentState === "creating-order" ? "Creating order..." : paymentState === "redirecting" ? "Redirecting..." : "Book Now"}
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -425,6 +511,6 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
             {/* <pre>
                 {JSON.stringify(availability, null, 2)}
             </pre> */}
-        </div>
+        </div >
     );
 }

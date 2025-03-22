@@ -43,4 +43,31 @@ export const orderSchema = z.object({
         message: "Time is required.",
     }),
     message: z.string().optional(),
+    emergencyContactPerson: z.string().min(2, {
+        message: "Name must be at least 2 characters.",
+    }).max(36, {
+        message: "Name name must be at most 36 characters.",
+    }),
+    emergencyContactNumber: z.string().nonempty({ message: "Mobile number is required" })
+        .refine(
+            (number) => {
+                try {
+                    const phoneNumber = phoneUtil.parse(number);
+                    return phoneUtil.isValidNumber(phoneNumber);
+                } catch {
+                    return false;
+                }
+            },
+            { message: "Invalid mobile number" }
+        ),
+    emergencyContactRelation: z.string().min(2, {
+        message: "Relation name must be at least 2 characters.",
+    }).max(36, {
+        message: "Relation name must be at most 36 characters.",
+    }),
+    consent: z.boolean({
+        required_error: "You must agree to the terms and conditions",
+    }).refine((val) => val === true, {
+        message: "You must agree to the terms and conditions",
+    }),
 });

@@ -271,7 +271,7 @@ export async function submitQuiz(data: {
         newStat.intimacy = 7;
     }
 
-    if (stat.length === 0) {
+    if (userStatData.length === 0) {
         await db.insert(userStat).values({
             stat: [newStat],
             userId
@@ -362,4 +362,48 @@ export async function getStatsByUser() {
         throw new Error("User not found");
     };
     return (await db.select().from(userStat).where(eq(userStat.userId, userId)).orderBy(desc(userStat.createdAt)))[0];
+}
+
+
+// get recomended quiz
+export async function getRecomendedQuiz(current: string) {
+    const quizzes = await db.select({
+        id: quiz.id,
+        title: quiz.title,
+        category: quiz.categoryId,
+    }).from(quiz);
+
+    const currentQuiz = quizzes.find(q => q.id === current);
+
+    let sameCatQuizzes = quizzes.filter(q => q.category === currentQuiz?.category && q.id !== currentQuiz?.id);
+    let diffCatQuizzes = quizzes.filter(q => q.category !== currentQuiz?.category);
+
+    if (!currentQuiz) {
+        sameCatQuizzes = quizzes.filter(q => q.id !== current);
+        diffCatQuizzes = quizzes.filter(q => q.id !== current);
+    }
+
+    if (sameCatQuizzes.length === 0) {
+        return {
+            sameCatQuiz: null,
+            diffCatQuiz: diffCatQuizzes[Math.floor(Math.random() * diffCatQuizzes.length)]
+        };
+    }
+    if (diffCatQuizzes.length === 0) {
+        return {
+            sameCatQuiz: sameCatQuizzes[Math.floor(Math.random() * sameCatQuizzes.length)],
+            diffCatQuiz: null
+        };
+    };
+    if (sameCatQuizzes.length === 0 && diffCatQuizzes.length === 0) {
+        return {
+            sameCatQuiz: null,
+            diffCatQuiz: null
+        };
+    };
+
+    return {
+        sameCatQuiz: sameCatQuizzes[Math.floor(Math.random() * sameCatQuizzes.length)],
+        diffCatQuiz: diffCatQuizzes[Math.floor(Math.random() * diffCatQuizzes.length)]
+    };
 }

@@ -1,4 +1,5 @@
 import { Instagram, Linkedin, Mail } from "lucide-react";
+import { ContactForm } from "./contact-form";
 
 export default function Page() {
 
@@ -58,82 +59,8 @@ export default function Page() {
                                 </div>
                             </div>
                         </div>
-                        <div className="p-4">
-                            <form>
-                                <div className="mb-3">
-                                    <label htmlFor="name" className="text-black font-bold text-sm">
-                                        Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        name="name"
-                                        placeholder="Enter your name"
-                                        required
-                                        className="w-full border-b border-gray-300 p-1 focus:outline-none"
-                                    />
-                                </div>
-                                <div className="flex gap-4 mb-3">
-                                    <div className="w-1/2">
-                                        <label htmlFor="email" className="text-black font-bold text-sm">
-                                            Email
-                                        </label>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            placeholder="Enter your email"
-                                            required
-                                            className="w-full border-b border-gray-300 p-1 focus:outline-none"
-                                        />
-                                    </div>
-                                    <div className="w-1/2">
-                                        <label htmlFor="contact" className="text-black font-bold text-sm">
-                                            Contact No.
-                                        </label>
-                                        <input
-                                            type="tel"
-                                            id="contact"
-                                            name="contact"
-                                            placeholder="Enter your contact number"
-                                            required
-                                            className="w-full border-b border-gray-300 p-1 focus:outline-none"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="subject" className="text-black font-bold text-sm">
-                                        Subject
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="subject"
-                                        name="subject"
-                                        placeholder="Enter your subject"
-                                        required
-                                        className="w-full border-b border-gray-300 p-1 focus:outline-none"
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="message" className="text-black font-bold text-sm">
-                                        Message
-                                    </label>
-                                    <textarea
-                                        id="message"
-                                        name="message"
-                                        rows={4}
-                                        placeholder="Enter your message"
-                                        required
-                                        className="w-full border-b border-gray-300 p-1 focus:outline-none"
-                                    ></textarea>
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="float-right px-4 py-2 bg-[#9ED6B7] text-white font-bold rounded-md hover:bg-black transition"
-                                >
-                                    Submit
-                                </button>
-                            </form>
+                        <div className="p-4 w-full">
+                            <ContactForm />
                         </div>
                     </div>
                 </div>

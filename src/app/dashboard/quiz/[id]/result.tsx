@@ -1,5 +1,5 @@
 "use client";
-import { getQuizById } from "@/actions/quiz";
+import { getQuizById, getRecomendedQuiz } from "@/actions/quiz";
 import { Button } from "@/components/ui/button";
 import {
     Carousel,
@@ -8,7 +8,11 @@ import {
     CarouselItem
 } from "@/components/ui/carousel";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, Share2 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
@@ -18,6 +22,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
     const imgCat = ["general", "emmotions", "growth", "parental", "relationship", "work"].find((cat) => quiz.categoryName?.toLowerCase().includes(cat)) || "general";
+    const pathname = usePathname();
 
     useEffect(() => {
         if (!api) {
@@ -33,6 +38,12 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
     }, [api]);
     const grade = quiz.grades.sort((a, b) => b.percent - a.percent).find(grade => percentage >= grade.percent);
 
+    const { data: recomendedQuiz, isLoading: recomendedQuizLoading } = useQuery({
+        queryKey: ["random-quiz", id],
+        queryFn: async () => {
+            return await getRecomendedQuiz(id);
+        }
+    });
 
     return (
         <div className="fixed sm:rounded-lg rounded-none sm:relative z-[500000] sm:z-[50] top-0 left-0 bottom-0 right-0 w-full h-full bg-[#9ed6b7] flex flex-col">
@@ -58,7 +69,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
                     </div>
                 )
             }
-            <Carousel setApi={setApi} className="flex-1 h-full sm:w-[calc(100svw_-_14rem)]">
+            <Carousel setApi={setApi} className={cn("flex-1 h-full overflow-y-scroll", pathname.includes("dashboard") ? "sm:w-[calc(100svw_-_14rem)]" : "")}>
                 <CarouselContent className="h-full">
                     <CarouselItem className="h-full p-4 pl-8">
                         <div className="h-full max-w-prose mx-auto flex flex-col justify-center">
@@ -150,7 +161,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
                             </div>
                             <div className="p-12 text-gray-800">
                                 <p className="font-semibold text-7xl text-white">Pro - tip </p>
-                                <p className="text-5xl">protin</p>
+                                <p className="text-5xl">potion</p>
                             </div>
                         </div>
                     </CarouselItem>
@@ -169,6 +180,54 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
                             </CarouselItem>
                         ))
                     }
+                    <CarouselItem className="h-full p-4 pl-8">
+                        <div className="h-full max-w-prose mx-auto flex flex-col gap-8">
+                            <div className="h-[50%] w-full flex flex-col space-y-2">
+                                <p className="text-xl font-semibold text-left">
+                                    Think you have figured out yourself ...?
+                                </p>
+                                <p className="text-2xl text-white font-semibold text-left">
+                                    Try another !
+                                </p>
+                                <div className="flex-1">
+                                    <div className="grid grid-cols-2 gap-4 h-full ">
+                                        <div className="rounded-xl shadow-xl p-4 h-[70%] bg-neutral-50 flex flex-col">
+                                            <img className="flex-1 mx-auto" src={`/result/page-8/${imgCat}/image-1.svg`} />
+                                            <p className="text-gray-800 translate-y-4">{recomendedQuiz?.sameCatQuiz?.title}</p>
+                                            {
+                                                !recomendedQuizLoading &&
+                                                <Link className="mx-auto translate-y-8" href={`/dashboard/quizzes/${recomendedQuiz?.sameCatQuiz?.id}`}>
+                                                    <Button className="" variant="default">Start now</Button>
+                                                </Link>
+                                            }
+                                        </div>
+                                        <div className="rounded-xl shadow-xl p-4 h-[70%] mt-[27%] bg-neutral-50 flex flex-col">
+                                            <img className="flex-1 mx-auto" src={`/result/page-8/${imgCat}/image-2.svg`} />
+                                            <p className="text-gray-800 translate-y-4">{recomendedQuiz?.diffCatQuiz?.title}</p>
+                                            {
+                                                !recomendedQuizLoading &&
+                                                <Link className="mx-auto translate-y-8" href={`/dashboard/quizzes/${recomendedQuiz?.diffCatQuiz?.id}`}>
+                                                    <Button className="" variant="default">Start now</Button>
+                                                </Link>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <p className="pt-6 text-xl font-semibold text-center">Need more <span className="text-white">HELP?</span></p>
+                            </div>
+
+                            <div className="flex-1 grid place-items-center">
+                                <div className="h-full aspect-square bg-[url(/blog-thumb.svg)] bg-cover bg-top rounded-2xl">
+                                    <div className="h-full py-[20%] flex flex-row items-end font-semibold w-[60%] lg:text-xl md:text-sm sm:text-2xl px-4">
+                                        <div className="space-y-4">
+                                            <p className="">How to deal with<br />anxiety?</p>
+                                            <button className="scale-90 ml-[-5%] bg-white shadow-xl px-3 py-1 rounded-xl">Read</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </CarouselItem>
                 </CarouselContent>
             </Carousel>
             <div className="flex justify-center">

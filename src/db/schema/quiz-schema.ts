@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { ulid } from "ulid";
 import { user } from "./auth-schema";
@@ -41,7 +40,7 @@ export const quizResult = sqliteTable("quiz_result", {
     total: integer("total").notNull(),
     quizId: text("quiz_id").notNull().references(() => quiz.id, { onDelete: "set null" }),
     userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-    createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date(Date.now())),
 });
 
 export const quizResultAnswer = sqliteTable("quiz_result_answer", {
@@ -59,6 +58,6 @@ export const userStat = sqliteTable("user_stat", {
         intimacy: number;
     }[]>().notNull(),
     userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }).unique(),
-    createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
-    updatedAt: text("updated_at").notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date(Date.now())),
+    updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(new Date(Date.now())),
 });

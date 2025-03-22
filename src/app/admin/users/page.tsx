@@ -18,7 +18,7 @@ type ListUsersQueryParams = ListUsersOptions extends { query?: infer Q }
 export default function Page() {
 
     const [usersQuery, setUsersQuery] = useState<ListUsersQueryParams>({
-        limit: 1,
+        limit: 15,
         offset: 0,
         searchValue: "",
     });

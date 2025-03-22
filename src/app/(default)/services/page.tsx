@@ -1,5 +1,6 @@
 "use client";
 import { NewBooking } from "@/components/bookings/new-booking";
+import { SchoolContactForm } from "@/components/forms/school-contact-form";
 import { Button } from "@/components/ui/button";
 import {
     Carousel,
@@ -180,18 +181,21 @@ export default function Page() {
                                 </div>
                             </div>
                             <div className="flex gap-3 flex-row-reverse items-end">
-                                <Dialog>
-                                    <DialogTrigger asChild>
-                                        <Button className="font-semibold h-10 rounded-lg">Book A Session</Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="text-left max-h-svh max-w-2xl overflow-y-scroll">
-                                        <DialogHeader>
-                                            <DialogTitle></DialogTitle>
-                                            <DialogDescription></DialogDescription>  Book a session
-                                        </DialogHeader>
-                                        <NewBooking defaultProductType="service" defaultProductId={activeService} isNested={true} />
-                                    </DialogContent>
-                                </Dialog>
+                                {
+                                    activeService < 4 &&
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button className="font-semibold h-10 rounded-lg">Book A Session</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="text-left max-h-svh max-w-2xl overflow-y-scroll">
+                                            <DialogHeader>
+                                                <DialogTitle></DialogTitle>
+                                                <DialogDescription></DialogDescription>  Book a session
+                                            </DialogHeader>
+                                            <NewBooking defaultProductType="service" defaultProductId={activeService} isNested={true} />
+                                        </DialogContent>
+                                    </Dialog>
+                                }
                                 <DropdownMenu open={showPrice} onOpenChange={setShowPrice}>
                                     <DropdownMenuTrigger className={`shadow-sm inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-background hover:bg-foreground/80 h-10 px-4 py-2 bg-emerald-500 font-semibold min-w-28 float-right ${showPrice ? "hover:bg-white bg-white text-gray-900 border border-emerald-500" : ""}`}>{showPrice ? <div className="flex gap-1 items-center justify-between"><Image className="h-full aspect-square border-t border-b border-emerald-500" width={40} height={40} src={`/service/${activeService + 1}.gif`} alt={`${services[activeService].compareTo}-logo`} /> <p>₹{services[activeService].price}</p></div> : "Get Price"}</DropdownMenuTrigger>
                                     <DropdownMenuContent className="px-4 py-1 flex gap-2 items-center bg-emerald-500 text-white rounded-full w-fit mx-auto">
@@ -566,7 +570,19 @@ export default function Page() {
                                             </div>
                                         </div>
                                         <div className="flex justify-between pt-2">
-                                            <Button onClick={(event) => { event.stopPropagation(); }} className="bg-[#52869A] font-bold rounded-xl">BOOK NOW</Button>
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                    <Button onClick={(event) => { event.stopPropagation(); }} className="bg-[#52869A] font-bold rounded-xl">BOOK NOW</Button>
+                                                </DialogTrigger>
+                                                <DialogContent className="overflow-y-scroll max-h-svh sm:max-h-[80svh]" onClick={(event) => { event.stopPropagation(); }}>
+                                                    <DialogHeader>
+                                                        <DialogTitle>Book a personalized programs for your school</DialogTitle>
+                                                        <DialogDescription>
+                                                        </DialogDescription>
+                                                    </DialogHeader>
+                                                    <SchoolContactForm defaultService={item.title} />
+                                                </DialogContent>
+                                            </Dialog>
                                             <Button className="font-bold" variant="ghost">Know More</Button>
                                         </div>
                                     </div>

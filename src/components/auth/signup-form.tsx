@@ -142,8 +142,7 @@ export function SignupForm({
                                         <Button onClick={() => {
                                             authClient.signIn.social({
                                                 provider: "google",
-                                                callbackURL: "/dashboard",
-                                                requestSignUp: true
+                                                callbackURL: "/dashboard"
                                             });
                                         }} type="button" variant="outline" className="w-full">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

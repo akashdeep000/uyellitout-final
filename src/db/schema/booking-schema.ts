@@ -30,6 +30,9 @@ export const booking = sqliteTable("booking", {
     phoneNumber: text("phone_number").notNull(),
     age: integer("age").notNull(),
     message: text("message"),
+    emergencyContactPerson: text("emergency_contact_person"),
+    emergencyContactNumber: text("emergency_contact_number"),
+    emergencyContactRelation: text("emergency_contact_relation"),
     createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date(Date.now())),
     updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(new Date(Date.now())),
 });
