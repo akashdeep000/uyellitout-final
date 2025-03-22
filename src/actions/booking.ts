@@ -7,6 +7,7 @@ import { env } from "@/env";
 import { auth } from "@/lib/auth";
 import { convertDateSlots, convertToDate } from "@/lib/utils";
 import { orderSchema } from "@/schema/order";
+import { addMinutes } from "date-fns";
 import { and, asc, count, desc, eq, gte, InferInsertModel, InferSelectModel, isNotNull, isNull, like, lte, or, SQL } from "drizzle-orm";
 import { headers } from "next/headers";
 import Razorpay from "razorpay";
@@ -147,7 +148,7 @@ export async function deleteAllBlockedSlotsAndAddNew(data: Partial<BlockedAvaila
 // Get Next 30 days' available days
 export async function getNext30DaysAvailableDays() {
     // allow slots after
-    const startTime = new Date(Date.now());
+    const startTime = addMinutes(new Date(Date.now()), 120);
 
 
     // Get current date and the date 30 days from now
