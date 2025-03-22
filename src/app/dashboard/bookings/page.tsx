@@ -196,7 +196,7 @@ export default function BookingsPage() {
                                 <TableCell>{booking.productName}</TableCell>
                                 <TableCell>{new Date(booking.time!).toLocaleDateString()}</TableCell>
                                 <TableCell>{new Date(booking.time!).toLocaleTimeString()}</TableCell>
-                                <TableCell>{new Date(booking.createdAt!).toLocaleString()}</TableCell>
+                                <TableCell>{new Date(booking.createdAt!).toLocaleString()}{booking.status === "cancelled" ? " (Cancelled)" : ""}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

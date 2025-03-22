@@ -73,8 +73,11 @@ export function FormSubmissionsList() {
                 )}
             </Accordion>
 
-            <div ref={ref} className="h-10">
-                {isFetchingNextPage && <div>Loading more...</div>}
+            <div ref={ref} className="h-12">
+                {isFetchingNextPage && <div className="space-y-2">
+                    <Skeleton className="w-full h-12 rounded" />
+                </div>
+                }
             </div>
         </div>
     );

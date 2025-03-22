@@ -7,6 +7,7 @@ import {
     Heading,
     Hr,
     Html,
+    Img,
     Link,
     Preview,
     Section,
@@ -71,7 +72,9 @@ export const VerificationEmail: React.FC<Readonly<VerificationEmail>> = ({ ctx }
                         </Text>
                         <Hr />
                         <Link className="text-emerald-500" href={env.NEXT_PUBLIC_BETTER_AUTH_URL}>
-                            uyellitout
+                            <Section className="text-center mt-6">
+                                <Img src="http://localhost:3000/full-logo.jpg" alt="Uyellitout Logo" className="mx-auto mb-4" width="auto" height="50" />
+                            </Section>
                         </Link>
                     </Container>
                 </Body>

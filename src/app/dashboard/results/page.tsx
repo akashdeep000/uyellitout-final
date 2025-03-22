@@ -21,7 +21,7 @@ export default function ResultsPage() {
                         <TableHead className="min-w-28 w-min font-semibold bg-neutral-200 rounded-tl-xl">Date</TableHead>
                         <TableHead className="font-semibold bg-neutral-200">Quiz Title</TableHead>
                         <TableHead className="text-center font-semibold bg-neutral-200">Points</TableHead>
-                        {/* <TableHead className="px-0 font-semibold bg-neutral-200 rounded-tr-xl"></TableHead> */}
+                        <TableHead className="px-0 font-semibold bg-neutral-200 rounded-tr-xl"></TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

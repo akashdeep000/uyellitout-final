@@ -253,8 +253,8 @@ export async function submitQuiz(data: {
     };
 
     const newStat = {
-        happiness: quizData.categotyRelatedTo === "intimacy" ? previousStat.happiness || 0 : converterToHappiness(quizData.categotyRelatedTo, (previousStat.happiness === 0 ? percentage : (previousStat.happiness + percentage) / 2)),
-        intimacy: quizData.categotyRelatedTo !== "intimacy" ? previousStat.intimacy || 0 : previousStat.intimacy === 0 ? percentage : (previousStat.intimacy + percentage) / 2
+        happiness: quizData.categotyRelatedTo === "intimacy" ? previousStat.happiness || 0 : converterToHappiness(quizData.categotyRelatedTo, (previousStat.happiness === 0 ? percentage || 7 : (previousStat.happiness + percentage) / 2)),
+        intimacy: quizData.categotyRelatedTo !== "intimacy" ? previousStat.intimacy || 0 : previousStat.intimacy === 0 ? percentage || 0 : (previousStat.intimacy + percentage) / 2
     };
 
     if (newStat.happiness > 97) {

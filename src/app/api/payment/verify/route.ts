@@ -1,7 +1,9 @@
 import { getNext30DaysAvailableDays } from "@/actions/booking";
 import { db } from "@/db";
 import { booking } from "@/db/schema";
+import { sendBookingConfirmationEmail, sendBookingNotConfirmedEmail } from "@/emails";
 import { env } from "@/env";
+import { formatToIndianTime } from "@/lib/utils";
 import crypto from "crypto";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -40,33 +42,62 @@ export async function POST(request: NextRequest) {
             //     console.log("Payment captured:", payload);
             //     break;
             case "order.paid":
-                // Handle successful order payment
-                console.log("Order paid:", payload);
-                // Update the booking status to "confirmed" in the database
-                const orderId = payload.payload.order.entity.id;
-                console.log("Order ID:", orderId);
-                const bookings = await db.select().from(booking).where(eq(booking.orderId, orderId));
-                if (bookings.length === 0) {
-                    throw new Error("No booking found");
-                }
-                const availabilities = await getNext30DaysAvailableDays();
+                let bookings;
+                try {
+                    // Handle successful order payment
+                    console.log("Order paid:", payload);
+                    // Update the booking status to "confirmed" in the database
+                    const orderId = payload.payload.order.entity.id;
+                    console.log("Order ID:", orderId);
+                    bookings = await db.select().from(booking).where(eq(booking.orderId, orderId));
+                    if (bookings.length === 0) {
+                        throw new Error("No booking found");
+                    }
 
-                for (const booking of bookings) {
-                    if (booking.date && booking.slots) {
-                        const availabileSlots = availabilities.find((availability) => availability.date.toISOString().split("T")[0] === booking.date?.toISOString().split("T")[0])?.slots;
-                        if (!availabileSlots) {
-                            throw new Error("No slots available for this date");
-                        }
-                        if (booking.slots) {
-                            if (!booking.slots.every(slots => availabileSlots.includes(slots))) {
+                    const availabilities = await getNext30DaysAvailableDays();
+
+                    for (const booking of bookings) {
+                        if (booking.date && booking.slots) {
+                            const availabileSlots = availabilities.find((availability) => availability.date.toISOString().split("T")[0] === booking.date?.toISOString().split("T")[0])?.slots;
+                            if (!availabileSlots) {
                                 throw new Error("No slots available for this date");
+                            }
+                            if (booking.slots) {
+                                if (!booking.slots.every(slots => availabileSlots.includes(slots))) {
+                                    throw new Error("No slots available for this date");
+                                }
                             }
                         }
                     }
+                    await db.update(booking)
+                        .set({ status: "confirmed" })
+                        .where(eq(booking.orderId, orderId));
+                    await sendBookingConfirmationEmail({
+                        subject: "Uyellitout - Session Booking Confirmed",
+                        ctx: {
+                            client: {
+                                email: bookings[0].email,
+                                name: bookings[0].name
+                            },
+                            sessionType: bookings[0].productName,
+                            sessionDateTime: formatToIndianTime(bookings[0].time!)
+                        }
+                    });
+                } catch (error) {
+                    console.log(error);
+                    if (!bookings) return;
+                    await sendBookingNotConfirmedEmail({
+                        subject: "Uyellitout - Session Booking Not Confirmed",
+                        ctx: {
+                            client: {
+                                email: bookings[0].email,
+                                name: bookings[0].name
+                            },
+                            sessionType: bookings[0].productName,
+                            sessionDateTime: formatToIndianTime(bookings[0].time!)
+                        }
+                    });
                 }
-                await db.update(booking)
-                    .set({ status: "confirmed" })
-                    .where(eq(booking.orderId, orderId));
                 break;
             default:
                 console.log("Unhandled event type:", payload.event);

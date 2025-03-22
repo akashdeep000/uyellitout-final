@@ -32,32 +32,42 @@ export const converterFromHappiness = (matric: "happiness" | "anxiety" | "stress
     case "mood":
       return happinessToMood(value);
     default:
-      return value;
+      return clamp(value, 7, 97);
   }
 };
 
+const clamp = (value: number, min: number, max: number) => {
+  return Math.max(min, Math.min(max, value));
+};
+
 export const happinessToAnxiety = (happiness: number) => {
-  return ((98 - happiness) * 1.023) + 12;
+  const result = ((98 - happiness) * 1.023) + 12;
+  return clamp(result, 7, 97);
 };
 
 export const happinessToStress = (happiness: number) => {
-  return ((98 - happiness) * 0.988) + 15;
+  const result = ((98 - happiness) * 0.988) + 15;
+  return clamp(result, 7, 97);
 };
 
 export const happinessToMood = (happiness: number) => {
-  return ((98 - happiness) * 1.011) + 13;
+  const result = ((98 - happiness) * 1.011) + 13;
+  return clamp(result, 7, 97);
 };
 
 export const anxietyToHappiness = (anxiety: number) => {
-  return 98 - ((anxiety - 12) / 1.023);
+  const result = 98 - ((anxiety - 12) / 1.023);
+  return clamp(result, 7, 97);
 };
 
 export const stressToHappiness = (stress: number) => {
-  return 98 - ((stress - 15) / 0.988);
+  const result = 98 - ((stress - 15) / 0.988);
+  return clamp(result, 7, 97);
 };
 
 export const moodToHappiness = (mood: number) => {
-  return 98 - ((mood - 13) / 1.011);
+  const result = 98 - ((mood - 13) / 1.011);
+  return clamp(result, 7, 97);
 };
 
 
@@ -186,4 +196,13 @@ export function convertDateSlots(
   // });
 
   return Object.entries(result).map(([, slots]) => (slots));
+}
+
+
+export function formatToIndianTime(date: Date) {
+  return new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "full",
+    timeStyle: "short",
+    timeZone: "Asia/Kolkata"
+  }).format(date);
 }
