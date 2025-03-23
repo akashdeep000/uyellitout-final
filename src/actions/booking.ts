@@ -3,10 +3,10 @@
 import { packages, services } from "@/configs/data";
 import { db } from "@/db"; // Assuming you have a database instance
 import { availability, blockedAvailability, booking } from "@/db/schema";
-import { sendBookingConfirmationEmail, sendBookingRescheduledEmail } from "@/emails";
+import { sendBookingCancelledEmail, sendBookingConfirmationEmail, sendBookingRescheduledEmail } from "@/emails";
 import { env } from "@/env";
 import { auth } from "@/lib/auth";
-import { convertDateSlots, convertToDate, formatToIndianTime } from "@/lib/utils";
+import { convertDateSlots, convertToDate } from "@/lib/utils";
 import { orderSchema } from "@/schema/order";
 import { addMinutes } from "date-fns";
 import { and, asc, count, desc, eq, gte, InferInsertModel, InferSelectModel, isNotNull, isNull, like, lte, or, SQL } from "drizzle-orm";
@@ -300,11 +300,12 @@ export async function resheduleBooking({ id, date, startingSlot }: {
             ctx: {
                 client: {
                     name: currentBooking.name,
-                    email: currentBooking.email
+                    email: currentBooking.email,
+                    number: currentBooking.phoneNumber
                 },
                 sessionType: currentBooking.productName,
-                oldSessionDateTime: formatToIndianTime(currentBooking.time),
-                newSessionDateTime: formatToIndianTime(convertToDate(date, startingSlot)),
+                oldSessionDateTime: currentBooking.time,
+                newSessionDateTime: convertToDate(date, startingSlot),
             },
             subject: "Booking Rescheduled",
         });
@@ -313,10 +314,11 @@ export async function resheduleBooking({ id, date, startingSlot }: {
             ctx: {
                 client: {
                     name: currentBooking.name,
-                    email: currentBooking.email
+                    email: currentBooking.email,
+                    number: currentBooking.phoneNumber
                 },
                 sessionType: currentBooking.productName,
-                sessionDateTime: formatToIndianTime(convertToDate(date, startingSlot)),
+                sessionDateTime: convertToDate(date, startingSlot),
             },
             subject: "Booking Confirmed",
         });
@@ -336,9 +338,28 @@ export async function cancelBooking({ id }: {
     if (session?.user.role !== "admin") {
         throw new Error("Not Allowed");
     };
-    return await db.update(booking).set({
+    const data = await db.update(booking).set({
         status: "cancelled"
     }).where(eq(booking.id, id)).returning();
+    const bookingData = data[0];
+    if (!bookingData) {
+        throw new Error("Booking not found");
+    }
+    if (bookingData.time) {
+        await sendBookingCancelledEmail({
+            ctx: {
+                client: {
+                    name: bookingData.name,
+                    email: bookingData.email,
+                    number: bookingData.phoneNumber
+                },
+                sessionType: bookingData.productName,
+                sessionDateTime: bookingData.time,
+            },
+            subject: "Booking Cancelled",
+        });
+    }
+    return data;
 }
 
 // Get historical bookings of user (latest first) with pagination

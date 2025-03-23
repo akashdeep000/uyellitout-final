@@ -28,6 +28,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1).optional(), // Google client secret
     RASORPAY_KEY_SECRET: z.string().min(1), // Rasorpay key secret
     RASORPAY_WEBHOOK_SECRET: z.string().min(1), // Rasorpay webhook secret
+    WHATSAPP_API_URL: z.string().url().optional(), // WhatsApp API URL
+    WHATSAPP_API_KEY: z.string().min(1).optional(), // WhatsApp API token
   },
   client: {
     NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url(), // URL for authentication service

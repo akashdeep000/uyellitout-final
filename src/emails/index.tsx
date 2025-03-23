@@ -1,5 +1,7 @@
+import { sendWahaMessage } from "@/actions/waha";
 import { VerificationEmail } from "@/emails/templetes/verification-email";
 import { sendEmail } from "@/lib/email-client";
+import { formatToIndianTime } from "@/lib/utils";
 import { render } from "@react-email/components";
 import { User } from "better-auth";
 import BookingCancelledEmail from "./templetes/booking-cancel-email";
@@ -37,9 +39,10 @@ type BookingConfirmationEmailProps = {
         client: {
             name: string;
             email: string;
+            number?: string;
         };
         sessionType: string;
-        sessionDateTime: string;
+        sessionDateTime: Date;
         link?: string;
     };
     subject: string;
@@ -53,6 +56,25 @@ export const sendBookingConfirmationEmail: (ctx: BookingConfirmationEmailProps) 
         subject,
         body: emailHtml,
     });
+    if (ctx.client.number) {
+        try {
+            await sendWahaMessage(ctx.client.number,
+                `✅ Booking Confirmed!
+
+Hello ${ctx.client.name || "User"}, your therapy session is successfully scheduled.
+
+📅 Date: ${formatToIndianTime(ctx.sessionDateTime).split("at")[0].trim()}
+⏰ Time: ${formatToIndianTime(ctx.sessionDateTime).split("at")[1].trim()} (in IST)
+🔗 Session Link: https://meet.google.com/qhd-iwmg-yen
+
+We’re here to listen and support you—see you soon!
+
+-Team Uyellitout`);
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 };
 
 
@@ -62,9 +84,10 @@ type BookingNotConfirmedEmailProps = {
         client: {
             name: string;
             email: string;
+            number?: string;
         };
         sessionType: string;
-        sessionDateTime: string;
+        sessionDateTime: Date;
     };
     subject: string;
 };
@@ -78,6 +101,28 @@ export const sendBookingNotConfirmedEmail: (ctx: BookingNotConfirmedEmailProps) 
         subject,
         body: emailHtml,
     });
+    if (ctx.client.number) {
+        try {
+            await sendWahaMessage(ctx.client.number,
+                `❌ Booking can't confirm
+
+Hello ${ctx.client.name || "User"}, your therapy session is canceled due to slot unavaibility.
+
+📅 Date: ${formatToIndianTime(ctx.sessionDateTime).split("at")[0].trim()}
+⏰ Time: ${formatToIndianTime(ctx.sessionDateTime).split("at")[1].trim()} (in IST)
+
+If you have been charged, refund will be initiated automatically.
+Please chose a different time ans schedule again.
+
+We’re here to listen and support you—see you soon!
+
+-Team Uyellitout`);
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
 };
 
 
@@ -86,10 +131,11 @@ type BookingRescheduledEmailProps = {
         client: {
             name: string;
             email: string;
+            number?: string;
         };
         sessionType: string;
-        oldSessionDateTime: string;
-        newSessionDateTime: string;
+        oldSessionDateTime: Date;
+        newSessionDateTime: Date;
         link?: string;
     };
     subject: string;
@@ -104,6 +150,25 @@ export const sendBookingRescheduledEmail: (ctx: BookingRescheduledEmailProps) =>
         subject,
         body: emailHtml,
     });
+    if (ctx.client.number) {
+        try {
+            await sendWahaMessage(ctx.client.number,
+                `🔃 Booking Rescheduled!
+
+Hello ${ctx.client.name || "User"}, your therapy session is successfully rescheduled.
+
+📅 New Date: ${formatToIndianTime(ctx.newSessionDateTime).split("at")[0].trim()}
+⏰ New Time: ${formatToIndianTime(ctx.newSessionDateTime).split("at")[1].trim()} (in IST)
+🔗 Session Link: https://meet.google.com/qhd-iwmg-yen
+
+We’re here to listen and support you—see you soon!
+
+-Team Uyellitout`);
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 };
 
 
@@ -112,9 +177,10 @@ type BookingCancelledEmailProps = {
         client: {
             name: string;
             email: string;
+            number?: string;
         };
         sessionType: string;
-        sessionDateTime: string;
+        sessionDateTime: Date;
         reason?: string;
     };
     subject: string;
@@ -129,4 +195,30 @@ export const sendBookingCancelledEmail: (ctx: BookingCancelledEmailProps) => Pro
         subject,
         body: emailHtml,
     });
+
+    await sendEmail({
+        to: ctx.client.email,
+        subject,
+        body: emailHtml,
+    });
+    if (ctx.client.number) {
+        try {
+            await sendWahaMessage(ctx.client.number,
+                `❌ Booking is canceled
+
+Hello ${ctx.client.name || "User"}, your therapy session is canceled.
+
+📅 Date: ${formatToIndianTime(ctx.sessionDateTime).split("at")[0].trim()}
+⏰ Time: ${formatToIndianTime(ctx.sessionDateTime).split("at")[1].trim()} (in IST)
+
+Please contact us if there is you have any query.
+
+We’re here to listen and support you—see you soon!
+
+-Team Uyellitout`);
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 };

@@ -3,7 +3,6 @@ import { db } from "@/db";
 import { booking } from "@/db/schema";
 import { sendBookingConfirmationEmail, sendBookingNotConfirmedEmail } from "@/emails";
 import { env } from "@/env";
-import { formatToIndianTime } from "@/lib/utils";
 import crypto from "crypto";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -80,7 +79,7 @@ export async function POST(request: NextRequest) {
                                 name: bookings[0].name
                             },
                             sessionType: bookings[0].productName,
-                            sessionDateTime: formatToIndianTime(bookings[0].time!)
+                            sessionDateTime: bookings[0].time!
                         }
                     });
                 } catch (error) {
@@ -92,10 +91,11 @@ export async function POST(request: NextRequest) {
                             ctx: {
                                 client: {
                                     email: bookings[0].email,
-                                    name: bookings[0].name
+                                    name: bookings[0].name,
+                                    number: bookings[0].phoneNumber
                                 },
                                 sessionType: bookings[0].productName,
-                                sessionDateTime: formatToIndianTime(bookings[0].time!)
+                                sessionDateTime: bookings[0].time!
                             }
                         });
                     } catch (error) {

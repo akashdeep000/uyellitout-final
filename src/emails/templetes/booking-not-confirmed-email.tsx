@@ -1,3 +1,4 @@
+import { formatToIndianTime } from "@/lib/utils";
 import {
     Button,
     Heading,
@@ -13,7 +14,7 @@ type BookingNotConfirmedEmailProps = {
             name: string;
         };
         sessionType: string;
-        sessionDateTime: string;
+        sessionDateTime: Date;
     };
 
     subject: string;
@@ -30,8 +31,8 @@ export const BookingNotConfirmedEmail: React.FC<Readonly<BookingNotConfirmedEmai
 
             <Section className="my-6">
                 <Text className="text-lg font-bold">📅 Session Details:</Text>
-                <Text>📌 Session Type: {ctx?.sessionType}</Text>
-                <Text>⏳ Date & Time: {ctx?.sessionDateTime}</Text>
+                <Text>📌 Session Type: {ctx.sessionType}</Text>
+                <Text>⏳ Date & Time: {formatToIndianTime(ctx.sessionDateTime)} (in IST)</Text>
             </Section>
 
             <Section className="mt-6 mb-4">

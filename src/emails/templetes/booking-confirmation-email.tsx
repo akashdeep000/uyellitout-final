@@ -1,3 +1,4 @@
+import { formatToIndianTime } from "@/lib/utils";
 import {
     Heading,
     Hr,
@@ -14,7 +15,7 @@ type BookingConfirmationEmailProps = {
             name: string;
         };
         sessionType: string;
-        sessionDateTime: string;
+        sessionDateTime: Date;
         link?: string;
     };
     subject: string;
@@ -32,7 +33,7 @@ export const BookingConfirmationEmail: React.FC<Readonly<BookingConfirmationEmai
                 <Text>📌 Session Type: {ctx?.sessionType}</Text>
                 <Text>🧑‍⚕️ Therapist: Srishti Singh</Text>
                 <Text>📍 Mode: Online</Text>
-                <Text>⏳ Date & Time: {ctx?.sessionDateTime}</Text>
+                <Text>⏳ Date & Time: {formatToIndianTime(ctx?.sessionDateTime)} (in IST)</Text>
                 <Text className="mt-4">🔗 <Link href={ctx?.link || "https://meet.google.com/qhd-iwmg-yen"}>This is the link to join the session</Link></Text>
             </Section>
 

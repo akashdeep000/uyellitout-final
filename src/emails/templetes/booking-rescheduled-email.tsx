@@ -1,3 +1,4 @@
+import { formatToIndianTime } from "@/lib/utils";
 import {
     Heading,
     Link,
@@ -13,8 +14,8 @@ type BookingRescheduledEmailProps = {
             name: string;
         };
         sessionType: string;
-        oldSessionDateTime: string;
-        newSessionDateTime: string;
+        oldSessionDateTime: Date;
+        newSessionDateTime: Date;
         link?: string;
     };
     subject: string;
@@ -32,8 +33,8 @@ export const BookingRescheduledEmail: React.FC<Readonly<BookingRescheduledEmailP
                 <Text>📌 Session Type: {ctx?.sessionType}</Text>
                 <Text>🧑‍⚕️ Therapist: Srishti Singh</Text>
                 <Text>📍 Mode: Online</Text>
-                <Text>⏳ Previous Date & Time: {ctx?.oldSessionDateTime}</Text>
-                <Text>⏳ New Date & Time: {ctx?.newSessionDateTime}</Text>
+                <Text>⏳ Previous Date & Time: {formatToIndianTime(ctx.oldSessionDateTime)} (in IST)</Text>
+                <Text>⏳ New Date & Time: {formatToIndianTime(ctx.newSessionDateTime)} (in IST)</Text>
                 <Text className="mt-4">🔗 <Link href={ctx?.link || "https://meet.google.com/qhd-iwmg-yen"}>Join the session</Link></Text>
             </Section>
 
