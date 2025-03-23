@@ -197,7 +197,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </svg>
                         <div>
                             <nav className="flex justify-end gap-4 max-w-prose font-semibold flex-wrap">
-                                <ul className="hover:text-foreground  transition-all hover:underline"><Link href="#">Home</Link></ul>
+                                <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/">Home</Link></ul>
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/about-us">About Us</Link></ul>
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/services">Services</Link></ul>
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/dashboard/quiz">Quiz</Link></ul>

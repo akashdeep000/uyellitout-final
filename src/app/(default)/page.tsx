@@ -341,7 +341,7 @@ export default function Home() {
                         <DialogTrigger asChild>
                             <Button size="lg" className="text-xl md:text-2xl py-7 md:py-8  px-12 md:px-14 font-semibold rounded-lg hover:scale-[1.01] transition-all">Book Your Session</Button>
                         </DialogTrigger>
-                        <DialogContent className="text-left max-h-svh max-w-2xl overflow-y-scroll">
+                        <DialogContent className="text-left max-h-svh max-w-3xl overflow-y-scroll">
                             <DialogHeader>
                                 <DialogTitle></DialogTitle>
                                 <DialogDescription></DialogDescription>

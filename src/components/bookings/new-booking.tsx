@@ -222,7 +222,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
                                                 ))
                                             }
                                         </SelectGroup>
-                                        <SelectGroup>
+                                        {/* <SelectGroup>
                                             <SelectLabel>Packages</SelectLabel>
                                             {
                                                 packages.map((pkg, index) => (
@@ -235,7 +235,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
                                                     </SelectItem>
                                                 ))
                                             }
-                                        </SelectGroup>
+                                        </SelectGroup> */}
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -419,79 +419,79 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
                                                     />
                                                 </FormControl>
                                                 <FormLabel className="text-sm font-normal flex gap-2">
-                                                    <p>I agree to the</p>
-                                                    <Dialog>
-                                                        <DialogTrigger className="text-blue-500 underline">terms and conditions</DialogTrigger>
-                                                        <DialogContent className="overflow-y-scroll max-h-svh sm:max-h-[80svh]">
-                                                            <DialogHeader>
-                                                                <DialogTitle>Client Consent Notice for Counseling Services</DialogTitle>
-                                                                <DialogDescription>
-                                                                </DialogDescription>
-                                                            </DialogHeader>
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">Introduction</h2>
-                                                                <p className="text-gray-700">Thank you for choosing our counseling services. This consent form outlines important information regarding your participation in counseling sessions. Please read this carefully before proceeding with your booking.</p>
-                                                            </section>
+                                                    <p>I agree to the
+                                                        <Dialog>
+                                                            <DialogTrigger className="text-blue-500 underline px-2">terms and conditions</DialogTrigger>
+                                                            <DialogContent className="overflow-y-scroll max-h-svh sm:max-h-[80svh]">
+                                                                <DialogHeader>
+                                                                    <DialogTitle>Client Consent Notice for Counseling Services</DialogTitle>
+                                                                    <DialogDescription>
+                                                                    </DialogDescription>
+                                                                </DialogHeader>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">Introduction</h2>
+                                                                    <p className="text-gray-700">Thank you for choosing our counseling services. This consent form outlines important information regarding your participation in counseling sessions. Please read this carefully before proceeding with your booking.</p>
+                                                                </section>
 
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">1. Nature of Counseling Services</h2>
-                                                                <p className="text-gray-700">Counseling involves discussing personal challenges, emotions, and thoughts to facilitate personal growth and well-being. While counseling can be beneficial, there are no guarantees regarding specific outcomes.</p>
-                                                            </section>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">1. Nature of Counseling Services</h2>
+                                                                    <p className="text-gray-700">Counseling involves discussing personal challenges, emotions, and thoughts to facilitate personal growth and well-being. While counseling can be beneficial, there are no guarantees regarding specific outcomes.</p>
+                                                                </section>
 
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">2. Confidentiality</h2>
-                                                                <ul className="text-gray-700 list-disc pl-5">
-                                                                    <li>If there is a risk of harm to yourself or others.</li>
-                                                                    <li>If there is suspected abuse of a minor, elderly person, or vulnerable individual.</li>
-                                                                    <li>If required by law or court order.</li>
-                                                                    <li>If you provide written consent to share information with a third party.</li>
-                                                                </ul>
-                                                            </section>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">2. Confidentiality</h2>
+                                                                    <ul className="text-gray-700 list-disc pl-5">
+                                                                        <li>If there is a risk of harm to yourself or others.</li>
+                                                                        <li>If there is suspected abuse of a minor, elderly person, or vulnerable individual.</li>
+                                                                        <li>If required by law or court order.</li>
+                                                                        <li>If you provide written consent to share information with a third party.</li>
+                                                                    </ul>
+                                                                </section>
 
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">3. Online Counseling Considerations</h2>
-                                                                <p className="text-gray-700">If sessions are conducted online, ensure a private and secure space to maintain confidentiality. The platform used will strive to maintain security; however, complete privacy over the internet cannot be guaranteed.</p>
-                                                            </section>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">3. Online Counseling Considerations</h2>
+                                                                    <p className="text-gray-700">If sessions are conducted online, ensure a private and secure space to maintain confidentiality. The platform used will strive to maintain security; however, complete privacy over the internet cannot be guaranteed.</p>
+                                                                </section>
 
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">4. Fees & Cancellation Policy</h2>
-                                                                <ul className="text-gray-700 list-disc pl-5">
-                                                                    <li>Payment must be made before the session begins.</li>
-                                                                    <li>Cancellations or rescheduling requests should be made at least 24 hours in advance. Late cancellations may be subject to charges.</li>
-                                                                </ul>
-                                                            </section>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">4. Fees & Cancellation Policy</h2>
+                                                                    <ul className="text-gray-700 list-disc pl-5">
+                                                                        <li>Payment must be made before the session begins.</li>
+                                                                        <li>Cancellations or rescheduling requests should be made at least 24 hours in advance. Late cancellations may be subject to charges.</li>
+                                                                    </ul>
+                                                                </section>
 
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">5. Client Responsibilities</h2>
-                                                                <ul className="text-gray-700 list-disc pl-5">
-                                                                    <li>Actively participate in sessions and engage in the therapeutic process.</li>
-                                                                    <li>Communicate openly about any concerns regarding counseling.</li>
-                                                                    <li>Seek emergency medical or psychiatric help if experiencing a crisis beyond the scope of counseling services.</li>
-                                                                </ul>
-                                                            </section>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">5. Client Responsibilities</h2>
+                                                                    <ul className="text-gray-700 list-disc pl-5">
+                                                                        <li>Actively participate in sessions and engage in the therapeutic process.</li>
+                                                                        <li>Communicate openly about any concerns regarding counseling.</li>
+                                                                        <li>Seek emergency medical or psychiatric help if experiencing a crisis beyond the scope of counseling services.</li>
+                                                                    </ul>
+                                                                </section>
 
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">6. Voluntary Participation & Right to Withdraw</h2>
-                                                                <p className="text-gray-700">You have the right to withdraw from counseling at any time. If you wish to discontinue, you may discuss this with your counselor for proper closure and referrals if needed.</p>
-                                                            </section>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">6. Voluntary Participation & Right to Withdraw</h2>
+                                                                    <p className="text-gray-700">You have the right to withdraw from counseling at any time. If you wish to discontinue, you may discuss this with your counselor for proper closure and referrals if needed.</p>
+                                                                </section>
 
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">7. Limitation of Services</h2>
-                                                                <p className="text-gray-700">Counseling is not a substitute for medical treatment or psychiatric care. If a higher level of care is required, referrals will be provided.</p>
-                                                            </section>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">7. Limitation of Services</h2>
+                                                                    <p className="text-gray-700">Counseling is not a substitute for medical treatment or psychiatric care. If a higher level of care is required, referrals will be provided.</p>
+                                                                </section>
 
-                                                            <section>
-                                                                <h2 className="text-lg font-semibold mb-2">8. Informed Consent Acknowledgment</h2>
-                                                                <p className="text-gray-700">By checking this box and proceeding with the booking, you acknowledge that:</p>
-                                                                <ul className="text-gray-700 list-disc pl-5">
-                                                                    <li>You have read and understood this consent form.</li>
-                                                                    <li>You agree to the terms outlined above.</li>
-                                                                    <li>You have read and understood this consent form.</li>
-                                                                </ul>
-                                                            </section>
-                                                        </DialogContent>
-                                                    </Dialog>
-                                                    <p>of counseling services</p>
+                                                                <section>
+                                                                    <h2 className="text-lg font-semibold mb-2">8. Informed Consent Acknowledgment</h2>
+                                                                    <p className="text-gray-700">By checking this box and proceeding with the booking, you acknowledge that:</p>
+                                                                    <ul className="text-gray-700 list-disc pl-5">
+                                                                        <li>You have read and understood this consent form.</li>
+                                                                        <li>You agree to the terms outlined above.</li>
+                                                                        <li>You have read and understood this consent form.</li>
+                                                                    </ul>
+                                                                </section>
+                                                            </DialogContent>
+                                                        </Dialog>
+                                                        of counseling services</p>
                                                 </FormLabel>
                                             </div>
                                             <FormMessage />

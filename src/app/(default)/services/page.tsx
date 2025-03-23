@@ -133,21 +133,83 @@ export default function Page() {
             </section>
             <section className="pb-6">
                 <div className=" p-6 shadow-xl border-2 rounded-lg max-w-4xl mx-auto">
-                    <div className="bg-background rounded-xl p-4 grid gap-2 grid-cols-2">
+                    <div className="bg-background rounded-xl p-4 grid gap-2 md:grid-cols-2">
                         <div className="space-y-2">
                             {
                                 services.map((service, index) => (
-                                    <div onClick={() => {
-                                        setActiveService(index);
-                                        setShowPrice(false);
-                                    }} key={index} className={`px-4 py-2 rounded-lg ${activeService === index ? "bg-[#79C8AD]" : "bg-[#79C8AD]/20"} transition-all flex justify-between items-center hover:bg-[#79C8AD]/40`}>
-                                        <p className="font-semibold">{service.title}</p>
-                                        <Button variant={"secondary"} className={`${activeService !== index ? "bg-[#79C8AD]" : "bg-[#c8ffec]"} hover:bg-[#79C8AD]/60 font-semibold`}>Details</Button>
+                                    <div key={index} className="space-y-2">
+                                        <div onClick={() => {
+                                            setActiveService(index);
+                                            setShowPrice(false);
+                                        }} className={`px-4 py-2 rounded-lg ${activeService === index ? "bg-[#79C8AD]" : "bg-[#79C8AD]/20"} transition-all flex justify-between items-center hover:bg-[#79C8AD]/40`}>
+                                            <p className="font-semibold">{service.title}</p>
+                                            <Button variant={"secondary"} className={`${activeService !== index ? "bg-[#79C8AD]" : "bg-[#c8ffec]"} hover:bg-[#79C8AD]/60 font-semibold`}>Details</Button>
+                                        </div>
+                                        {activeService === index &&
+                                            <div className="p-4 bg-[#D8ECEE] rounded-lg md:hidden flex flex-col gap-2 justify-between">
+                                                <div className="space-y-2">
+
+                                                    <p className="text-lg font-semibold">{services[activeService].title}</p>
+                                                    <p className="text-sm">{services[activeService].description}</p>
+                                                    <div className="h-px bg-black" />
+                                                    <div className="mt-4 space-y-1">
+                                                        <p className="font-semibold">Benefits:</p>
+
+                                                        {
+                                                            services[activeService].benifits.map((benifit, index) => (
+                                                                <div key={index} className="flex gap-2">
+                                                                    <Triangle className="fill-teal-500 stroke-none size-3 rotate-90 translate-y-1" />
+                                                                    <p className="text-sm">{benifit}</p>
+                                                                </div>
+                                                            ))
+                                                        }
+
+                                                    </div>
+                                                    <div className="mt-4 space-y-1">
+                                                        <p className="font-semibold">What you will get:</p>
+
+                                                        {
+                                                            services[activeService].features.map((feature, index) => (
+                                                                <div key={index} className="flex gap-2">
+                                                                    <Triangle className="fill-teal-500 stroke-none size-3 rotate-90 translate-y-1" />
+                                                                    <p className="text-sm">{feature}</p>
+                                                                </div>
+                                                            ))
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-3 flex-row-reverse items-end">
+                                                    {
+                                                        activeService < 4 &&
+                                                        <Dialog>
+                                                            <DialogTrigger asChild>
+                                                                <Button className="font-semibold h-10 rounded-lg">Book A Session</Button>
+                                                            </DialogTrigger>
+                                                            <DialogContent className="text-left max-h-svh max-w-3xl overflow-y-scroll">
+                                                                <DialogHeader>
+                                                                    <DialogTitle></DialogTitle>
+                                                                    <DialogDescription></DialogDescription>  Book a session
+                                                                </DialogHeader>
+                                                                <NewBooking defaultProductType="service" defaultProductId={activeService} isNested={true} />
+                                                            </DialogContent>
+                                                        </Dialog>
+                                                    }
+                                                    <DropdownMenu open={showPrice} onOpenChange={setShowPrice}>
+                                                        <DropdownMenuTrigger className={`shadow-sm inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-background hover:bg-foreground/80 h-10 px-4 py-2 bg-emerald-500 font-semibold min-w-28 float-right ${showPrice ? "hover:bg-white bg-white text-gray-900 border border-emerald-500" : ""}`}>{showPrice ? <div className="flex gap-1 items-center justify-between"><Image className="h-full aspect-square border-t border-b border-emerald-500" width={40} height={40} src={`/service/${activeService + 1}.gif`} alt={`${services[activeService].compareTo}-logo`} /> <p>₹{services[activeService].price}</p></div> : "Get Price"}</DropdownMenuTrigger>
+                                                        <DropdownMenuContent className="px-4 py-1 flex gap-2 items-center bg-emerald-500 text-white rounded-full w-fit mx-auto">
+                                                            <p>Less than a {services[activeService].compareTo}</p>
+                                                            <Image className="size-6" width={40} height={40} src={`/service/${activeService + 1}.static.png`} alt={`${services[activeService].compareTo}-logo`} />
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 ))
                             }
                         </div>
-                        <div className="p-4 bg-[#D8ECEE] rounded-lg flex flex-col gap-2 justify-between">
+                        <div className="p-4 bg-[#D8ECEE] rounded-lg hidden md:flex flex-col gap-2 justify-between">
                             <div className="space-y-2">
 
                                 <p className="text-lg font-semibold">{services[activeService].title}</p>
@@ -187,7 +249,7 @@ export default function Page() {
                                         <DialogTrigger asChild>
                                             <Button className="font-semibold h-10 rounded-lg">Book A Session</Button>
                                         </DialogTrigger>
-                                        <DialogContent className="text-left max-h-svh max-w-2xl overflow-y-scroll">
+                                        <DialogContent className="text-left max-h-svh max-w-3xl overflow-y-scroll">
                                             <DialogHeader>
                                                 <DialogTitle></DialogTitle>
                                                 <DialogDescription></DialogDescription>  Book a session
@@ -208,7 +270,7 @@ export default function Page() {
                     </div>
                 </div>
             </section>
-            <section className="pt-6">
+            <section className="pt-6 hidden">
                 <p className="text-center text-3xl py-4 text-[#198A70]">Psychological Assesments</p>
                 <p className="text-center max-w-5xl mx-auto">At <b className="text-[#79C8AD]">Uyellitout</b>, we offer a wide range of professional assessments tailored to provide valuable insights into your cognitive abilities, personality traits, mental health, and more. Our assessments help you understand yourself better, guide therapeutic interventions, and support personal growth. Explore the following specialized tests:</p>
                 <div className="py-6 px-2 max-w-[94rem] mx-auto">
@@ -244,7 +306,7 @@ export default function Page() {
                     </Carousel>
                 </div>
             </section>
-            <section className="mb-8">
+            <section className="mb-8 hidden">
                 <p className="text-center text-3xl py-4 text-[#198A70]">Special Packages</p>
                 <div className="flex flex-wrap justify-center gap-5 mt-6">
                     {packages.map((pkg, index) => (

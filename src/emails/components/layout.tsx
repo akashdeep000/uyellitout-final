@@ -50,8 +50,6 @@ export const EmailLayout: React.FC<Readonly<EmailLayoutProps>> = ({ children, pr
                         {children}
                         <Hr className="my-6" />
 
-                        <Text>With care,<br />Uyellitout</Text>
-
                         <Section className="mt-4">
                             <Text>📞 Contact Us: 8584034584</Text>
                             <Text>📧 Email: uyellitout@gmail.com</Text>
