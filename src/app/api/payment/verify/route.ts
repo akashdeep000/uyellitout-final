@@ -76,7 +76,8 @@ export async function POST(request: NextRequest) {
                         ctx: {
                             client: {
                                 email: bookings[0].email,
-                                name: bookings[0].name
+                                name: bookings[0].name,
+                                number: bookings[0].phoneNumber
                             },
                             sessionType: bookings[0].productName,
                             sessionDateTime: bookings[0].time!
