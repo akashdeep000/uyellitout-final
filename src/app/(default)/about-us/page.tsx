@@ -363,8 +363,8 @@ export default function Page() {
                         ["Tailored", "Compassionate", "Effective"].map((item, index) => (
                             <div key={index} className="space-y-4">
                                 <p className="text-sm sm:text-lg md:text-xl text-[#198a70f1] font-semibold text-center">{item}</p>
-                                <div className="w-full aspect-video grid place-items-center text-neutral-500">
-                                    <img className="w-full h-full" src={`/about/c-${index + 1}.svg`} alt="" />
+                                <div className="w-full max-w-40 max-h-40 mx-auto aspect-square grid place-items-center text-neutral-500">
+                                    <img className="h-full" src={`/about/c-${index + 1}.svg`} alt="" />
                                 </div>
                             </div>
                         ))
@@ -374,12 +374,12 @@ export default function Page() {
                     <div className="text-4xl text-center font-semibold text-[#198A70] flex justify-center items-center gap-3">
                         <p className="text-4xl text-white"><span className="text-lg">Our</span> PROMISES</p>
                     </div>
-                    <div className="grid grid-cols-4 gap-6 max-w-4xl mx-auto mt-6">
+                    <div className="grid grid-cols-4 gap-8 max-w-4xl mx-auto mt-6">
                         {
                             ["Results-Driven Mental Wellness", "100% Private & Confidential", "Safe Judgement-Free Space", "Tailored Therapy Plans"].map((item, index) => (
-                                <div key={index} className="space-y-4">
-                                    <div className="w-full max-w-32 mx-auto aspect-video grid place-items-center text-neutral-500">
-                                        <img className="w-full h-full" src={`/about/d-${index + 1}.svg`} alt="" />
+                                <div key={index} className="grid gap-4">
+                                    <div className="w-full max-w-24 max-h-24 mx-auto aspect-square grid place-items-center text-neutral-500">
+                                        <img className="h-full" src={`/about/d-${index + 1}.svg`} alt="" />
                                     </div>
                                     <p className="text-sm sm:text-md md:text-lg text-white font-semibold text-center">{item}</p>
                                 </div>
