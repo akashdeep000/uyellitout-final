@@ -122,7 +122,7 @@ export const sendWahaMessage = async (to: string, message: string) => {
             "reply_to": null,
             "text": message,
             "linkPreview": true,
-            "linkPreviewHighQuality": false,
+            "linkPreviewHighQuality": true,
             "session": "default"
         }),
     });
