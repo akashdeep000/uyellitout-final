@@ -54,7 +54,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
                             if (navigator.share) {
                                 await navigator.share({
                                     title: "Uyellitout - Brain's Cheat Sheet",
-                                    text: `I got ${percentage}% on the ${quiz.title} quiz!`,
+                                    text: `${quiz.title} - result!`,
                                     url: `${window.location.origin}/results/${id}`
                                 });
                             } else if (navigator.clipboard) {
@@ -160,7 +160,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
                                 <img className="h-full" src="/result/page-4/image-1.svg" />
                             </div>
                             <div className="p-12 text-gray-800">
-                                <p className="font-semibold text-7xl text-white">Pro - tip </p>
+                                <p className="font-semibold text-7xl text-white">Pro-tip </p>
                                 <p className="text-5xl">potion</p>
                             </div>
                         </div>

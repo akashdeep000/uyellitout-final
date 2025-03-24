@@ -1,4 +1,5 @@
 "use client";
+import { PhoneNumberForm } from "@/components/forms/phone-number-add";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -189,6 +190,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                 <main className="p-2 grid min-h-[calc(100svh_-_5rem)]">
                     {children}
+                    {
+                        session?.data?.user && !session?.data?.user.phoneNumber &&
+                        <div className="fixed top-0 bottom-0 left-0 right-0 z-[99999] bg-neutral-900/20 backdrop-blur-md grid place-items-center p-2">
+                            <div className="w-full max-w-md p-4 rounded-xl space-y-2 bg-white">
+                                <p className="font-semibold">Add phone number to continue</p>
+                                <PhoneNumberForm />
+                            </div>
+                        </div>
+                    }
                 </main>
                 <footer className="bg-neutral-200 px-4 pt-12 pb-6">
                     <div className="flex justify-between gap-12">

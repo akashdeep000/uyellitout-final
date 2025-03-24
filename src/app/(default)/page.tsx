@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { GridPattern } from "@/components/ui/grid-pattern";
 import {
     Table,
     TableBody,
@@ -20,12 +19,10 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { WordFadeIn } from "@/components/ui/word-fade-in";
-import { cn } from "@/lib/utils";
-import { ArrowRight, CalendarDays, Check, Info, MessagesSquare, Quote, ShieldCheck, UserRound, X } from "lucide-react";
+import { CalendarDays, Check, Info, MessagesSquare, Quote, ShieldCheck, UserRound, X } from "lucide-react";
 import { motion, useSpring, useTransform } from "motion/react";
 import Link from "next/link";
-import { ChildImg, IndividualImg } from "./svgs";
+import { ChildImg, IndividualImg, ParentalImg } from "./svgs";
 
 export default function Home() {
     const sessionsSpring = useSpring(168, { mass: 0.8, stiffness: 75, damping: 15 });
@@ -442,7 +439,7 @@ export default function Home() {
                                         }} initial={{ translateY: 50, opacity: 0 }} whileInView={{ translateY: 0, opacity: 1 }} className="rounded-2xl bg-white p-6">
                                             <p className="text-lg text-center">Parental</p>
                                             <div className="aspect-video">
-                                                <IndividualImg className="mx-auto w-full h-full" />
+                                                <ParentalImg className="mx-auto w-full h-full" />
                                             </div>
                                         </motion.div>
                                     </Link>
@@ -685,7 +682,7 @@ export default function Home() {
                     </svg>
                 </div>
             </section>
-            <section className="hidden content-evenly min-h-[calc(100svh_-_4rem)] bg-gradient-to-t from-emerald-200 to-emerald-100">
+            {/* <section className="hidden content-evenly min-h-[calc(100svh_-_4rem)] bg-gradient-to-t from-emerald-200 to-emerald-100">
                 <GridPattern
                     width={25}
                     height={25}
@@ -786,7 +783,7 @@ export default function Home() {
                     </div>
                 </div>
 
-            </section>
+            </section> */}
             <section className="px-4 py-12 space-y-12 bg-emerald-50 bg-xyz bg-cover">
                 <p className="text-center text-3xl font-bold">Why Choose Us?</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 max-w-md md:max-w-4xl mx-auto gap-4 justify-center">
