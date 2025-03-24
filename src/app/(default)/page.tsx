@@ -548,7 +548,7 @@ export default function Home() {
                     <div className="bg-[#235161] xl:hidden">
                         <motion.div transition={{
                             delay: 0.05
-                        }} initial={{ translateY: 50, opacity: 0 }} whileInView={{ translateY: 0, opacity: 1 }} className="pb-6 grid place-items-center">
+                        }} initial={{ translateY: 50, opacity: 0 }} whileInView={{ translateY: 0, opacity: 1 }} className="pt-4 pb-6 grid place-items-center">
                             <Dialog>
                                 <DialogTrigger asChild>
                                     <Button size="lg" className="z-50 text-xl md:text-2xl py-7 md:py-8  px-12 md:px-14 font-semibold rounded-2xl hover:scale-[1.01] hover:bg-gray-950 transition-all">Book Your Session</Button>

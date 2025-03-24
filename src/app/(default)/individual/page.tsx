@@ -16,7 +16,7 @@ export default function Page() {
                 <div className="flex flex-col items-center justify-center gap-4">
                     <h1 className="text-4xl text-center text-[#198A70]">INDIVIDUAL THERAPY</h1>
                 </div>
-                <div className="grid md:grid-cols-[4fr_3fr] gap-8 p-4 mt-8">
+                <div className="grid max-w-7xl mx-auto md:grid-cols-[4fr_3fr] gap-8 p-4 mt-8">
                     <div className="space-y-4">
                         <p className="text-2xl font-semibold">
                             Are you struggling with stress, anxiety, depression, or other life challenges?
@@ -109,7 +109,7 @@ export default function Page() {
             </section>
             <section className="mt-10 lg:mt-20 p-4 space-y-4">
                 <p className="text-3xl text-center">How It Works?</p>
-                <div className="hidden lg:flex gap-2 items-center">
+                <div className="hidden  max-w-7xl mx-auto lg:flex gap-2 items-center">
                     {
                         ["Goal Settings", "personalized Approach", "Ongoing Support", "Monitor Progress", "Follow-up"].map((item, index) => {
                             return (
