@@ -12,7 +12,7 @@ export const user = sqliteTable("user", {
 	banned: integer("banned", { mode: "boolean" }),
 	banReason: text("ban_reason"),
 	banExpires: integer("ban_expires", { mode: "timestamp" }),
-	phoneNumber: text("phone_number").unique(),
+	phoneNumber: text("phone_number"),
 	phoneNumberVerified: integer("phone_number_verified", { mode: "boolean" })
 });
 

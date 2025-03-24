@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -37,6 +38,7 @@ export function PhoneNumberForm() {
         }
     });
 
+    const { toast } = useToast();
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
@@ -47,10 +49,19 @@ export function PhoneNumberForm() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["session"] }); // Refresh category list
+            toast({
+                title: "Phone number added successfully",
+                description: "Your phone number has been added successfully.",
+            });
             form.reset();
         },
         onError: (error) => {
             console.error("Error adding category:", error);
+            toast({
+                title: "Failed to add phone number",
+                description: error.message,
+                variant: "destructive"
+            });
         }
     });
 
