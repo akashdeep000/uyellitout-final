@@ -187,7 +187,7 @@ export default function Page() {
       <div className="space-y-2">
         <p className="font-semibold">Progress Graph</p>
         <div className="grid gap-6 md:grid-cols-[16fr_9fr] max-w-5xl">
-          <div className="bg-[#FFE7E7]/50 p-4 rounded-2xl  max-w-[100svw]">
+          <div className="bg-[#FFF5EE]/50 p-4 rounded-2xl  max-w-[100svw]">
             <ChartContainer config={chartConfig}>
               <LineChart
                 accessibilityLayer
@@ -221,7 +221,7 @@ export default function Page() {
 
               </LineChart>
             </ChartContainer>
-            <div className="grid grid-cols-[1fr_2fr_2fr_2fr_1fr] text-xs text-gray-600">
+            <div className="grid grid-cols-[1fr_2fr_2fr_2fr_1fr] font-semibold text-xs text-gray-600">
               {
                 metrics.map((metric, index) => (
                   <p className={cn("w-full text-center", index === 0 && "text-left", index === 4 && "text-right")} key={metric.key}>{metric.lebel}</p>
