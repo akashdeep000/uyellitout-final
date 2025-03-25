@@ -233,7 +233,7 @@ export default function Page() {
             </div>
           </div>
           <div className="aspect-square grid grid-rows-[1fr_auto] gap-4">
-            <div className="hidden sm:block bg-[url(/blog-thumb.svg)] bg-cover bg-top rounded-2xl">
+            <div className="bg-[url(/blog-thumb.svg)] bg-cover bg-top rounded-2xl">
               <div className="h-full py-[20%] flex flex-row items-end font-semibold w-[60%] lg:text-xl md:text-sm sm:text-2xl px-4">
                 <div className="space-y-4">
                   <p className="">How to deal with<br />anxiety?</p>
