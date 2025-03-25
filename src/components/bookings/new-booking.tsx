@@ -188,7 +188,7 @@ export function NewBooking({ defaultProductType, defaultProductId, onSuccess, is
     };
 
     return (
-        <div className="space-y-6 p-6">
+        <div className="space-y-6 p-6 bg-white z-[45]">
             <div>
                 <p className="text-2xl">Book your appointment now</p>
                 <p>So our team can reach out to you on time</p>

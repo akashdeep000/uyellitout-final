@@ -48,7 +48,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
     });
 
     return (
-        <div className="fixed sm:rounded-lg rounded-none sm:relative z-[500000] sm:z-[50] top-0 left-0 bottom-0 right-0 w-full h-full bg-[#9ed6b7] flex flex-col">
+        <div className="fixed sm:rounded-lg rounded-none sm:relative z-40 sm:z-40 top-0 left-0 bottom-0 right-0 w-full h-full bg-[#9ed6b7] flex flex-col">
             {
                 current !== 1 && (
                     <div className="flex justify-end p-2">

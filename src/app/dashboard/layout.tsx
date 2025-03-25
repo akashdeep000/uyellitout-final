@@ -192,7 +192,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     {children}
                     {
                         session?.data?.user && !session?.data?.user.phoneNumber &&
-                        <div className="fixed top-0 bottom-0 left-0 right-0 z-[99999] bg-neutral-900/20 backdrop-blur-md grid place-items-center p-2">
+                        <div className="fixed top-0 bottom-0 left-0 right-0 z-30 bg-neutral-900/20 backdrop-blur-md grid place-items-center p-2">
                             <div className="w-full max-w-md p-4 rounded-xl space-y-2 bg-white">
                                 <p className="font-semibold">Add phone number to continue</p>
                                 <PhoneNumberForm />
