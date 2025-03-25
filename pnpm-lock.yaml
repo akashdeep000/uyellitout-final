@@ -137,6 +137,9 @@ importers:
       next:
         specifier: 15.1.4
         version: 15.1.4(@babel/core@7.24.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      nextjs-toploader:
+        specifier: ^3.8.15
+        version: 3.8.15(next@15.1.4(@babel/core@7.24.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       nodemailer:
         specifier: ^6.10.0
         version: 6.10.0
@@ -4013,6 +4016,13 @@ packages:
       sass:
         optional: true
 
+  nextjs-toploader@3.8.15:
+    resolution: {integrity: sha512-f/ggKImRjI1EMk5af/4VBVpH49iEuDNQgSpRvTezEleqSl20lDCsQof2q9H2q59L/kBOOpR0xBzorjrHKe1mQg==}
+    peerDependencies:
+      next: '>= 6.0.0'
+      react: '>= 16.0.0'
+      react-dom: '>= 16.0.0'
+
   node-abi@3.74.0:
     resolution: {integrity: sha512-c5XK0MjkGBrQPGYG24GBADZud0NCbznxNx0ZkS+ebUTrmV1qTDxPxSL8zEAPURXSbLRWVexxmP4986BziahL5w==}
     engines: {node: '>=10'}
@@ -4038,6 +4048,9 @@ packages:
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
+
+  nprogress@0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
 
   nypm@0.5.4:
     resolution: {integrity: sha512-X0SNNrZiGU8/e/zAB7sCTtdxWTMSIO73q+xuKgglm2Yvzwlo8UoC5FNySQFCvl84uPaeADkqHUZUkWy4aH4xOA==}
@@ -8741,6 +8754,14 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
+  nextjs-toploader@3.8.15(next@15.1.4(@babel/core@7.24.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      next: 15.1.4(@babel/core@7.24.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      nprogress: 0.2.0
+      prop-types: 15.8.1
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+
   node-abi@3.74.0:
     dependencies:
       semver: 7.7.1
@@ -8760,6 +8781,8 @@ snapshots:
   nodemailer@6.10.0: {}
 
   normalize-path@3.0.0: {}
+
+  nprogress@0.2.0: {}
 
   nypm@0.5.4:
     dependencies:

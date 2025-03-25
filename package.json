@@ -59,6 +59,7 @@
     "moment-timezone": "^0.5.47",
     "motion": "^12.5.0",
     "next": "15.1.4",
+    "nextjs-toploader": "^3.8.15",
     "nodemailer": "^6.10.0",
     "postgres": "^3.4.5",
     "razorpay": "^2.9.6",

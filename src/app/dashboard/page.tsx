@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
-import { converterFromHappiness } from "@/lib/utils";
+import { cn, converterFromHappiness } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { CartesianGrid, Label, Line, LineChart, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, XAxis } from "recharts";
@@ -49,26 +49,18 @@ const chartConfig = {
     label: "Percent",
     color: "hsl(var(--chart-2))",
   },
-  happiness: {
-    label: "Happiness",
-    color: "#BBCA97",
+  initial: {
+    label: "Initial",
+    color: "hsl(var(--chart-1))",
   },
-  anxiety: {
-    label: "Anxiety",
-    color: "#AACDC1",
+  previous: {
+    label: "Previous",
+    color: "hsl(var(--chart-5))",
   },
-  stress: {
-    label: "Stress",
-    color: "#F6EAA1",
+  latest: {
+    label: "Latest",
+    color: "hsl(var(--chart-2))",
   },
-  mood: {
-    label: "Mood",
-    color: "#B3D9BE",
-  },
-  intimacy: {
-    label: "Intimacy",
-    color: "#F0AA97",
-  }
 } satisfies ChartConfig;
 
 
@@ -101,14 +93,28 @@ export default function Page() {
     }]
   }));
 
-  const graphData = stats?.stat.map((item, index) => {
-    const data: Record<string, unknown> = {};
-    data.time = index === stats.stat.length - 1 ? "Latest" : index === stats.stat.length - 2 ? "Previous" : "Initial";
-    metrics.forEach(metric => {
-      data[metric.key] = metric.key === "intimacy" ? item.intimacy : converterFromHappiness(metric.key, item.happiness);
+  // const graphData = stats?.stat.map((item, index) => {
+  //   const data: Record<string, unknown> = {};
+  //   data.time = index === stats.stat.length - 1 ? "Latest" : index === stats.stat.length - 2 ? "Previous" : "Initial";
+  //   metrics.forEach(metric => {
+  //     data[metric.key] = metric.key === "intimacy" ? item.intimacy : converterFromHappiness(metric.key, item.happiness);
+  //   });
+  //   return data;
+  // }) || [];
+
+
+  const graphData2 = metrics.map(metric => {
+    const data: Record<string, string | number> = {
+      metric: metric.lebel
+    };
+    stats?.stat.forEach((stat, index) => {
+      data[index === stats.stat.length - 1 ? "latest" : index === stats.stat.length - 2 ? "previous" : "initial"] = metric.key === "intimacy" ? stat.intimacy.toFixed(2) : converterFromHappiness(metric.key, stat.happiness).toFixed(2);
     });
     return data;
-  }) || [];
+  });
+
+  console.log({ graphData2 });
+
 
   return (
     <div className="flex flex-col gap-8 overflow-x-scroll sm:px-[2%]">
@@ -188,27 +194,28 @@ export default function Page() {
             <ChartContainer config={chartConfig}>
               <LineChart
                 accessibilityLayer
-                data={graphData}
-                margin={{
-                  left: 12,
-                  right: 12,
-                }}
+                data={graphData2}
+              // margin={{
+              //   left: 12,
+              //   right: 12,
+              // }}
               >
                 <CartesianGrid vertical={false} />
                 <XAxis
-                  dataKey="time"
+                  dataKey="metric"
                   tickLine={false}
                   axisLine={false}
-                  tickMargin={8}
-                  tickFormatter={(value) => value}
+                  fillOpacity={0}
+                // tickMargin={8}
+                // tickFormatter={(value) => value.slice(0, 3)}
                 />
                 <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                {metrics.map((metric) => (
+                {["initial", "previous", "latest"].map((time) => (
                   <Line
-                    key={metric.key}
+                    key={time}
                     type="monotone"
-                    dataKey={metric.key}
-                    stroke={metric.background}
+                    dataKey={time}
+                    stroke={`var(--color-${time})`}
                     strokeWidth={3}
                     dot={false}
                     activeDot={{ r: 4 }}
@@ -217,6 +224,13 @@ export default function Page() {
 
               </LineChart>
             </ChartContainer>
+            <div className="grid grid-cols-[1fr_2fr_2fr_2fr_1fr] text-xs text-gray-600">
+              {
+                metrics.map((metric, index) => (
+                  <p className={cn("w-full text-center", index === 0 && "text-left", index === 4 && "text-right")} key={metric.key}>{metric.lebel}</p>
+                ))
+              }
+            </div>
           </div>
           <div className="aspect-square grid grid-rows-[1fr_auto] gap-4">
             <div className="hidden sm:block bg-[url(/blog-thumb.svg)] bg-cover bg-top rounded-2xl">

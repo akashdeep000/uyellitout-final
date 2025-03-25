@@ -1,5 +1,6 @@
 "use client";
 import { getQuizById, getRecomendedQuiz } from "@/actions/quiz";
+import { NewBooking } from "@/components/bookings/new-booking";
 import { Button } from "@/components/ui/button";
 import {
     Carousel,
@@ -7,6 +8,7 @@ import {
     CarouselContent,
     CarouselItem
 } from "@/components/ui/carousel";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -366,7 +368,19 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
             </Carousel>
             <div className="flex justify-center">
                 {
-                    current !== 1 && <Button variant="secondary" size="lg">BOOK YOUR SESSION</Button>
+                    current !== 1 &&
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="secondary" size="lg">BOOK YOUR SESSION</Button>
+                        </DialogTrigger>
+                        <DialogContent className="text-left max-h-svh max-w-3xl overflow-y-scroll">
+                            <DialogHeader>
+                                <DialogTitle></DialogTitle>
+                                <DialogDescription></DialogDescription>
+                            </DialogHeader>
+                            <NewBooking isNested={true} />
+                        </DialogContent>
+                    </Dialog>
                 }
             </div>
             <div className="p-2 flex gap-1 justify-around sm:judstify-around items-center">
