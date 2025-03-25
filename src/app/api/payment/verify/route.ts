@@ -1,4 +1,4 @@
-import { getNext30DaysAvailableDays } from "@/actions/booking";
+import { checkIfSlotAvailible } from "@/actions/booking";
 import { db } from "@/db";
 import { booking } from "@/db/schema";
 import { sendBookingConfirmationEmail, sendBookingNotConfirmedEmail } from "@/emails";
@@ -53,19 +53,20 @@ export async function POST(request: NextRequest) {
                         throw new Error("No booking found");
                     }
 
-                    const availabilities = await getNext30DaysAvailableDays();
+                    // const availabilities = await getNext30DaysAvailableDays();
 
                     for (const booking of bookings) {
                         if (booking.date && booking.slots) {
-                            const availabileSlots = availabilities.find((availability) => availability.date.toISOString().split("T")[0] === booking.date?.toISOString().split("T")[0])?.slots;
-                            if (!availabileSlots) {
-                                throw new Error("No slots available for this date");
-                            }
-                            if (booking.slots) {
-                                if (!booking.slots.every(slots => availabileSlots.includes(slots))) {
-                                    throw new Error("No slots available for this date");
-                                }
-                            }
+                            await checkIfSlotAvailible(booking.date, booking.slots[0]);
+                            // const availabileSlots = availabilities.find((availability) => availability.date.toISOString().split("T")[0] === booking.date?.toISOString().split("T")[0])?.slots;
+                            // if (!availabileSlots) {
+                            //     throw new Error("No slots available for this date");
+                            // }
+                            // if (booking.slots) {
+                            //     if (!booking.slots.every(slots => availabileSlots.includes(slots))) {
+                            //         throw new Error("No slots available for this date");
+                            //     }
+                            // }
                         }
                     }
                     await db.update(booking)
