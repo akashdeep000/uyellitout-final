@@ -115,6 +115,7 @@ export default function Page() {
 
     const [activeService, setActiveService] = useState(0);
     const [showPrice, setShowPrice] = useState(false);
+    const [showPriceMD, setShowPriceMD] = useState(false);
     const [activePackage, setActivePackage] = useState<number | null>(null);
 
     const toggleBox = (index: number) => {
@@ -197,7 +198,7 @@ export default function Page() {
                                                     }
                                                     <DropdownMenu open={showPrice} onOpenChange={setShowPrice}>
                                                         <DropdownMenuTrigger className={`shadow-sm inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-background hover:bg-foreground/80 h-10 px-4 py-2 bg-emerald-500 font-semibold min-w-28 float-right ${showPrice ? "hover:bg-white bg-white text-gray-900 border border-emerald-500" : ""}`}>{showPrice ? <div className="flex gap-1 items-center justify-between"><Image className="h-full aspect-square border-t border-b border-emerald-500" width={40} height={40} src={`/service/${activeService + 1}.gif`} alt={`${services[activeService].compareTo}-logo`} /> <p>₹{services[activeService].price}</p></div> : "Get Price"}</DropdownMenuTrigger>
-                                                        <DropdownMenuContent className="px-4 py-1 flex gap-2 items-center bg-emerald-500 text-white rounded-full w-fit mx-auto">
+                                                        <DropdownMenuContent className="md:hidden px-4 py-1 flex gap-2 items-center bg-emerald-500 text-white rounded-full w-fit mx-auto">
                                                             <p>Less than a {services[activeService].compareTo}</p>
                                                             <Image className="size-6" width={40} height={40} src={`/service/${activeService + 1}.static.png`} alt={`${services[activeService].compareTo}-logo`} />
                                                         </DropdownMenuContent>
@@ -258,9 +259,9 @@ export default function Page() {
                                         </DialogContent>
                                     </Dialog>
                                 }
-                                <DropdownMenu open={showPrice} onOpenChange={setShowPrice}>
-                                    <DropdownMenuTrigger className={`shadow-sm inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-background hover:bg-foreground/80 h-10 px-4 py-2 bg-emerald-500 font-semibold min-w-28 float-right ${showPrice ? "hover:bg-white bg-white text-gray-900 border border-emerald-500" : ""}`}>{showPrice ? <div className="flex gap-1 items-center justify-between"><Image className="h-full aspect-square border-t border-b border-emerald-500" width={40} height={40} src={`/service/${activeService + 1}.gif`} alt={`${services[activeService].compareTo}-logo`} /> <p>₹{services[activeService].price}</p></div> : "Get Price"}</DropdownMenuTrigger>
-                                    <DropdownMenuContent className="px-4 py-1 flex gap-2 items-center bg-emerald-500 text-white rounded-full w-fit mx-auto">
+                                <DropdownMenu open={showPriceMD} onOpenChange={setShowPriceMD}>
+                                    <DropdownMenuTrigger className={`shadow-sm inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-background hover:bg-foreground/80 h-10 px-4 py-2 bg-emerald-500 font-semibold min-w-28 float-right ${showPriceMD ? "hover:bg-white bg-white text-gray-900 border border-emerald-500" : ""}`}>{showPriceMD ? <div className="flex gap-1 items-center justify-between"><Image className="h-full aspect-square border-t border-b border-emerald-500" width={40} height={40} src={`/service/${activeService + 1}.gif`} alt={`${services[activeService].compareTo}-logo`} /> <p>₹{services[activeService].price}</p></div> : "Get Price"}</DropdownMenuTrigger>
+                                    <DropdownMenuContent className="hidden px-4 py-1 md:flex gap-2 items-center bg-emerald-500 text-white rounded-full w-fit mx-auto">
                                         <p>Less than a {services[activeService].compareTo}</p>
                                         <Image className="size-6" width={40} height={40} src={`/service/${activeService + 1}.static.png`} alt={`${services[activeService].compareTo}-logo`} />
                                     </DropdownMenuContent>
