@@ -282,6 +282,7 @@ export async function submitQuiz(data: {
         }).where(eq(userStat.userId, userId));
     } else {
         if (stat.length >= 3) {
+            stat[1] = stat[2];
             stat.pop();
         }
         await db.update(userStat).set({

@@ -113,9 +113,6 @@ export default function Page() {
     return data;
   });
 
-  console.log({ graphData2 });
-
-
   return (
     <div className="flex flex-col gap-8 overflow-x-scroll sm:px-[2%]">
       <div className="hidden sm:block font-semibold text-2xl pt-6 pb-2">
