@@ -34,83 +34,73 @@ export async function POST(request: NextRequest) {
         // Parse the body as JSON
         const payload = JSON.parse(rawBody);
 
-        // Handle the event type
-        switch (payload.event) {
-            // case "payment.captured":
-            //     // Handle successful payment capture
-            //     console.log("Payment captured:", payload);
-            //     break;
-            case "order.paid":
-                let bookings;
-                try {
-                    // Handle successful order payment
-                    console.log("Order paid:", payload);
-                    // Update the booking status to "confirmed" in the database
-                    const orderId = payload.payload.order.entity.id;
-                    console.log("Order ID:", orderId);
-                    bookings = await db.select().from(booking).where(eq(booking.orderId, orderId));
-                    if (bookings.length === 0) {
-                        throw new Error("No booking found");
-                    }
-
-                    // const availabilities = await getNext30DaysAvailableDays();
-
-                    for (const booking of bookings) {
-                        if (booking.date && booking.slots) {
-                            await checkIfSlotAvailible(booking.date, booking.slots[0]);
-                            // const availabileSlots = availabilities.find((availability) => availability.date.toISOString().split("T")[0] === booking.date?.toISOString().split("T")[0])?.slots;
-                            // if (!availabileSlots) {
-                            //     throw new Error("No slots available for this date");
-                            // }
-                            // if (booking.slots) {
-                            //     if (!booking.slots.every(slots => availabileSlots.includes(slots))) {
-                            //         throw new Error("No slots available for this date");
-                            //     }
-                            // }
-                        }
-                    }
-                    await db.update(booking)
-                        .set({ status: "confirmed" })
-                        .where(eq(booking.orderId, orderId));
-                    await sendBookingConfirmationEmail({
-                        subject: "Uyellitout - Session Booking Confirmed",
-                        ctx: {
-                            client: {
-                                email: bookings[0].email,
-                                name: bookings[0].name,
-                                number: bookings[0].phoneNumber
-                            },
-                            sessionType: bookings[0].productName,
-                            sessionDateTime: bookings[0].time!
-                        }
-                    });
-                } catch (error) {
-                    console.log(error);
-                    if (!bookings) return;
-                    try {
-                        await sendBookingNotConfirmedEmail({
-                            subject: "Uyellitout - Session Booking Not Confirmed",
-                            ctx: {
-                                client: {
-                                    email: bookings[0].email,
-                                    name: bookings[0].name,
-                                    number: bookings[0].phoneNumber
-                                },
-                                sessionType: bookings[0].productName,
-                                sessionDateTime: bookings[0].time!
-                            }
-                        });
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-                break;
-            default:
-                console.log("Unhandled event type:", payload.event);
+        if (payload.event !== "order.paid") {
+            console.log("Unhandled event type:", payload.event);
+            return NextResponse.json({ error: "Unhandled event type" }, { status: 500 });
         }
 
-        // Respond with success
-        return NextResponse.json({ status: "ok" });
+        let bookings;
+        try {
+            // Handle successful order payment
+            console.log("Order paid:", payload);
+            // Update the booking status to "confirmed" in the database
+            const orderId = payload.payload.order.entity.id;
+            console.log("Order ID:", orderId);
+            bookings = await db.select().from(booking).where(eq(booking.orderId, orderId));
+            if (bookings.length === 0) {
+                throw new Error("No booking found");
+            }
+
+            for (const booking of bookings) {
+                if (booking.date && booking.slots) {
+                    await checkIfSlotAvailible(booking.date, booking.slots[0]);
+                }
+            }
+
+            await db.update(booking)
+                .set({ status: "confirmed" })
+                .where(eq(booking.orderId, orderId));
+            try {
+                await sendBookingConfirmationEmail({
+                    subject: "Uyellitout - Session Booking Confirmed",
+                    ctx: {
+                        client: {
+                            email: bookings[0].email,
+                            name: bookings[0].name,
+                            number: bookings[0].phoneNumber
+                        },
+                        sessionType: bookings[0].productName,
+                        sessionDateTime: bookings[0].time!
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
+            // Respond with success
+            return NextResponse.json({ status: "ok" });
+        } catch (error) {
+            console.log(error);
+            if (!bookings) {
+                return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+            };
+            try {
+                await sendBookingNotConfirmedEmail({
+                    subject: "Uyellitout - Session Booking Not Confirmed",
+                    ctx: {
+                        client: {
+                            email: bookings[0].email,
+                            name: bookings[0].name,
+                            number: bookings[0].phoneNumber
+                        },
+                        sessionType: bookings[0].productName,
+                        sessionDateTime: bookings[0].time!
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
+            return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        }
     } catch (error) {
         console.error("Error processing webhook:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
