@@ -307,7 +307,7 @@ export async function resheduleBooking({ id, date, startingSlot }: {
                 oldSessionDateTime: currentBooking.time,
                 newSessionDateTime: convertToDate(date, startingSlot),
             },
-            subject: "Booking Rescheduled",
+            subject: "Session Rescheduled",
         });
     } else {
         await sendBookingConfirmationEmail({
@@ -320,7 +320,7 @@ export async function resheduleBooking({ id, date, startingSlot }: {
                 sessionType: currentBooking.productName,
                 sessionDateTime: convertToDate(date, startingSlot),
             },
-            subject: "Booking Confirmed",
+            subject: "Session Confirmed",
         });
     }
 
@@ -356,7 +356,7 @@ export async function cancelBooking({ id }: {
                 sessionType: bookingData.productName,
                 sessionDateTime: bookingData.time,
             },
-            subject: "Booking Cancelled",
+            subject: "Session Cancelled",
         });
     }
     return data;

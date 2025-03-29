@@ -3,7 +3,6 @@ import {
     Body,
     Container,
     Head,
-    Heading,
     Hr,
     Html,
     Img,
@@ -46,7 +45,7 @@ export const EmailLayout: React.FC<Readonly<EmailLayoutProps>> = ({ children, pr
                 <Preview>{previewText}</Preview>
                 <Body className="text-gray-800 font-custom">
                     <Container>
-                        <Heading className="text-3xl font-normal text-emerald-500 mb-10">uyellitout</Heading>
+                        {/* <Heading className="text-3xl font-normal text-emerald-500 mb-10">uyellitout</Heading> */}
                         {children}
                         <Hr className="my-6" />
 

@@ -1,3 +1,4 @@
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ export default function RootLayout({
             </ReactQueryProviders>
           </main>
           <Toaster />
+          <Sonner />
         </TooltipProvider>
       </body>
     </html>
