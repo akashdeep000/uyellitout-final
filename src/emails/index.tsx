@@ -61,7 +61,9 @@ export const sendBookingConfirmationEmail: (ctx: BookingConfirmationEmailProps) 
             await sendWahaMessage(ctx.client.number,
                 `✅ Session Confirmed!
 
-Hello ${ctx.client.name || "User"}, your therapy session is successfully scheduled.
+Hello ${ctx.client.name || "User"},
+
+Your therapy session is successfully scheduled.
 
 📅 Date: ${formatToIndianTime(ctx.sessionDateTime).split("at")[0].trim()}
 ⏰ Time: ${formatToIndianTime(ctx.sessionDateTime).split("at")[1].trim()} (in IST)
@@ -106,7 +108,9 @@ export const sendBookingNotConfirmedEmail: (ctx: BookingNotConfirmedEmailProps) 
             await sendWahaMessage(ctx.client.number,
                 `❌ Session can't be confirm
 
-Hello ${ctx.client.name || "User"}, your therapy session is canceled due to slot unavaibility.
+Hello ${ctx.client.name || "User"},
+
+Your therapy session is canceled due to slot unavaibility.
 
 📅 Date: ${formatToIndianTime(ctx.sessionDateTime).split("at")[0].trim()}
 ⏰ Time: ${formatToIndianTime(ctx.sessionDateTime).split("at")[1].trim()} (in IST)
@@ -155,7 +159,9 @@ export const sendBookingRescheduledEmail: (ctx: BookingRescheduledEmailProps) =>
             await sendWahaMessage(ctx.client.number,
                 `🔃 Session Rescheduled!
 
-Hello ${ctx.client.name || "User"}, your therapy session is successfully rescheduled.
+Hello ${ctx.client.name || "User"},
+
+Your therapy session is successfully rescheduled.
 
 📅 New Date: ${formatToIndianTime(ctx.newSessionDateTime).split("at")[0].trim()}
 ⏰ New Time: ${formatToIndianTime(ctx.newSessionDateTime).split("at")[1].trim()} (in IST)
@@ -206,7 +212,9 @@ export const sendBookingCancelledEmail: (ctx: BookingCancelledEmailProps) => Pro
             await sendWahaMessage(ctx.client.number,
                 `❌ Session is canceled
 
-Hello ${ctx.client.name || "User"}, your therapy session is canceled.
+Hello ${ctx.client.name || "User"},
+
+Your therapy session is canceled.
 
 📅 Date: ${formatToIndianTime(ctx.sessionDateTime).split("at")[0].trim()}
 ⏰ Time: ${formatToIndianTime(ctx.sessionDateTime).split("at")[1].trim()} (in IST)
