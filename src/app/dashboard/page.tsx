@@ -241,7 +241,7 @@ export default function Page() {
           </div>
           {/* <div className="space-y-2 md:space-y-0 md:flex md:items-center md:gap-2"> */}
           <a href="https://api.whatsapp.com/send/?phone=918584034584"><Button className="text-lg bg-[#8DAA64] rounded-xl py-6 px-8 font-semibold w-full">Talk to therapist</Button></a>
-          <p className="">We carefully plan our slots to ensure you receive the support you need as soon as possible</p>
+          <p className="">We carefully plan our slots to ensure you receive the support you need as soon as possible.</p>
           {/* </div> */}
         </div>
 
