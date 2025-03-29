@@ -24,7 +24,7 @@ export default function Page() {
 
     return (
         <div className="md:pt-3 lg:pt:4 space-y-4">
-            <ScrollArea>
+            <ScrollArea className="max-w-[100svw]">
                 <div className="flex gap-2">
                     <div onClick={() => setSelectedCategory(null)}
                         className={cn("px-2.5 py-1 bg-muted rounded w-max cursor-pointer text-muted-foreground hover:bg-muted-foreground/30 hover:text-foreground",

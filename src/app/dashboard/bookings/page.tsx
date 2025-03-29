@@ -64,7 +64,7 @@ export default function BookingsPage() {
     return (
         <div className="space-y-8 p-3">
             <div className="max-w-[100svw]">
-                <h2 className="text-xl mb-4">Upcoming Bookings</h2>
+                <h2 className="text-xl mb-4">Upcoming Sessions</h2>
                 <Table className="max-w-[100svw]">
                     <TableHeader>
                         <TableRow>
@@ -114,7 +114,7 @@ export default function BookingsPage() {
             </div>
 
             <div className="max-w-[100svw]">
-                <h2 className="text-xl mb-4">Not Scheduled Bookings</h2>
+                <h2 className="text-xl mb-4">Not Scheduled Sessions</h2>
                 <Table className="max-w-[100svw]">
                     <TableHeader>
                         <TableRow>
@@ -162,7 +162,7 @@ export default function BookingsPage() {
             </div>
 
             <div className="max-w-[100svw]">
-                <h2 className="text-xl mb-4">Historical Bookings</h2>
+                <h2 className="text-xl mb-4">Sessions history</h2>
                 <Table className="max-w-[100svw]">
                     <TableHeader>
                         <TableRow>

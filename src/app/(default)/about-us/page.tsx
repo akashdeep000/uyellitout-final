@@ -252,7 +252,7 @@ export default function Page() {
                                 icon: <CircleCheckBig />
                             }
                         ].map((item, index) => (
-                            <div key={index} className={`flex flex-wrap justify-evenly items-center gap-4 ${index % 2 ? null : "sm:flex-row-reverse"}`}>
+                            <div key={index} className={`flex flex-wrap justify-around items-center gap-4 ${index % 2 ? null : "sm:flex-row-reverse"}`}>
                                 <div className="sm:w-52 w-[50%] aspect-video grid place-items-center text-neutral-500">
                                     <img className="w-full h-full" src={`/about/a-${index + 1}.svg`} alt="" />
                                 </div>
@@ -370,9 +370,9 @@ export default function Page() {
                         ))
                     }
                 </div>
-                <div className="bg-[#8fdeb3] p-6 grid gap-6">
+                <div className="bg-[#79C8AD] p-6 grid gap-6">
                     <div className="text-4xl text-center font-semibold text-[#198A70] flex justify-center items-center gap-3">
-                        <p className="text-4xl text-white"><span className="text-lg">Our</span> PROMISES</p>
+                        <p className="text-4xl text-white"><span className="text-2xl">Our</span> PROMISES</p>
                     </div>
                     <div className="grid grid-cols-4 gap-8 max-w-4xl mx-auto mt-6">
                         {

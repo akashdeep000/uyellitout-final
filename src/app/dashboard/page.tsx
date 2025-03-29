@@ -229,7 +229,7 @@ export default function Page() {
               }
             </div>
           </div>
-          <div className="aspect-square grid grid-rows-[1fr_auto] gap-4">
+          <div className=" grid grid-rows-[1fr_auto] gap-4">
             <div className="bg-[url(/blog-thumb.svg)] bg-cover bg-top rounded-2xl">
               <div className="h-full py-[20%] flex flex-row items-end font-semibold w-[60%] lg:text-xl md:text-sm sm:text-2xl px-4">
                 <div className="space-y-4">
@@ -238,7 +238,10 @@ export default function Page() {
                 </div>
               </div>
             </div>
-            <Button className="font-semibold">Talk to therapist</Button>
+            <div className="p-2 rounded-xl space-y-2 bg-emerald-200">
+              <p>We carefully plan our slots to ensure you receive the support you need as soon as possible</p>
+              <Button className="font-semibold w-full">Talk to therapist</Button>
+            </div>
           </div>
 
         </div>
