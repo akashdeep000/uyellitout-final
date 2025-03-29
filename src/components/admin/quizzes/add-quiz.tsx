@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash } from "lucide-react";
@@ -243,7 +244,7 @@ export function AddQuiz() {
                                                         <FormField control={form.control} name={`grades.${gradeIndex}.tips.${tipIndex}.description`} render={({ field }) => (
                                                             <FormItem>
                                                                 <FormLabel>Tip Description</FormLabel>
-                                                                <FormControl><Input {...field} /></FormControl>
+                                                                <FormControl><Textarea {...field} /></FormControl>
                                                                 <FormMessage />
                                                             </FormItem>
                                                         )} />

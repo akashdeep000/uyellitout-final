@@ -63,7 +63,7 @@ export default function Page() {
                             !selectedCategory ? "bg-muted-foreground/30 text-foreground" : null)}>
                         All
                     </div>
-                    {categoriesLoading && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="w-16 h-8 rounded" />)}
+                    {categoriesLoading && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="w-16 h-10 rounded" />)}
                     {categories?.map((category) => (
                         <div key={category.id} onClick={() => setSelectedCategory(category.id)}
                             className={cn("px-2.5 py-1 bg-muted rounded w-max cursor-pointer text-muted-foreground hover:bg-muted-foreground/30 hover:text-foreground",
