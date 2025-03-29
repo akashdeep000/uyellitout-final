@@ -312,6 +312,7 @@ export async function getQuizResultsWithUser(page: number = 1, limit: number = 1
             id: user.id,
             name: user.name,
             email: user.email,
+            phoneNumber: user.phoneNumber,
             image: user.image
         }
     }).from(quizResult)

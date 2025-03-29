@@ -60,6 +60,7 @@ export function QuizResults() {
                             <TableHead>Quiz Name</TableHead>
                             <TableHead>User</TableHead>
                             <TableHead>Email</TableHead>
+                            <TableHead>Phone Number</TableHead>
                             <TableHead>Marks</TableHead>
                             <TableHead>Percentage</TableHead>
                             <TableHead>Date</TableHead>
@@ -89,6 +90,7 @@ export function QuizResults() {
                                 <TableCell className="font-medium">{result.quizName}</TableCell>
                                 <TableCell>{result.user.name}</TableCell>
                                 <TableCell>{result.user.email}</TableCell>
+                                <TableCell>{result.user.phoneNumber || "N/A"}</TableCell>
                                 <TableCell>{`${result.mark}/${result.total}`}</TableCell>
                                 <TableCell>{((result.mark / result.total) * 100).toFixed(2)}%</TableCell>
                                 <TableCell>{new Date(result.createdAt).toLocaleString()}</TableCell>

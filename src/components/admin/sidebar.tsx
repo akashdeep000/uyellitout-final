@@ -1,4 +1,4 @@
-import { CalendarCheck, CalendarCog, Home, Library, MessageCircle, Settings, Users } from "lucide-react";
+import { CalendarCheck, CalendarCog, Library, MessageCircle, Settings, Users } from "lucide-react";
 
 import {
     Sidebar,
@@ -13,11 +13,11 @@ import {
 
 // Menu items.
 const items = [
-    {
-        title: "Home",
-        url: "/admin",
-        icon: Home,
-    },
+    // {
+    //     title: "Home",
+    //     url: "/admin",
+    //     icon: Home,
+    // },
     {
         title: "Users",
         url: "/admin/users",

@@ -430,6 +430,9 @@ export default function Page() {
                                 <TableHead>Price</TableHead>
                                 <TableHead>Product Type</TableHead>
                                 <TableHead>Message</TableHead>
+                                <TableHead>Emergency Contact Number</TableHead>
+                                <TableHead>Emergency Contact Person</TableHead>
+                                <TableHead>Emergency Contact Relation</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -468,12 +471,15 @@ export default function Page() {
                                     <TableCell>{booking.price}</TableCell>
                                     <TableCell>{booking.productType}</TableCell>
                                     <TableCell>{booking.message || "N/A"}</TableCell>
+                                    <TableCell>{booking.emergencyContactNumber || "N/A"}</TableCell>
+                                    <TableCell>{booking.emergencyContactPerson || "N/A"}</TableCell>
+                                    <TableCell>{booking.emergencyContactRelation || "N/A"}</TableCell>
                                 </TableRow>
                             ))}
 
                             {(isLoading || !data) && Array.from({ length: 3 }).map((_, i) => (
                                 <TableRow key={i}>
-                                    {Array.from({ length: 11 }).map((_, j) => (
+                                    {Array.from({ length: 14 }).map((_, j) => (
                                         <TableCell key={j}>
                                             <Skeleton className="h-6 w-full" />
                                         </TableCell>
@@ -483,7 +489,7 @@ export default function Page() {
 
                             {data?.pages[0]?.data.length === 0 && (
                                 <TableRow>
-                                    <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
+                                    <TableCell colSpan={14} className="text-center py-8 text-muted-foreground">
                                         No bookings found for the selected filters
                                     </TableCell>
                                 </TableRow>
