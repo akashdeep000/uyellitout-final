@@ -114,7 +114,7 @@ export default function Page() {
   });
 
   return (
-    <div className="flex flex-col gap-8 overflow-x-scroll sm:px-[2%]">
+    <div className="flex flex-col gap-8 overflow-x-scroll sm:px-[2%] mb-4">
       <div className="hidden sm:block font-semibold text-2xl pt-6 pb-2">
         <div className="flex gap-2"><p>Welcome back, </p> {sessionLoading ? <Skeleton className="inline w-24 h-8 rounded" /> : <p>{session?.data?.user.name.split(" ")[0]}!</p>}</div>
         <p>Ready to check your progress?</p>
@@ -238,12 +238,11 @@ export default function Page() {
                 </div>
               </div>
             </div>
-            <div className="p-2 rounded-xl space-y-2 bg-emerald-200">
-              <p>We carefully plan our slots to ensure you receive the support you need as soon as possible</p>
-              <a href="https://api.whatsapp.com/send/?phone=918584034584"><Button className="font-semibold w-full">Talk to therapist</Button></a>
-            </div>
           </div>
-
+          {/* <div className="space-y-2 md:space-y-0 md:flex md:items-center md:gap-2"> */}
+          <a href="https://api.whatsapp.com/send/?phone=918584034584"><Button className="text-lg bg-[#8DAA64] rounded-xl py-6 px-8 font-semibold w-full">Talk to therapist</Button></a>
+          <p className="">We carefully plan our slots to ensure you receive the support you need as soon as possible</p>
+          {/* </div> */}
         </div>
 
       </div>

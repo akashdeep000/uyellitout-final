@@ -1,8 +1,9 @@
 "use client";
-import { deleteQuiz, getCategories, getQuizzes, getQuizzesByCategory, updateQuiz } from "@/actions/quiz";
+import { deleteCategory, deleteQuiz, getCategories, getQuizzes, getQuizzesByCategory, updateQuiz } from "@/actions/quiz";
 import { AdminPageWrapper } from "@/components/admin/page-wraper";
 import { AddCategory } from "@/components/admin/quizzes/add-category";
 import { AddQuiz } from "@/components/admin/quizzes/add-quiz";
+import { EditCategory } from "@/components/admin/quizzes/edit-category";
 import { EditQuiz } from "@/components/admin/quizzes/edit-quiz";
 import { QuizResults } from "@/components/admin/quizzes/quiz-results";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -58,7 +59,7 @@ export default function Page() {
             <ScrollArea>
                 <div className="flex gap-2">
                     <div onClick={() => setSelectedCategory(null)}
-                        className={cn("px-2.5 py-1 bg-muted rounded w-max cursor-pointer text-muted-foreground hover:bg-muted-foreground/30 hover:text-foreground",
+                        className={cn("flex items-center px-2.5 py-1 bg-muted rounded w-max cursor-pointer text-muted-foreground hover:bg-muted-foreground/30 hover:text-foreground",
                             !selectedCategory ? "bg-muted-foreground/30 text-foreground" : null)}>
                         All
                     </div>
@@ -67,7 +68,25 @@ export default function Page() {
                         <div key={category.id} onClick={() => setSelectedCategory(category.id)}
                             className={cn("px-2.5 py-1 bg-muted rounded w-max cursor-pointer text-muted-foreground hover:bg-muted-foreground/30 hover:text-foreground",
                                 selectedCategory === category.id ? "bg-muted-foreground/30 text-foreground" : null)}>
-                            {category.name}
+                            <div className="flex items-center gap-2">
+                                {category.name}
+                                <div className="flex items-center">
+                                    <EditCategory id={category.id} initialName={category.name} initialRelatedTo={category.relatedTo} />
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => {
+                                            if (confirm("Are you sure you want to delete this category?")) {
+                                                deleteCategory(category.id).then(() => {
+                                                    queryClient.invalidateQueries({ queryKey: ["categories"] });
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     ))}
                     <AddCategory />

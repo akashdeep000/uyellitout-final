@@ -1,6 +1,6 @@
 "use client";
 
-import { addCategory } from "@/actions/quiz";
+import { updateCategory } from "@/actions/quiz";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -13,12 +13,18 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export function AddCategory() {
+interface EditCategoryProps {
+    id: string;
+    initialName: string;
+    initialRelatedTo?: "happiness" | "anxiety" | "stress" | "mood" | "intimacy" | "others";
+}
+
+export function EditCategory({ id, initialName, initialRelatedTo }: EditCategoryProps) {
     const [open, setOpen] = useState(false);
 
     // Form Schema
@@ -36,22 +42,24 @@ export function AddCategory() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            relatedTo: "happiness", // Default value
+            name: initialName,
+            relatedTo: initialRelatedTo || "happiness",
         }
     });
 
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
-        mutationFn: addCategory,
+        mutationFn: async (data: z.infer<typeof formSchema>) => {
+            return updateCategory(id, { name: data.name, relatedTo: data.relatedTo });
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["categories"] }); // Refresh category list
             form.reset();
             setOpen(false);
         },
         onError: (error) => {
-            console.error("Error adding category:", error);
+            console.error("Error updating category:", error);
         }
     });
 
@@ -61,12 +69,14 @@ export function AddCategory() {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger className="h-10 w-10 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-muted text-muted-foreground hover:bg-muted-foreground/30 hover:text-foreground">
-                <Plus />
+            <DialogTrigger asChild>
+                <Button variant="ghost" size="icon">
+                    <Pencil className="h-4 w-4" />
+                </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Add new category</DialogTitle>
+                    <DialogTitle>Edit category</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -104,7 +114,7 @@ export function AddCategory() {
                             )}
                         />
                         <Button type="submit" className="w-full" disabled={mutation.isPending}>
-                            {mutation.isPending ? "Adding..." : "Add Category"}
+                            {mutation.isPending ? "Saving..." : "Save Changes"}
                         </Button>
                     </form>
                 </Form>

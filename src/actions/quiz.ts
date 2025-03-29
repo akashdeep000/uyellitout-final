@@ -176,8 +176,8 @@ export async function getCategories(): Promise<QuizCategory[]> {
 }
 
 // Update a category
-export async function updateCategory(id: string, name: string) {
-    return await db.update(quizCategory).set({ name }).where(eq(quizCategory.id, id)).returning();
+export async function updateCategory(id: string, data: { name: string; relatedTo: "happiness" | "anxiety" | "stress" | "mood" | "intimacy" | "others" }) {
+    return await db.update(quizCategory).set({ name: data.name, relatedTo: data.relatedTo }).where(eq(quizCategory.id, id)).returning();
 }
 
 // Delete a category
@@ -246,49 +246,52 @@ export async function submitQuiz(data: {
     console.log({ mark, total, percentage, quizData });
 
     await db.insert(quizResultAnswer).values(newQuizResultAnswers);
-    const stat = userStatData[0]?.stat ?? [];
-    const previousStat = stat[stat.length - 1] || {
-        happiness: 0,
-        intimacy: 0
-    };
 
-    const newStat = {
-        happiness: quizData.categotyRelatedTo === "intimacy" ? previousStat.happiness || 0 : converterToHappiness(quizData.categotyRelatedTo, (previousStat.happiness === 0 ? percentage || 7 : (previousStat.happiness + percentage) / 2)),
-        intimacy: quizData.categotyRelatedTo !== "intimacy" ? previousStat.intimacy || 0 : previousStat.intimacy === 0 ? percentage || 0 : (previousStat.intimacy + percentage) / 2
-    };
+    if (quizData.categotyRelatedTo !== "others") {
+        const stat = userStatData[0]?.stat ?? [];
+        const previousStat = stat[stat.length - 1] || {
+            happiness: 0,
+            intimacy: 0
+        };
 
-    if (newStat.happiness > 97) {
-        newStat.happiness = 97;
-    }
-    if (newStat.intimacy > 97) {
-        newStat.intimacy = 97;
-    }
+        const newStat = {
+            happiness: quizData.categotyRelatedTo === "intimacy" ? previousStat.happiness || 0 : converterToHappiness(quizData.categotyRelatedTo, (previousStat.happiness === 0 ? percentage || 7 : (previousStat.happiness + percentage) / 2)),
+            intimacy: quizData.categotyRelatedTo !== "intimacy" ? previousStat.intimacy || 0 : previousStat.intimacy === 0 ? percentage || 0 : (previousStat.intimacy + percentage) / 2
+        };
 
-    if (newStat.happiness !== 0 && newStat.happiness < 7) {
-        newStat.happiness = 7;
-    }
-    if (newStat.intimacy !== 0 && newStat.intimacy < 7) {
-        newStat.intimacy = 7;
-    }
-
-    if (userStatData.length === 0) {
-        await db.insert(userStat).values({
-            stat: [newStat],
-            userId
-        });
-    } else if (stat.length < 3) {
-        await db.update(userStat).set({
-            stat: [...stat, newStat]
-        }).where(eq(userStat.userId, userId));
-    } else {
-        if (stat.length >= 3) {
-            stat[1] = stat[2];
-            stat.pop();
+        if (newStat.happiness > 97) {
+            newStat.happiness = 97;
         }
-        await db.update(userStat).set({
-            stat: [...stat, newStat]
-        }).where(eq(userStat.userId, userId));
-        return { id: quizResultId, percentage };
+        if (newStat.intimacy > 97) {
+            newStat.intimacy = 97;
+        }
+
+        if (newStat.happiness !== 0 && newStat.happiness < 7) {
+            newStat.happiness = 7;
+        }
+        if (newStat.intimacy !== 0 && newStat.intimacy < 7) {
+            newStat.intimacy = 7;
+        }
+
+        if (userStatData.length === 0) {
+            await db.insert(userStat).values({
+                stat: [newStat],
+                userId
+            });
+        } else if (stat.length < 3) {
+            await db.update(userStat).set({
+                stat: [...stat, newStat]
+            }).where(eq(userStat.userId, userId));
+        } else {
+            if (stat.length >= 3) {
+                stat[1] = stat[2];
+                stat.pop();
+            }
+            await db.update(userStat).set({
+                stat: [...stat, newStat]
+            }).where(eq(userStat.userId, userId));
+            return { id: quizResultId, percentage };
+        }
     }
     return { id: quizResultId, percentage };
 }
