@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Bell, Calendar, LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
@@ -24,6 +24,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         queryKey: ["session"],
         queryFn: () => authClient.getSession()
     });
+
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     return (
         <div className="grid grid-cols-[auto_1fr] h-svh">
@@ -100,7 +106,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <div className="flex gap-1 items-center">
                                 <Calendar size={16} />
                                 <div>
-                                    {(new Date()).toLocaleDateString()}
+                                    {isClient && (new Date()).toLocaleDateString()}
                                 </div>
                             </div>
 
