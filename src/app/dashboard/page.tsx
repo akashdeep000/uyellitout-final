@@ -240,7 +240,7 @@ export default function Page() {
             </div>
             <div className="p-2 rounded-xl space-y-2 bg-emerald-200">
               <p>We carefully plan our slots to ensure you receive the support you need as soon as possible</p>
-              <Button className="font-semibold w-full">Talk to therapist</Button>
+              <a href="https://api.whatsapp.com/send/?phone=918584034584"><Button className="font-semibold w-full">Talk to therapist</Button></a>
             </div>
           </div>
 

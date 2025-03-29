@@ -59,7 +59,7 @@ export const sendBookingConfirmationEmail: (ctx: BookingConfirmationEmailProps) 
     if (ctx.client.number) {
         try {
             await sendWahaMessage(ctx.client.number,
-                `✅ Booking Confirmed!
+                `✅ Session Confirmed!
 
 Hello ${ctx.client.name || "User"}, your therapy session is successfully scheduled.
 
@@ -104,7 +104,7 @@ export const sendBookingNotConfirmedEmail: (ctx: BookingNotConfirmedEmailProps) 
     if (ctx.client.number) {
         try {
             await sendWahaMessage(ctx.client.number,
-                `❌ Booking can't confirm
+                `❌ Session can't be confirm
 
 Hello ${ctx.client.name || "User"}, your therapy session is canceled due to slot unavaibility.
 
@@ -153,7 +153,7 @@ export const sendBookingRescheduledEmail: (ctx: BookingRescheduledEmailProps) =>
     if (ctx.client.number) {
         try {
             await sendWahaMessage(ctx.client.number,
-                `🔃 Booking Rescheduled!
+                `🔃 Session Rescheduled!
 
 Hello ${ctx.client.name || "User"}, your therapy session is successfully rescheduled.
 
@@ -204,7 +204,7 @@ export const sendBookingCancelledEmail: (ctx: BookingCancelledEmailProps) => Pro
     if (ctx.client.number) {
         try {
             await sendWahaMessage(ctx.client.number,
-                `❌ Booking is canceled
+                `❌ Session is canceled
 
 Hello ${ctx.client.name || "User"}, your therapy session is canceled.
 
