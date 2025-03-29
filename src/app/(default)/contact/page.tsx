@@ -1,5 +1,8 @@
 import { Instagram, Linkedin, Mail } from "lucide-react";
 import { ContactForm } from "./contact-form";
+import { metadata } from "./page.metadata";
+
+export { metadata };
 
 export default function Page() {
 
