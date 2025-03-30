@@ -198,7 +198,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
 
                                     {
                                         !recomendedQuizLoading &&
-                                        <Link className="mx-auto translate-y-8" href={`/dashboard/quizzes/${recomendedQuiz?.sameCatQuiz?.id}`}>
+                                        <Link className="mx-auto translate-y-8" href={`/dashboard/quiz/${recomendedQuiz?.sameCatQuiz?.id}`}>
                                             <Button className="" variant="default">Start now</Button>
                                         </Link>
                                     }
@@ -210,7 +210,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
 
                                     {
                                         !recomendedQuizLoading &&
-                                        <Link className="mx-auto translate-y-8" href={`/dashboard/quizzes/${recomendedQuiz?.diffCatQuiz?.id}`}>
+                                        <Link className="mx-auto translate-y-8" href={`/dashboard/quiz/${recomendedQuiz?.diffCatQuiz?.id}`}>
                                             <Button className="" variant="default">Start now</Button>
                                         </Link>
                                     }
