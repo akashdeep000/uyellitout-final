@@ -113,9 +113,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
                                 </div>
                             </div>
                             <div>
-                                <p className="text-3xl text-gray-800 font-semibold tracking-tighter">
-                                    {grade?.title}
-                                </p>
+                                <p className="text-3xl text-gray-800 font-semibold tracking-tighter" dangerouslySetInnerHTML={{ __html: grade?.title.replaceAll("{", "<span class=\"text-4xl\">").replaceAll("}", "</span>").replaceAll("[", "<span class=\"text-white\">").replaceAll("]", "</span>") || "" }} />
                             </div>
                         </div>
                     </CarouselItem>
@@ -150,7 +148,7 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
                                 </div>
                             </div>
                             <div className="text-gray-800 tracking-tighter space-y-4">
-                                <p className="text-2xl" dangerouslySetInnerHTML={{ __html: grade?.title.replaceAll("{", "<span class=\"text-3xl\">").replaceAll("}", "</span>").replaceAll("[", "<span class=\"text-white\">").replaceAll("]", "</span>") || "" }}
+                                <p className="text-2xl" dangerouslySetInnerHTML={{ __html: grade?.description.replaceAll("{", "<span class=\"text-3xl\">").replaceAll("}", "</span>").replaceAll("[", "<span class=\"text-white\">").replaceAll("]", "</span>") || "" }}
                                 />
                             </div>
                         </div>

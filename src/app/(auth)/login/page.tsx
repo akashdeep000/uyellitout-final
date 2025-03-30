@@ -1,5 +1,6 @@
 import { LoginForm } from "@/components/auth/login-form";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -15,7 +16,9 @@ export default function LoginPage() {
           </div>
           uyellitout
         </a>
-        <LoginForm />
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { SignupForm } from "@/components/auth/signup-form";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
     title: "Signup",
@@ -15,7 +16,9 @@ export default function SignupPage() {
                     </div>
                     uyellitout
                 </a>
-                <SignupForm />
+                <Suspense>
+                    <SignupForm />
+                </Suspense>
             </div>
         </div>
     );
