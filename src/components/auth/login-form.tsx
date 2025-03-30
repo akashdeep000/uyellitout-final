@@ -14,7 +14,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -23,30 +23,26 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const { toast } = useToast();
-
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard"; // Get the redirect URL if present
+
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading">("idle");
 
   const formSchema = z.object({
-    email: z.string().email({
-      message: "Invalid email address.",
-    }),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters.",
-    }).max(36, {
-      message: "Password must be at most 36 characters.",
-    })
+    email: z.string().email({ message: "Invalid email address." }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters." })
+      .max(36, { message: "Password must be at most 36 characters." }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,38 +50,42 @@ export function LoginForm({
     defaultValues: {
       email: "",
       password: "",
-    }
+    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setStatus("loading");
-    authClient.signIn.email({
-      email: values.email,
-      password: values.password,
-      // callbackURL: "/dashboard"
-    }, {
-      onSuccess: async () => {
-        const session = await authClient.getSession();
-        toast({
-          title: "Logged in successfully",
-          description: "Redirecting to dashboard...",
-        });
-        setStatus("idle");
-        if (session.data?.user.role === "admin") {
-          router.push("/admin");
-        } else {
-          router.push("/dashboard");
-        }
+    authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
       },
-      onError: (error) => {
-        toast({
-          title: "Failed to login",
-          description: error.error.message,
-          variant: "destructive"
-        });
-        setStatus("idle");
-      },
-    });
+      {
+        onSuccess: async () => {
+          const session = await authClient.getSession();
+          toast({
+            title: "Logged in successfully",
+            description: "Redirecting...",
+          });
+          setStatus("idle");
+
+          // Redirect based on user role or the originally requested page
+          if (session.data?.user.role === "admin" && !redirectTo.startsWith("/admin")) {
+            router.push("/admin");
+          } else {
+            router.push(redirectTo);
+          }
+        },
+        onError: (error) => {
+          toast({
+            title: "Failed to login",
+            description: error.error.message,
+            variant: "destructive",
+          });
+          setStatus("idle");
+        },
+      }
+    );
   }
 
   return (
@@ -114,7 +114,7 @@ export function LoginForm({
                   <Button onClick={() => {
                     authClient.signIn.social({
                       provider: "google",
-                      callbackURL: "/dashboard"
+                      callbackURL: redirectTo
                     });
                   }} type="button" variant="outline" className="w-full">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -173,7 +173,7 @@ export function LoginForm({
                 </div>
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
-                  <Link href="/signup" className="underline underline-offset-4">
+                  <Link href={searchParams.get("redirectTo") ? `/signup?redirectTo=${encodeURIComponent(redirectTo)}` : "/signup"} className="underline underline-offset-4">
                     Sign Up
                   </Link>
                   <br />
@@ -187,10 +187,6 @@ export function LoginForm({
           </Form>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        By clicking log in, you agree to our <Link href="/terms-conditions">Terms of Service</Link>{" "}
-        and <Link href="/privacy-policy">Privacy Policy</Link>.
-      </div>
     </div>
   );
 }

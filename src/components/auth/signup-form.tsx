@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import libphonenumber from "google-libphonenumber";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,6 +39,8 @@ export function SignupForm({
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [status, setStatus] = useState<"idle" | "loading">("idle");
     const [success, setSuccess] = useState(false);
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("redirectTo") || "/dashboard";
 
     const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
@@ -91,7 +94,7 @@ export function SignupForm({
             phoneNumber: values.phoneNumber,
             email: values.email,
             password: values.password,
-            callbackURL: "/dashboard",
+            callbackURL: redirectTo,
         }, {
             onSuccess: () => {
                 toast({
@@ -109,7 +112,6 @@ export function SignupForm({
                 });
                 setStatus("idle");
             },
-            redirectTo: "/email-verification"
         });
     }
 
@@ -142,7 +144,7 @@ export function SignupForm({
                                         <Button onClick={() => {
                                             authClient.signIn.social({
                                                 provider: "google",
-                                                callbackURL: "/dashboard"
+                                                callbackURL: redirectTo
                                             });
                                         }} type="button" variant="outline" className="w-full">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -249,7 +251,7 @@ export function SignupForm({
                                     </div>
                                     <div className="text-center text-sm">
                                         Already have an account?{" "}
-                                        <Link href="/login" className="underline underline-offset-4">
+                                        <Link href={searchParams.get("redirectTo") ? `/login?redirectTo=${encodeURIComponent(redirectTo)}` : "/login"} className="underline underline-offset-4">
                                             Log in
                                         </Link>
                                     </div>

@@ -15,12 +15,17 @@ export default async function authMiddleware(request: NextRequest) {
         },
     );
 
+    // If no session, redirect to login page with the original requested URL as a query parameter
     if (!session) {
-        return NextResponse.redirect(new URL("/login", request.url));
+        const redirectUrl = encodeURIComponent(request.url);
+        return NextResponse.redirect(new URL(`/login?redirectTo=${redirectUrl}`, request.url));
     }
+
+    // If the user is not an admin and tries to access an admin page, redirect to dashboard
     if (session.user.role !== "admin" && request.nextUrl.pathname.startsWith("/admin")) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
     }
+
     return NextResponse.next();
 }
 
