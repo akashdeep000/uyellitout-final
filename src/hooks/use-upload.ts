@@ -1,4 +1,5 @@
 import { getPresignedUrl } from "@/actions/upload";
+import { env } from "@/env";
 import { useCallback, useState } from "react";
 import { ulid } from "ulid";
 
@@ -30,7 +31,7 @@ export function useUpload() {
 
   const uploadFile = useCallback(async (file: File): Promise<{ uploadId: string; promise: Promise<string> }> => {
     const uploadId = createUploadId();
-    const generatedKey = `${uploadId}${file.name.split(".").pop() ? `.${file.name.split(".").pop()}` : ""}`;
+    const generatedKey = `${env.NODE_ENV === "production" ? "uploads" : "dev-uploads"}/${uploadId}${file.name.split(".").pop() ? `.${file.name.split(".").pop()}` : ""}`;
 
     setUploads(prev => new Map(prev).set(uploadId, {
       id: uploadId,
