@@ -150,9 +150,8 @@ export function Result({ id, percentage, quiz }: { id: string, percentage: numbe
                                 </div>
                             </div>
                             <div className="text-gray-800 tracking-tighter space-y-4">
-                                <p className="text-2xl">
-                                    {grade?.description}
-                                </p>
+                                <p className="text-2xl" dangerouslySetInnerHTML={{ __html: grade?.title.replaceAll("{", "<span class=\"text-3xl\">").replaceAll("}", "</span>").replaceAll("[", "<span class=\"text-white\">").replaceAll("]", "</span>") || "" }}
+                                />
                             </div>
                         </div>
                     </CarouselItem>
