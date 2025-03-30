@@ -11,18 +11,25 @@ import {
 } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useUpload } from "@/hooks/use-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 export function AddQuiz() {
     const [open, setOpen] = useState(false);
+    const [pendingUploads, setPendingUploads] = useState<Map<string, {
+        gradeIndex: number;
+        tipIndex: number;
+        uploadId: string;
+    }>>(new Map());
     const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: getCategories });
 
     // Form Schema
@@ -39,7 +46,7 @@ export function AddQuiz() {
                     z.object({
                         title: z.string().min(1),
                         description: z.string().min(1),
-                        image: z.string().startsWith("data:", "Image is required"), // Base64 string
+                        image: z.string().min(1, "Image URL is required"),
                     })
                 ).nonempty()
             })
@@ -82,22 +89,54 @@ export function AddQuiz() {
         onError: (error) => console.error("Error adding quiz:", error)
     });
 
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log({ data });
+    const onSubmit = useCallback((data: z.infer<typeof formSchema>) => {
+        if (pendingUploads.size > 0) {
+            console.warn("Cannot submit while uploads are pending");
+            return;
+        }
         mutation.mutate(data);
-    };
+    }, [mutation, pendingUploads]);
 
-    const handleImageUpload = (gradeIndex: number, tipIndex: number, file: File) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            form.setValue(`grades.${gradeIndex}.tips.${tipIndex}.image`, reader.result as string);
+    const { uploadFile, uploads, removeUpload } = useUpload();
+
+    const handleImageUpload = useCallback(async (gradeIndex: number, tipIndex: number, file: File) => {
+        try {
+            const { uploadId, promise } = await uploadFile(file);
+
+            setPendingUploads(prev => {
+                const updated = new Map(prev);
+                updated.set(`${gradeIndex}-${tipIndex}`, { gradeIndex, tipIndex, uploadId });
+                return updated;
+            });
+
+            const url = await promise;
+            form.setValue(`grades.${gradeIndex}.tips.${tipIndex}.image`, url);
             form.clearErrors(`grades.${gradeIndex}.tips.${tipIndex}.image`);
-        };
-        reader.onerror = () => {
-            console.error("Error reading file");
-        };
-    };
+
+            setPendingUploads(prev => {
+                const updated = new Map(prev);
+                updated.delete(`${gradeIndex}-${tipIndex}`);
+                return updated;
+            });
+
+            removeUpload(uploadId);
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            form.setError(`grades.${gradeIndex}.tips.${tipIndex}.image`, {
+                type: "manual",
+                message: "Failed to upload image"
+            });
+        }
+    }, [form, removeUpload, uploadFile]);
+
+    const getUploadProgress = useCallback((gradeIndex: number, tipIndex: number) => {
+        const key = `${gradeIndex}-${tipIndex}`;
+        const uploadInfo = pendingUploads.get(key);
+        if (uploadInfo) {
+            return uploads.get(uploadInfo.uploadId);
+        }
+        return undefined;
+    }, [pendingUploads, uploads]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -257,11 +296,31 @@ export function AddQuiz() {
                                                                         : <div className="h-32 bg-muted-foreground/20 rounded"></div>
                                                                 }
                                                                 <FormControl>
-                                                                    <Input type="file" onChange={(e) => {
-                                                                        if (e.target.files) {
-                                                                            handleImageUpload(gradeIndex, tipIndex, e.target.files[0]);
-                                                                        }
-                                                                    }} />
+                                                                    <div>
+                                                                        <Input
+                                                                            type="file"
+                                                                            onChange={(e) => {
+                                                                                if (e.target.files) {
+                                                                                    handleImageUpload(gradeIndex, tipIndex, e.target.files[0]);
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        {getUploadProgress(gradeIndex, tipIndex)?.progress && (
+                                                                            <div className="mt-2 space-y-2">
+                                                                                <Progress value={getUploadProgress(gradeIndex, tipIndex)?.progress?.percentage} />
+                                                                                <p className="text-sm text-muted-foreground">
+                                                                                    {getUploadProgress(gradeIndex, tipIndex)?.stage === "preparing" ? "Preparing upload..." :
+                                                                                        getUploadProgress(gradeIndex, tipIndex)?.stage === "uploading" ? `Uploading: ${getUploadProgress(gradeIndex, tipIndex)?.progress?.percentage}%` :
+                                                                                            "Upload complete"}
+                                                                                </p>
+                                                                            </div>
+                                                                        )}
+                                                                        {getUploadProgress(gradeIndex, tipIndex)?.error && (
+                                                                            <p className="text-sm text-destructive mt-1">
+                                                                                {getUploadProgress(gradeIndex, tipIndex)?.error}
+                                                                            </p>
+                                                                        )}
+                                                                    </div>
                                                                 </FormControl>
                                                                 <FormMessage />
                                                             </FormItem>
@@ -276,8 +335,8 @@ export function AddQuiz() {
                             </div>
                             <ScrollBar orientation="horizontal" />
                         </ScrollArea>
-                        <Button type="submit" className="w-full" disabled={mutation.isPending}>
-                            {mutation.isPending ? "Adding..." : "Add Quiz"}
+                        <Button type="submit" className="w-full" disabled={mutation.isPending || pendingUploads.size > 0}>
+                            {mutation.isPending ? "Adding..." : pendingUploads.size > 0 ? "Waiting for uploads..." : "Add Quiz"}
                         </Button>
                     </form>
                 </Form>

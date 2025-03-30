@@ -30,14 +30,21 @@ export const env = createEnv({
     RASORPAY_WEBHOOK_SECRET: z.string().min(1), // Rasorpay webhook secret
     WHATSAPP_API_URL: z.string().url().optional(), // WhatsApp API URL
     WHATSAPP_API_KEY: z.string().min(1).optional(), // WhatsApp API token
+    S3_ENDPOINT: z.string().url(),
+    S3_BUCKET: z.string(),
+    S3_REGION: z.string().optional(),
+    S3_ACCESS_KEY_ID: z.string(),
+    S3_SECRET_ACCESS_KEY: z.string(),
   },
   client: {
     NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url(), // URL for authentication service
     NEXT_PUBLIC_RASORPAY_KEY_ID: z.string().min(1), // Rasorpay key ID
+    NEXT_PUBLIC_S3_PUBLIC_URL: z.string().url(), // S3 PUBLIC URL
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
     NEXT_PUBLIC_RASORPAY_KEY_ID: process.env.NEXT_PUBLIC_RASORPAY_KEY_ID,
+    NEXT_PUBLIC_S3_PUBLIC_URL: process.env.NEXT_PUBLIC_S3_PUBLIC_URL,
   },
   onValidationError: (error: ZodError) => {
     console.error(

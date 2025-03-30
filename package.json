@@ -16,6 +16,8 @@
     "auth:schema-gen": "cli generate --config src/lib/auth.ts --output src/db/schema/auth-schema.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.726.1",
+    "@aws-sdk/s3-request-presigner": "3.726.1",
     "@better-fetch/fetch": "^1.1.12",
     "@formkit/auto-animate": "^0.8.2",
     "@hookform/resolvers": "^3.10.0",
