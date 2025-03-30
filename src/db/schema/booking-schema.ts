@@ -20,7 +20,7 @@ export const booking = sqliteTable("booking", {
     slots: text("slots", { mode: "json" }).$type<number[]>(),
     time: integer("time", { mode: "timestamp" }),
     status: text("status", { enum: ["pending", "confirmed", "cancelled"] }).notNull().default("pending"),
-    userId: text("user_id").references(() => user.id),
+    userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
     orderId: text("order_id").notNull(),
     productName: text("product_name").notNull(),
     productType: text("product_type", { enum: ["service", "package"] }).notNull(),
