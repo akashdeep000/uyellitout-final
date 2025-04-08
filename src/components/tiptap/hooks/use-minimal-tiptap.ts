@@ -1,3 +1,4 @@
+import { getPresignedUrl } from "@/actions/upload";
 import { cn } from "@/lib/utils";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { TextStyle } from "@tiptap/extension-text-style";
@@ -8,6 +9,7 @@ import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import * as React from "react";
 import { toast } from "sonner";
+import { ulid } from "ulid";
 import {
   CodeBlockLowlight,
   Color,
@@ -51,17 +53,37 @@ const createExtensions = (placeholder: string) => [
     maxFileSize: 5 * 1024 * 1024,
     allowBase64: true,
     uploadFn: async file => {
-      // NOTE: This is a fake upload function. Replace this with your own upload logic.
-      // This function should return the uploaded image URL.
+      console.log(file);
 
-      // wait 3s to simulate upload
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // eslint-disable-next-line n/no-process-env
+      const generatedKey = `${process.env.NODE_ENV === "production" ? "uploads" : "dev-uploads"}/${ulid()}${file.name.split(".").pop() ? `.${file.name.split(".").pop()}` : ""}`;
+      console.log({ generatedKey });
 
-      const src = await fileToBase64(file);
+      // Create the presigned URL for the file
+      const url = (await getPresignedUrl(generatedKey, file.type)).data?.url;
 
-      // either return { id: string | number, src: string } or just src
-      // return src;
-      return { id: randomId(), src };
+      if (!url) {
+        throw new Error("Failed to get presigned URL");
+      }
+
+      console.log({ url });
+
+      // Upload the file to S3 using the signed URL
+      const uploadResponse = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type,
+        },
+        body: file,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error("File upload failed");
+      }
+
+      // eslint-disable-next-line n/no-process-env
+      const publicUrl = `${process.env.NEXT_PUBLIC_S3_PUBLIC_URL}/${generatedKey}`;
+      return publicUrl;
     },
     onToggle(editor, files, pos) {
       editor.commands.insertContentAt(

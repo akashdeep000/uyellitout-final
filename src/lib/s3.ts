@@ -11,6 +11,8 @@ export async function createPresignedUrl(
   fileName: string,
   fileType: string
 ): Promise<PresignedUrlResponse> {
+  console.log("in s3 lib");
+
   const endpoint = env.S3_ENDPOINT;
   const bucket = env.S3_BUCKET;
   const region = env.S3_REGION;

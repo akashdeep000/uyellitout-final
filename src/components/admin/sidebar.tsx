@@ -1,4 +1,4 @@
-import { CalendarCheck, CalendarCog, Library, MessageCircle, Settings, Users } from "lucide-react";
+import { BookText, CalendarCheck, CalendarCog, FolderTree, Library, MessageCircle, Settings, Users } from "lucide-react";
 
 import {
     Sidebar,
@@ -22,6 +22,16 @@ const items = [
         title: "Users",
         url: "/admin/users",
         icon: Users,
+    },
+    {
+        title: "Blog Posts",
+        url: "/admin/blog/posts",
+        icon: BookText,
+    },
+    {
+        title: "Blog Categories",
+        url: "/admin/blog/categories",
+        icon: FolderTree,
     },
     {
         title: "Bookings",
