@@ -90,9 +90,24 @@ export default {
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out"
-			}
+			},
+
+			typography: {
+				DEFAULT: {
+					css: {
+						img: {
+							display: "block",
+							marginLeft: "auto",
+							marginRight: "auto",
+							maxWidth: "100%",
+							height: "auto",
+							borderRadius: "0.5rem", // optional rounded image
+						},
+					},
+				},
+			},
 		}
 	},
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
-	plugins: [require("tailwindcss-animate")],
+	plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;

@@ -9,10 +9,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { Category, Post } from "@/db/schema/blog-schema";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useToast } from "@/hooks/use-toast";
+import { useUpload } from "@/hooks/use-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -43,6 +45,7 @@ export function PostForm({ post }: PostFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [slugAvailable, setSlugAvailable] = useState(true);
+  const { uploadFile, getUploadProgress, uploads } = useUpload();
 
   const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ["categories"],
@@ -212,6 +215,82 @@ export function PostForm({ post }: PostFormProps) {
             />
             <FormField
               control={form.control}
+              name="thumbnail"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Thumbnail Image</FormLabel>
+                  <FormControl>
+                    <div className="space-y-4">
+                      {field.value && (
+                        <div className="relative h-[120px]">
+                          <img
+                            src={field.value}
+                            alt="Thumbnail preview"
+                            className="h-full w-auto"
+                          />
+                        </div>
+                      )}
+                      <div className="flex items-center gap-4">
+                        <div className="space-y-2 w-full">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                try {
+                                  const { uploadId, promise } = await uploadFile(file);
+                                  // Show progress bar
+                                  const progressTracker = setInterval(() => {
+                                    const progress = getUploadProgress(uploadId);
+                                    if (progress?.stage === "complete") {
+                                      clearInterval(progressTracker);
+                                    }
+                                  }, 100);
+
+                                  const url = await promise;
+                                  clearInterval(progressTracker);
+                                  field.onChange(url);
+                                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                } catch (error) {
+                                  toast({
+                                    title: "Error",
+                                    description: "Failed to upload thumbnail image",
+                                    variant: "destructive",
+                                  });
+                                }
+                              }
+                            }}
+                          />
+                          {uploads.size > 0 && Array.from(uploads.values()).map((upload) => (
+                            upload.stage !== "complete" && (
+                              <div key={upload.id} className="w-full space-y-2">
+                                <Progress value={upload.progress?.percentage || 0} />
+                                <span className="text-sm text-gray-500">
+                                  {upload.progress?.percentage || 0}%
+                                </span>
+                              </div>
+                            )
+                          ))}
+                        </div>
+                        {field.value && (
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => field.onChange("")}
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="content"
               render={({ field }) => (
                 <FormItem>
@@ -254,3 +333,9 @@ export function PostForm({ post }: PostFormProps) {
     </Card>
   );
 }
+
+
+
+
+
+
