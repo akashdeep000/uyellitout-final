@@ -86,7 +86,14 @@ export default async function BlogPage({
           <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-4">
             Expert&apos;s <span className="text-4xl">Column</span>
           </h1>
-          <div className="bg-blue-200 rounded-full size-32"></div>
+          <div className="size-40 grid place-items-center border relative">
+            <svg className="w-full h-ll" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 99 94">
+              <path
+                fill="#fff"
+                d="M99 51.381C99 74.92 70.948 94 45.73 94 20.515 94-7.137 75.28 1.674 40.229S25.721 0 50.938 0 99 27.844 99 51.381"
+              ></path>
+            </svg>
+          </div>
         </div>
         <div className="grid place-items-center">
           <form method="GET" action="/blog" className="relative w-full max-w-4xl">
