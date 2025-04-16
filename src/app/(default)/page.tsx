@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { GridPattern } from "@/components/ui/grid-pattern";
 import {
     Table,
     TableBody,
@@ -19,10 +20,11 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { CalendarDays, Check, Info, MessagesSquare, Quote, ShieldCheck, UserRound, X } from "lucide-react";
+import { WordFadeIn } from "@/components/ui/word-fade-in";
+import { cn } from "@/lib/utils";
+import { ArrowRight, CalendarDays, Check, Info, MessagesSquare, Quote, ShieldCheck, UserRound, X } from "lucide-react";
 import { motion, useSpring, useTransform } from "motion/react";
 import Link from "next/link";
-import { ChildImg, IndividualImg, ParentalImg } from "./svgs";
 
 export default function Home() {
     const sessionsSpring = useSpring(168, { mass: 0.8, stiffness: 75, damping: 15 });
@@ -319,7 +321,7 @@ export default function Home() {
 
     return (
         <main>
-            <section className="bg-white">
+            {/*<section className="bg-white">
                 <div className="min-h-[calc(100svh_+_0.5rem)] flex flex-col relative">
                     <svg
                         className="pt-[20%] md:pt-[10%] lg:pt-0 w-full max-h-[calc(100svh_+_0.5rem)] h-auto"
@@ -680,8 +682,10 @@ export default function Home() {
                         </defs>
                     </svg>
                 </div>
-            </section>
-            {/* <section className="hidden content-evenly min-h-[calc(100svh_-_4rem)] bg-gradient-to-t from-emerald-200 to-emerald-100">
+            </section> */}
+
+
+            <section className="content-evenly min-h-[calc(100svh_-_4rem)] bg-gradient-to-t from-emerald-200 to-emerald-100">
                 <GridPattern
                     width={25}
                     height={25}
@@ -782,7 +786,7 @@ export default function Home() {
                     </div>
                 </div>
 
-            </section> */}
+            </section>
             <section className="px-4 py-12 space-y-12 bg-emerald-50 bg-xyz bg-cover">
                 <p className="text-center text-3xl font-bold">Why Choose Us?</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 max-w-md md:max-w-4xl mx-auto gap-4 justify-center">

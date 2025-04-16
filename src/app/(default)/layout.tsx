@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            <header className={cn("py-4 px-2 md:px-[3%] lg:px-[5%] flex justify-between gap-2 items-center z-[1000]", pathName.split("/")[1] ? "" : "")}>
+            <header className={cn("bg-emerald-100 py-4 px-2 md:px-[3%] lg:px-[5%] flex justify-between gap-2 items-center z-[1000]", pathName.split("/")[1] ? "" : "")}>
                 <Link href="/">
                     <svg
                         className="h-10 sm:h-11 md:h-12 w-auto"
