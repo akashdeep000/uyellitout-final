@@ -73,7 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Link href="/dashboard/book-a-session">
                                 <ul className={`px-4 py-2 rounded-lg font-semibold hover:text-foreground  transition-all hover:bg-teal-500/20 ${pathName.split("/")[2] === "book-a-session" ? "bg-teal-500/50" : null}`}>Book a session</ul>
                             </Link>
-                            <Link href="#">
+                            <Link href="/blog">
                                 <ul className="px-4 py-2 rounded-lg font-semibold hover:text-foreground  transition-all hover:bg-teal-500/20">Blog</ul>
                             </Link>
                             <Link href="/contact">
@@ -170,7 +170,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Link href="/dashboard/book-a-session">
                                 <Button variant={"link"} className={pathName.split("/")[2] === "book-a-session" ? "underline bg-[#90DBB2]" : ""}>Book a session</Button>
                             </Link>
-                            <Link href="#">
+                            <Link href="/blog">
                                 <Button variant={"link"}>Blog</Button>
                             </Link>
                             <Link href="/contact">
@@ -313,7 +313,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/about-us">About Us</Link></ul>
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/services">Services</Link></ul>
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/dashboard/quiz">Quiz</Link></ul>
-                                {/* <ul className="hover:text-foreground  transition-all hover:underline"><Link href="#">Blogs</Link></ul> */}
+                                <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/blog">Blogs</Link></ul>
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/#faqs">FAQs</Link></ul>
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/contact">Get in Touch</Link></ul>
                                 <ul className="hover:text-foreground  transition-all hover:underline"><Link href="/privacy-policy">Privacy-Policy</Link></ul>

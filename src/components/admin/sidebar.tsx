@@ -46,13 +46,18 @@ const items = [
     {
         title: "Quizzes",
         url: "/admin/quizzes",
+        icon: Library, // Reusing Library icon for Resources
+      },
+      {
+        title: "Free Resources",
+        url: "/admin/resources",
         icon: Library,
-    },
-    {
+      },
+      {
         title: "Messeges",
         url: "/admin/messages",
         icon: MessageCircle,
-    },
+      },
     {
         title: "Settings",
         url: "/admin/settings",

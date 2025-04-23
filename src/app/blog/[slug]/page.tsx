@@ -123,11 +123,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+import { getResources } from "@/actions/resource";
+
 export default async function BlogPost({ params }: Props) {
   const post = await getPost((await params).slug);
   if (!post) notFound();
 
   const readingTime = estimateReadingTime(post.content);
+  const { data: resources, error: resourcesError } = await getResources();
+
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-12">
@@ -177,6 +181,29 @@ export default async function BlogPost({ params }: Props) {
         className="prose prose-lg max-w-none prose-img:mx-auto prose-img:rounded-lg prose-img:max-w-full prose-img:object-contain"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
+
+      {/* Free Resources Section */}
+
+      {resources && resources.length > 0 && (
+        <section className="mt-16">
+        <h3 className="text-2xl font-semibold mb-6 text-gray-800">Free Resources</h3>
+        <div className="grid gap-6 sm:grid-cols-2">
+          {resources?.map((resource) => (
+            <Link key={resource.id} href={resource.filePath} className="h-full">
+              <div className="p-4 border rounded hover:shadow-sm transition h-full">
+                <h4 className="font-semibold text-lg mb-1">{resource.title}</h4>
+                <p className="text-sm text-gray-500">{resource.description}</p>
+                <time className="text-sm text-gray-500">
+                  {resource.createdAt.toLocaleDateString("en-IN")}
+                </time>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+      )}
+
+
 
       {/* Related posts */}
       {post.related?.length > 0 && (
