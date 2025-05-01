@@ -8,7 +8,7 @@ import { env } from "@/env";
 import { auth } from "@/lib/auth";
 import { convertDateSlots, convertToDate } from "@/lib/utils";
 import { orderSchema } from "@/schema/order";
-import { addMinutes } from "date-fns";
+import { addDays, addMinutes } from "date-fns";
 import { and, asc, count, desc, eq, gte, InferInsertModel, InferSelectModel, isNotNull, isNull, like, lte, or, SQL } from "drizzle-orm";
 import { headers } from "next/headers";
 import Razorpay from "razorpay";
@@ -187,8 +187,7 @@ export async function getNext30DaysAvailableDays() {
     const next30Days = [];
     for (let i = 0; i < 30; i++) {
         const date = new Date(today.toISOString().split("T")[0]);
-        date.setDate(today.getDate() + i);
-        next30Days.push(date);
+        next30Days.push(addDays(date, i));
     }
 
 
