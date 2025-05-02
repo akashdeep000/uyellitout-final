@@ -196,8 +196,6 @@ export async function getNext30DaysAvailableDays() {
 			),
 		);
 
-	console.log({ weeklyAvailability, blockedDates });
-
 	//Get all confirmed bookings within the next 30 days
 	const confirmedBookings = await db
 		.select()
@@ -223,10 +221,7 @@ export async function getNext30DaysAvailableDays() {
 
 	// Map day numbers to day names used in your schema
 	const dayMap = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-	console.log({
-		blockedDay: dayMap[blockedDates[0].date.getUTCDay()],
-		blockedDate: blockedDates[0].date.toString(),
-	});
+
 	// Create the final availability result
 	const result = next30Days.map((date) => {
 		const dayName = dayMap[date.getUTCDay()];
@@ -293,8 +288,6 @@ export async function getNext30DaysAvailableDays() {
 			slots: availableSlots,
 		};
 	});
-	// console.log(result.filter(day => day.slots.length > 0));
-	// console.log(convertDateSlots(result.filter(day => day.slots.length > 0), 0, 330));
 
 	// Filter out days with no available slots
 	return result.filter((day) => day.slots.length > 0);
