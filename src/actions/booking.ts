@@ -4,9 +4,9 @@ import { packages, services } from "@/configs/data";
 import { db } from "@/db"; // Assuming you have a database instance
 import { availability, blockedAvailability, booking } from "@/db/schema";
 import {
-    sendBookingCancelledEmail,
-    sendBookingConfirmationEmail,
-    sendBookingRescheduledEmail,
+	sendBookingCancelledEmail,
+	sendBookingConfirmationEmail,
+	sendBookingRescheduledEmail,
 } from "@/emails";
 import { env } from "@/env";
 import { auth } from "@/lib/auth";
@@ -14,20 +14,20 @@ import { convertDateSlots, convertToDate } from "@/lib/utils";
 import { orderSchema } from "@/schema/order";
 import { addDays, addMinutes } from "date-fns";
 import {
-    type InferInsertModel,
-    type InferSelectModel,
-    type SQL,
-    and,
-    asc,
-    count,
-    desc,
-    eq,
-    gte,
-    isNotNull,
-    isNull,
-    like,
-    lte,
-    or,
+	type InferInsertModel,
+	type InferSelectModel,
+	type SQL,
+	and,
+	asc,
+	count,
+	desc,
+	eq,
+	gte,
+	isNotNull,
+	isNull,
+	like,
+	lte,
+	or,
 } from "drizzle-orm";
 import { headers } from "next/headers";
 import Razorpay from "razorpay";
@@ -179,16 +179,8 @@ export async function deleteAllBlockedSlotsAndAddNew(
 
 // Get Next 30 days' available days
 export async function getNext30DaysAvailableDays() {
-	// allow slots after
 	const startTime = addMinutes(new Date(Date.now()), 120);
-
-	// Get current date and the date 30 days from now
-	const today = new Date();
-	today.setHours(0, 0, 0, 0); // Set to beginning of day
-
-	const thirtyDaysLater = new Date();
-	thirtyDaysLater.setDate(today.getDate() + 30);
-	thirtyDaysLater.setHours(23, 59, 59, 999); // Set to end of day
+	const endTime = addDays(new Date(Date.now()), 30);
 
 	// Get all weekly availability
 	const weeklyAvailability = await db.select().from(availability);
@@ -199,10 +191,13 @@ export async function getNext30DaysAvailableDays() {
 		.from(blockedAvailability)
 		.where(
 			and(
-				gte(blockedAvailability.date, today),
-				lte(blockedAvailability.date, thirtyDaysLater),
+				gte(blockedAvailability.date, startTime),
+				lte(blockedAvailability.date, endTime),
 			),
 		);
+
+	console.log({ weeklyAvailability, blockedDates });
+
 	//Get all confirmed bookings within the next 30 days
 	const confirmedBookings = await db
 		.select()
@@ -210,8 +205,8 @@ export async function getNext30DaysAvailableDays() {
 		.where(
 			and(
 				eq(booking.status, "confirmed"),
-				gte(booking.date, today),
-				lte(booking.date, thirtyDaysLater),
+				gte(booking.date, startTime),
+				lte(booking.date, endTime),
 			),
 		);
 
@@ -222,20 +217,19 @@ export async function getNext30DaysAvailableDays() {
 	// Create an array to hold all dates in the next 30 days
 	const next30Days = [];
 	for (let i = 0; i < 30; i++) {
-		const date = new Date(today.toISOString().split("T")[0]);
-		next30Days.push(addDays(date, i));
+		next30Days.push(addDays(startTime, i));
 	}
+	console.log({ next30Days });
 
 	// Map day numbers to day names used in your schema
 	const dayMap = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-
+	console.log({
+		blockedDay: dayMap[blockedDates[0].date.getUTCDay()],
+		blockedDate: blockedDates[0].date.toString(),
+	});
 	// Create the final availability result
 	const result = next30Days.map((date) => {
-		const dayName = dayMap[date.getDay()];
-		// console.log({
-		//     date: date.toISOString(),
-		//     dayName,
-		// });
+		const dayName = dayMap[date.getUTCDay()];
 
 		// Get the weekly schedule for this day
 		const daySchedule = weeklyAvailability.find((a) => a.day === dayName);
@@ -255,8 +249,6 @@ export async function getNext30DaysAvailableDays() {
 			);
 		});
 
-		// console.log({ blockedDates, blockedDate, data: date.getTime() });
-
 		// Calculate available slots
 		let availableSlots = [...daySchedule.slots];
 
@@ -269,7 +261,7 @@ export async function getNext30DaysAvailableDays() {
 
 		// Filter slots that's time is already passed
 		if (
-			date.toISOString().split("T")[0] === today.toISOString().split("T")[0]
+			date.toISOString().split("T")[0] === startTime.toISOString().split("T")[0]
 		) {
 			availableSlots = availableSlots.filter((slot) => {
 				const hour = Math.floor(slot / 4);

@@ -83,6 +83,8 @@ export default function Page() {
             date: Date;
             slots: number[];
         }[]) => {
+            // console.log({data, convertDateSlots: convertDateSlots(data, -(new Date()).getTimezoneOffset(), 0)});
+
             await deleteAllBlockedSlotsAndAddNew(convertDateSlots(data, -(new Date()).getTimezoneOffset(), 0));
         },
         onSuccess: () => {
