@@ -193,21 +193,21 @@ export function convertDateSlots(
 			if (convertedMinutes < 0) {
 				if (!result[dateKey])
 					result[dateKey] = {
-						date: newDate,
+						date: new Date(newDate.toISOString().split("T")[0]),
 						slots: [],
 					};
 				result[dateKey].slots.push((1440 + convertedMinutes) / 15);
 			} else if (convertedMinutes >= 1440) {
 				if (!result[dateKey])
 					result[dateKey] = {
-						date: newDate,
+						date: new Date(newDate.toISOString().split("T")[0]),
 						slots: [],
 					};
 				result[dateKey].slots.push((convertedMinutes - 1440) / 15);
 			} else {
 				if (!result[dateKey])
 					result[dateKey] = {
-						date: newDate,
+						date: new Date(newDate.toISOString().split("T")[0]),
 						slots: [],
 					};
 				result[dateKey].slots.push(convertedMinutes / 15);

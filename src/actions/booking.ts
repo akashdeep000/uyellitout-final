@@ -180,6 +180,8 @@ export async function deleteAllBlockedSlotsAndAddNew(
 // Get Next 30 days' available days
 export async function getNext30DaysAvailableDays() {
 	const startTime = addMinutes(new Date(Date.now()), 120);
+	const today = new Date();
+	today.setUTCHours(0, 0, 0, 0);
 	const endTime = addDays(new Date(Date.now()), 30);
 
 	// Get all weekly availability
@@ -191,7 +193,7 @@ export async function getNext30DaysAvailableDays() {
 		.from(blockedAvailability)
 		.where(
 			and(
-				gte(blockedAvailability.date, startTime),
+				gte(blockedAvailability.date, today),
 				lte(blockedAvailability.date, endTime),
 			),
 		);
@@ -207,6 +209,8 @@ export async function getNext30DaysAvailableDays() {
 				lte(booking.date, endTime),
 			),
 		);
+	console.log(weeklyAvailability);
+	console.log(blockedDates);
 
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	//@ts-expect-error
@@ -217,7 +221,7 @@ export async function getNext30DaysAvailableDays() {
 	for (let i = 0; i < 30; i++) {
 		next30Days.push(addDays(startTime, i));
 	}
-	console.log({ next30Days });
+	// console.log({ next30Days });
 
 	// Map day numbers to day names used in your schema
 	const dayMap = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -243,6 +247,7 @@ export async function getNext30DaysAvailableDays() {
 				date.toISOString().split("T")[0]
 			);
 		});
+		console.log(blockedDate);
 
 		// Calculate available slots
 		let availableSlots = [...daySchedule.slots];
