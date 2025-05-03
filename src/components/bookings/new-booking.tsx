@@ -196,9 +196,9 @@ export function NewBooking({
 			console.log(error);
 			toast({
 				title: "Error",
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-expect-error
 				description:
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+					// @ts-expect-error
 					error?.message || "Something went wrong. Please try again later.",
 				variant: "destructive",
 			});
