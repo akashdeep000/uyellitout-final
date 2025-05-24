@@ -255,7 +255,7 @@ export default async function BlogPage({
 								: ""
 						}`}
 					>
-						Latest6
+						Latest
 					</Link>
 					<Link
 						href="/blog?category=trending"
