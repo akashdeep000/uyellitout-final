@@ -2,7 +2,6 @@ import { db } from "@/db";
 import { category, post, postToCategory } from "@/db/schema/blog-schema";
 import { and, asc, desc, eq, gt, lt, ne, or } from "drizzle-orm";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IncrementCount } from "./increment-client";
@@ -268,7 +267,7 @@ export default async function BlogPost({ params }: Props) {
 					</div>
 				</header>
 
-				{post.thumbnail && (
+				{/* {post.thumbnail && (
 					<div className="w-full aspect-video relative mb-10 rounded-lg overflow-hidden bg-neutral-100">
 						<Image
 							src={post.thumbnail}
@@ -279,7 +278,7 @@ export default async function BlogPost({ params }: Props) {
 							priority
 						/>
 					</div>
-				)}
+				)} */}
 
 				<div
 					className="prose prose-lg max-w-none prose-img:mx-auto prose-img:rounded-lg prose-img:max-w-full prose-img:object-contain"

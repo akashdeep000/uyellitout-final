@@ -220,7 +220,7 @@ export default async function BlogPage({
 						<div className="absolute top-0 right-0 bottom-0 left-0 text-sm text-gray-500 grid place-items-center p-4">
 							<Image
 								className="aspect-square w-full"
-								src="/blog.png"
+								src="/blog.svg"
 								alt="logo"
 								width={40}
 								height={40}
